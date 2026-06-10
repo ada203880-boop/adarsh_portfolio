@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adarsh Panda | Software Developer & Full Stack Engineer</title>
+  <meta name="description" content="Portfolio of Adarsh Panda - Premium Software Developer, Full Stack Engineer, and Data Science Enthusiast based in Bhubaneswar, Odisha, India.">
+  <meta name="theme-color" content="#070714">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to Content</a>
+
+  <!-- Preloader Screen -->
+  <div id="loader-screen" aria-hidden="true">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <div class="loader-logo" style="display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+              <img src="assets/img/logo.jpeg" alt="Logo" style="height: 120px; width: auto; filter: drop-shadow(0 0 15px #00f2ff);">
+        </div>
+      </div>
+      <div class="loader-bar-bg"><div class="loader-bar-fill"></div></div>
+      <div class="loader-status">Initializing Core Engine...</div>
+    </div>
+  </div>
+
+  <!-- Interactive Floating Background Canvas -->
+  <canvas id="bg-particles" aria-hidden="true"></canvas>
+
+  <!-- Premium Custom Dynamic Cursor -->
+  <div class="custom-cursor" aria-hidden="true"></div>
+  <div class="custom-cursor-dot" aria-hidden="true"></div>
+
+  <!-- Floating Action Buttons (Fixed) -->
+  <div class="floating-action-buttons" aria-label="Quick Social Links">
+    <a href="https://www.linkedin.com/in/adarsh-panda-5181b9214" target="_blank" rel="noopener noreferrer" class="fab-action-btn fab-action-link fab-action-link--linkedin" aria-label="Open LinkedIn in a new tab">
+      <i class="fab fa-linkedin-in" aria-hidden="true"></i>
+    </a>
+    <a href="https://wa.me/919861054025" target="_blank" rel="noopener noreferrer" class="fab-action-btn fab-action-link fab-action-link--whatsapp" aria-label="Open WhatsApp in a new tab">
+      <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    </a>
+    <a href="https://www.instagram.com/__a_._d_._i__?igsh=MWpwd2IwczBqaHN2eA==" target="_blank" rel="noopener noreferrer" class="fab-action-btn fab-action-link fab-action-link--instagram" aria-label="Open Instagram in a new tab">
+      <i class="fab fa-instagram" aria-hidden="true"></i>
+    </a>
+  </div>
+
+
+  <!-- Header Navigation -->
+  <header class="main-header">
+    <div class="nav-container">
+    <a href="#hero" class="brand-logo" aria-label="Adarsh Portfolio Home Page">
+        <img src="assets/img/logo.jpeg" alt="Adarsh Portfolio" style="height: 60px; width: auto;">
+    </a>
+      
+  <nav class="desktop-navigation" aria-label="Main Navigation Hierarchy">
+        <a href="#about" class="nav-anchor-link">About</a>
+        <a href="#education" class="nav-anchor-link">Education</a>
+        <a href="#skills" class="nav-anchor-link">Skills</a>
+        <a href="#projects" class="nav-anchor-link">Projects</a>
+        <a href="#certifications" class="nav-anchor-link">Certifications</a>
+      <a href="#contact" class="nav-anchor-link">Contact</a>
+      
+      </nav>
+
+
+
+      <div class="header-action-wrapper">
+        <a href="assets/resume/Adarsh_Panda_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cta-outline-btn nav-resume-btn">
+          <span>Resume <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+        </a>
+        <button class="mobile-toggle-trigger" aria-label="Toggle Navigation Screen Menu" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Overlay Navigation Screen Menu -->
+  <div class="mobile-nav-overlay" aria-hidden="true">
+    <nav class="mobile-nav-links" aria-label="Mobile Navigation Hierarchy">
+      <a href="#about" class="mobile-nav-anchor">About</a>
+      <a href="#education" class="mobile-nav-anchor">Education</a>
+      <a href="#skills" class="mobile-nav-anchor">Skills</a>
+      <a href="#projects" class="mobile-nav-anchor">Projects</a>
+      <a href="#certifications" class="mobile-nav-anchor">Certifications</a>
+      <a href="#contact" class="mobile-nav-anchor">Contact</a>
+
+      <a href="assets/resume/Adarsh_Panda_Resume.pdf" target="_blank" rel="noopener noreferrer" class="mobile-nav-resume">View Resume</a>
+    </nav>
+
+  </div>
+
+  <main id="main-content">
+    
+    <!-- Hero Section -->
+    <section id="hero" class="hero-viewport-section">
+      <div class="layout-container hero-grid-layout">
+        <div class="hero-text-node">
+          <div class="hero-meta-badge reveal-item">OPEN TO NEW OPPORTUNITIES</div>
+          <h1 class="hero-main-title reveal-item"> Namaste <span class="wave-emoji">🙏</span> I'm <br><span class="neon-gradient-text">Adarsh Panda</span> <span class="wave-emoji">👋</span></h1>
+          
+          <div class="typing-animation-container reveal-item" aria-label="Professional Roles Architecture">
+            <span class="static-prefix">I am a </span>
+            <span id="animated-role-target"></span><span class="typing-cursor">|</span>
+          </div>
+
+          <p class="hero-narrative-paragraph reveal-item">
+            I'm passionate about building modern web applications, solving real-world problems through technology, and transforming ideas into impactful digital experiences.
+          </p>
+
+          <div class="hero-action-cluster reveal-item">
+            <a href="#contact" class="premium-solid-btn">Let's Build <i class="fa-solid fa-bolt"></i></a>
+            <a href="#projects" class="premium-glass-btn">View Projects</a>
+            <a href="assets/cv/Adarsh_Panda_cv.pdf" class="premium-text-btn" download>Download CV <i class="fa-solid fa-download"></i></a>
+          </div>
+
+          <div class="hero-social-strip reveal-item">
+            <a href="https://www.linkedin.com/in/adarsh-panda-5181b9214" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Professional Directory Link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com/ada203880-boop" target="_blank" rel="noopener noreferrer" aria-label="GitHub Engineering Code Repository Link"><i class="fab fa-github"></i></a>
+            <a href="https://www.instagram.com/__a_._d_._i__?igsh=MWpwd2IwczBqaHN2eA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram Digital Brand Platform Link"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/919861054025" target="_blank" rel="noopener noreferrer" aria-label="Direct encrypted WhatsApp chat routing"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="hero-media-node reveal-item">
+          <div class="profile-parallax-container" id="profile-card">
+            <div class="glowing-halo-ring"></div>
+            <div class="profile-image-mask">
+              <img src="assets/img/profile.jpeg" alt="Adarsh Panda Professional Profile Photographic Frame Portrait" class="hero-profile-asset">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator-element" aria-hidden="true">
+        <div class="mouse-scroll-shape"><div class="mouse-scroll-wheel"></div></div>
+      </div>
+    </section>
+
+    <!-- Identity / About Section -->
+    <section id="about" class="standard-viewport-section">
+      <div class="layout-container">
+        <div class="section-title-block align-left">
+          <span class="section-kicker">01 // About Me</span>
+          <h2 class="section-heading">A Software Developer Obsessed With Systems</h2>
+        </div>
+
+        <div class="about-grid-architecture about-grid-architecture--premium">
+          <div class="about-text-column about-text-column--left reveal-item">
+            <p class="highlighted-lead about-reveal-lead">Hello! I'm Adarsh Panda, a B.Tech CSE Graduate & Full-Stack Developer from Bhubaneswar.</p>
+            <p class="body-narrative-text about-reveal-paragraph">Passionate about full-stack development and machine learning. Beyond my B.Tech studies at CV Raman Global University.</p>
+            <p class="body-narrative-text about-reveal-paragraph">I've spent my time building end-to-end projects that analyze and predict trends. Whether it's cleaning messy data or designing responsive interfaces.</p>
+            <p class="body-narrative-text about-reveal-paragraph">I’m driven by creating software that is both efficient and impactful.</p>
+            <div class="about-data-strips">
+              <div class="data-strip-item">
+                <span class="data-strip-label"><i class="fa-solid fa-location-dot"></i> Location</span>
+                <span class="data-strip-val">Bhubaneswar, Odisha</span>
+              </div>
+              <div class="data-strip-item">
+                <span class="data-strip-label"><i class="fa-solid fa-graduation-cap"></i> Degree</span>
+                <span class="data-strip-val">B.Tech Computer Science Engineering</span>
+              </div>
+              <div class="data-strip-item">
+                <span class="data-strip-label"><i class="fa-solid fa-university "></i> College</span>
+                <span class="data-strip-val">CV Raman Global University</span>
+              </div>
+              <div class="data-strip-item">
+                <span class="data-strip-label"><i class="fa-solid fa-calendar-days "></i> Passout Year</span>
+                <span class="data-strip-val">2021-2025</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-counter-column about-counter-column--right">
+            <div class="about-globe-shell reveal-item" aria-label="Interactive 3D globe visualization">
+              <div class="about-globe-frame">
+                <canvas id="about-globe-canvas" aria-hidden="true"></canvas>
+                <div class="about-globe-orbit-glow" aria-hidden="true"></div>
+
+                <div class="about-globe-icons" aria-hidden="true">
+                  <div class="tech-icon tech-icon--java" title="Java"><i class="fab fa-java"></i></div>
+                  <div class="tech-icon tech-icon--python" title="Python"><i class="fab fa-python"></i></div>
+                  <div class="tech-icon tech-icon--react" title="React"><i class="fab fa-react"></i></div>
+                  <div class="tech-icon tech-icon--javascript" title="JavaScript"><i class="fab fa-js"></i></div>
+                  <div class="tech-icon tech-icon--mysql" title="MySQL"><i class="fas fa-database"></i></div>
+                  <div class="tech-icon tech-icon--git" title="Git"><i class="fab fa-git-alt"></i></div>
+                  <div class="tech-icon tech-icon--vscode" title="VS Code"><i class="fas fa-code"></i></div>
+                </div>
+              </div>
+
+              <div class="about-dev-card" aria-label="Developer identity card">
+                <div class="about-dev-card-left">
+                  <div class="about-dev-avatar" aria-hidden="true">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                  </div>
+                </div>
+                <div class="about-dev-card-right">
+                  <div class="about-dev-name">Adarsh Panda</div>
+                  <div class="about-dev-role">Software Developer</div>
+                  <div class="about-dev-location">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <span>Bhubaneswar, India</span>
+                  </div>
+                  <div class="about-dev-status-row">
+                    <span class="about-dev-status-label">Status</span>
+                    <span class="about-dev-status-indicator" aria-hidden="true"></span>
+                    <span class="about-dev-status-text">OPEN TO NEW OPPORTUNITIES</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Education Section -->
+    <section id="education" class="standard-viewport-section alternate-bg">
+      <div class="layout-container">
+        <div class="section-title-block align-center">
+          <span class="section-kicker">02 // Education</span>
+          <h2 class="section-heading">My Education</h2>
+        </div>
+        
+        <div style="height:100px"></div>
+
+        <div class="timeline-chronology-container">
+
+          <div class="timeline-node-item reveal-item">
+            <div class="timeline-node-card">
+              <div class="timeline-node-date"><i class="fa-solid fa-school"> </i>2020</div>
+              <h3 class="timeline-node-title">Higher Secondary</h3>
+              <p class="timeline-node-body">Completed my Science stream at <strong>Sudhananda Vidyalaya</strong> with a focus on Mathematics, Physics, Chemistry, and Computer Science.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node-item reveal-item">
+            <div class="timeline-node-card">
+              <div class="timeline-node-date"><i class="fa-solid fa-graduation-cap"></i>2021</div>
+              <h3 class="timeline-node-title">B.Tech in Software Engineering</h3>
+              <p class="timeline-node-body">Started B.Tech in Computer Science Engineering at C.V. Raman Global University. Focus on software architecture, full-stack development, and data science.</p>
+            </div>
+          </div>
+
+          <div class="timeline-node-item reveal-item">
+            <div class="timeline-node-card">
+              <div class="timeline-node-date"><i class="fa-solid fa-calendar-days"></i>2025</div>
+              <h3 class="timeline-node-title">Engineering Degree Graduation</h3>
+              <p class="timeline-node-body">Graduated with a B.Tech in Computer Science Engineering, ready to deploy full-stack applications and modern microservices.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Capabilities / Skills Section -->
+    <section id="skills" class="standard-viewport-section">
+      <div class="layout-container">
+        <div class="section-title-block align-left">
+          <span class="section-kicker">03 // Full-Stack Capabilities</span>
+          <h2 class="section-heading">Technical Skills</h2>
+
+        </div>
+
+        <div class="skills-layout-with-sidebar">
+          <div class="skills-cards-grid reveal-item">
+            <!-- Category: Programming -->
+
+          <div class="skill-matrix-card reveal-item">
+              <div class="skill-matrix-header">
+                <div class="skill-matrix-icon"><i class="fa-solid fa-code"></i></div>
+                <h3 class="skill-matrix-title">Programming Languages</h3>
+              </div>
+            <div class="skill-matrix-content">
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>Python</span><span>90%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style="width: 90%;"></div></div>
+              </div>
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>JavaScript</span><span>85%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style="width: 85%;"></div></div>
+              </div>
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>C++</span><span>80%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style="width: 80%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category: Web Development -->
+          <div class="skill-matrix-card reveal-item">
+            <div class="skill-matrix-header">
+              <div class="skill-matrix-icon"><i class="fa-solid fa-layer-group"></i></div>
+            <h3 class="skill-matrix-title">Frontend &amp; Backend</h3>
+
+            </div>
+            <div class="skill-matrix-content">
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>Node.js / Express.js</span><span>88%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style= "width:88%;"></div></div>
+              </div>
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>HTML5 / CSS3 Layouts</span><span>92%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style= "width:92%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category: Database -->
+          <div class="skill-matrix-card reveal-item">
+            <div class="skill-matrix-header">
+              <div class="skill-matrix-icon"><i class="fa-solid fa-database"></i></div>
+              <h3 class="skill-matrix-title">Databases</h3>
+
+            </div>
+            <div class="skill-matrix-content">
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>MySQL Engine</span><span>85%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style= "width:85%;"></div></div>
+              </div>
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>Relational DBMS Paradigms</span><span>87%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style= "width:87%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category: Data Science -->
+          <div class="skill-matrix-card reveal-item">
+            <div class="skill-matrix-header">
+              <div class="skill-matrix-icon"><i class="fa-solid fa-chart-line"></i></div>
+              <h3 class="skill-matrix-title">Data Science & ML</h3>
+            </div>
+            <div class="skill-matrix-content">
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>Pandas & NumPy Computation</span><span>88%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style="width: 88%;"></div></div>
+              </div>
+              <div class="progress-bar-node">
+                <div class="progress-bar-labels"><span>Machine Learning Classification</span><span>82%</span></div>
+                <div class="progress-bar-track"><div class="progress-bar-fill-bar" style="width: 82%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <aside class="skills-tools-sidebar reveal-item" aria-label="Tools and Environment">
+            <div class="skills-tools-title">Tools &amp; Environment</div>
+            <ul class="skills-tools-list">
+              <li class="skills-tools-item"><i class="fab fa-github" aria-hidden="true"></i><span>GitHub</span></li>
+              <li class="skills-tools-item"><i class="fa-solid fa-terminal" aria-hidden="true"></i><span>VS Code</span></li>
+              <li class="skills-tools-item"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Jupyter Notebooks</span></li>
+              <li class="skills-tools-item"><i class="fa-solid fa-gears" aria-hidden="true"></i><span>REST APIs</span></li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Artifacts / Projects Section -->
+    <section id="projects" class="standard-viewport-section alternate-bg">
+      <div class="layout-container">
+        <div class="section-title-block align-center">
+          <span class="section-kicker">04 // Production Repository</span>
+<h2 class="section-heading">MY PROJECTS</h2>
+        </div>
+
+        <div class="projects-grid-architecture">
+          <!-- Project Card 1: APEXCORE ATM -->
+<article class="premium-project-card reveal-item" data-tilt>
+    <div class="project-visual-container">
+        <div class="project-overlay-glow"></div>
+        <div class="project-card-graphic-placeholder">
+            <i class="fa-solid fa-credit-card large-icon"></i>
+        </div>
+    </div>
+    <div class="project-details-body">
+        <span class="project-functional-badge">Full Stack</span>
+        <h3 class="project-card-title">APEXCORE ATM Platform</h3>
+        <p class="project-card-summary">
+            A secure full-stack ATM platform featuring RESTful APIs for authentication, balance updates, and real-time transaction history. Implemented strict MySQL ledger updates to maintain data integrity.
+        </p>
+        <div class="project-technologies-wrap">
+            <span class="tech-tag-pill">Node.js</span>
+            <span class="tech-tag-pill">Express.js</span>
+            <span class="tech-tag-pill">MySQL</span>
+        </div>
+        <div class="project-routing-actions">
+            <a href="https://github.com" target="_blank" class="project-btn-link primary-link">
+                <i class="fab fa-github"></i> View Source
+            </a>
+        </div>
+    </div>
+</article>
+          <!-- Project Card 2 -->
+          <article class="premium-project-card reveal-item" data-tilt>
+            <div class="project-visual-container">
+              <div class="project-overlay-glow"></div>
+              <div class="project-card-graphic-placeholder">
+                <i class="fa-solid fa-ship large-icon"></i>
+              </div>
+                <span class="project-functional-badge">ML Project</span>
+              </div>
+              <div class="project-details-body">
+              <h3 class="project-card-title">Titanic Survival Prediction</h3>
+              <p class="project-card-summary">
+                A machine learning project using Python that predicts passenger survival using data preprocessing, feature engineering, and classification algorithms with approximately 83% accuracy.
+              </p>
+              <div class="project-technologies-wrap">
+                <span class="tech-tag-pill">Python</span>
+                <span class="tech-tag-pill">Pandas</span>
+                <span class="tech-tag-pill">NumPy</span>
+                <span class="tech-tag-pill">Machine Learning</span>
+              </div>
+              <div class="project-routing-actions">
+                <a href="https://github.com/ada203880-boop" target="_blank" rel="noopener noreferrer" class="project-btn-link secondary-link" aria-label="View Titanic classification source code on GitHub"><i class="fab fa-github"></i> Source</a>
+                <a href="#" onclick="return false;" class="project-btn-link primary-link lock-status" aria-label="Live preview access placeholder"><i class="fa-solid fa-satellite-dish"></i> Simulation</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Credentials / Certifications Section -->
+    <section id="certifications" class="standard-viewport-section">
+      <div class="layout-container">
+        <div class="section-title-block align-left">
+          <span class="section-kicker">05 // Industry Authentication</span>
+        </div>
+
+        <div class="credentials-flex-grid">
+          
+          <!-- Cert 1 -->
+          <div class="credential-glass-card reveal-item">
+            <div class="credential-card-left">
+              <div class="credential-seal-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            </div>
+            <div class="credential-card-right">
+              <span class="credential-issuer-tag">NPTEL IIT Kanpur</span>
+              <h3 class="credential-official-name">Practical Cyber Security for Cyber Security Practitioners</h3>
+              <div class="credential-grading-metric">
+                <p>Security-driven developer with a strong foundation in Practical Cyber Security and Industrial Data Science. Certified as an Elite practitioner by IIT Kanpur, I combine hands-on experience in threat assessment with advanced data modeling to solve complex security challenges. Dedicated to continuous learning and implementing robust defense strategies in fast-paced technical environments.</p>
+                <span class="metric-badge-pill">Elite Certification</span>
+                <span class="score-metric">Score Verification: <strong>67/100</strong></span>
+                <a href="assets/nptel/Adarsh_Panda_Nptel.pdf" target="_blank" class="view-cert-btn">View Certificate</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cert 2 -->
+          <div class="credential-glass-card reveal-item">
+            <div class="credential-card-left">
+              <div class="credential-seal-icon"><i class="fa-solid fa-brain"></i></div>
+            </div>
+            <div class="credential-card-right">
+              <span class="credential-issuer-tag">Learn Wik Solutions Pvt. Ltd.</span>
+              <h3 class="credential-official-name">Industrial Training Ecosystem in Data Science</h3>
+              <p>Completed an intensive Industrial Training Ecosystem in Data Science at LearnWik Solutions. Developed proficiency in the Core Engineering Stack, focusing on real-world data processing, statistical analysis, and implementing scalable data solutions for industrial applications.</p>
+              <div class="credential-grading-metric">
+                <span class="metric-badge-pill">Core Engineering Stack Complete</span>
+                <span class="score-metric">Ref ID: <strong>APR23096</strong></span>
+                <a href="assets/learnwik/Adarsh_Panda_learnwik.png" target="_blank" class="view-cert-btn">View Certificate</a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CV Repository Component Module Section -->
+    <section id="resume-download-section" class="standard-viewport-section alternate-bg visual-cta-frame">
+      <div class="layout-container center-aligned-flexbox reveal-item">
+        <div class="neon-background-blur-sphere"></div>
+        <span class="cta-micro-badge">CURRICULUM VITAE</span>
+        <p class="cta-supporting-narrative">Download my latest resume for a full look at my academic history, technical skills, and key projects.</p>
+        <div class="cta-button-cluster">
+          <a href="assets/resume/Adarsh_Panda_Resume.pdf" class="premium-solid-btn" download>
+            <span>Download Resume <i class="fa-solid fa-cloud-arrow-down"></i></span>
+          </a>
+          <a href="assets/cv/Adarsh_Panda_cv.pdf" target="_blank" rel="noopener noreferrer" class="premium-glass-btn">
+            <span>View Interactive CV <i class="fa-solid fa-eye"></i></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connect / Contact Section -->
+    <section id="contact" class="standard-viewport-section">
+      <div class="layout-container">
+        <div class="section-title-block align-center">
+          <span class="section-kicker">06 // Communication Routing</span>
+          <h2 class="section-heading">Let's Build Something Amazing Together</h2>
+        </div>
+
+        <div class="contact-grid-architecture">
+          
+          <div class="contact-directory-node reveal-item">
+            <h3 class="directory-node-title">Contact Me</h3>
+
+            
+            <div class="directory-links-stack">
+              <a href="mailto:ada203880@gmail.com" class="directory-card-anchor">
+                <div class="directory-card-icon"><i class="fa-solid fa-envelope"></i></div>
+                <div class="directory-card-text">
+                  <span class="directory-label">Email</span>
+                  <span class="directory-val">ada203880@gmail.com</span>
+
+                </div>
+              </a>
+
+              <a href="tel:+919861054025" class="directory-card-anchor">
+                <div class="directory-card-icon"><i class="fa-solid fa-phone"></i></div>
+                <div class="directory-card-text">
+                  <span class="directory-label">Phone</span>
+                  <span class="directory-val">+91 9861054025</span>
+
+                </div>
+              </a>
+
+              <div class="directory-card-anchor no-hover-redirect">
+                <div class="directory-card-icon"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="directory-card-text">
+                  <span class="directory-label">Location</span>
+                  <span class="directory-val">Bhubaneswar, Odisha, India</span>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="directory-social-horizontal-matrix">
+              <a href="https://www.linkedin.com/in/adarsh-panda-5181b9214" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile Reference Network Access"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://github.com/ada203880-boop" target="_blank" rel="noopener noreferrer" aria-label="GitHub Development Profile System Access"><i class="fab fa-github"></i></a>
+              <a href="https://www.instagram.com/__a_._d_._i__?igsh=MWpwd2IwczBqaHN2eA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram Platform Digital Identity View"><i class="fab fa-instagram"></i></a>
+              <a href="https://wa.me/919861054025" target="_blank" rel="noopener noreferrer" aria-label="Direct Instant Messenger Tunnel Application Routing"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+
+          <div class="contact-form-node reveal-item">
+            <form id="portfolio-contact-form" autocomplete="on">
+              <div class="form-input-row-split">
+                <div class="input-component-field">
+                  <label for="form-name-field" class="premium-input-label">Your Name</label>
+                  <input type="text" id="form-name-field" name="name" class="premium-form-input" placeholder="e.g., Adi" required>
+
+                </div>
+                <div class="input-component-field">
+                  <label for="form-email-field" class="premium-input-label">Communication Return Email</label>
+                  <input type="email" id="form-email-field" name="email" class="premium-form-input" placeholder="e.g., mail@example.com" required>
+                </div>
+              </div>
+              <div class="input-component-field">
+                  <label for="form-subject-field" class="premium-input-label">Subject</label>
+                  <input type="text" id="form-subject-field" name="subject" class="premium-form-input" placeholder="How can I help you?" required>
+
+              </div>
+              <div class="input-component-field">
+                  <label for="form-message-field" class="premium-input-label">Message</label>
+                  <textarea id="form-message-field" name="message" class="premium-form-textarea" placeholder="Type your message here..." required></textarea>
+              </div>
+              
+              <button type="submit" class="premium-submit-btn-element">
+                <span>Send Message <i class="fa-solid fa-paper-plane"></i></span>
+              </button>
+
+              
+              <div id="form-response-status" class="form-feedback-status-msg" aria-live="polite"></div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Brand Platform Footer -->
+  <footer class="brand-footer-system">
+    <div class="layout-container footer-inner-grid">
+      <div class="footer-left-identity">
+        <div class="footer-brand-logo"></div>
+        <a href="#hero" class="brand-logo" aria-label="Adarsh Portfolio Home Page">
+        <img src="assets/img/logo.jpeg" alt="Adarsh Portfolio" style="height: 40px; width: auto;">
+    </a>
+        <p class="footer-mission-statement">Reliable backends. Interactive frameworks. Optimized delivery.</p>
+        <p>My work is about more than code — it’s about creating systems that endure, interfaces that connect, and pipelines that move with precision. Every project is a pursuit of resilience, clarity, and performance.</p>
+      </div>
+      <div class="footer-right-routing">
+        <ul class="footer-navigation-directory-list" aria-label="Footer Quick Links Matrix">
+          <li><a href="#about" class="footer-link">About</a></li>
+          <li><a href="#education" class="footer-link">Education</a></li>
+          <li><a href="#skills" class="footer-link">Skills</a></li>
+          <li><a href="#projects" class="footer-link">Projects</a></li>
+          <li><a href="#certifications" class="footer-link">Certifications</a></li>
+          <li><a href="#contact" class="footer-link">Contact</a></li>
+
+
+          <li><a href="assets/resume/Adarsh_Panda_Resume.pdf" class="footer-link" download>Download CV</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="layout-container footer-copyright-row-strip">
+      <p class="copyright-legal-text">&copy; 2026 Adarsh Panda. All Engineering Infrastructure Rights Reserved.</p>
+      <p class="crafted-engineering-credit">Engineered with Dark Neo-Glow Morphic UX Design Standard</p>
+    </div>
+  </footer>
+
+  <!-- Scripts: External Core Engine Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollreveal/4.0.9/scrollreveal.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+  <!-- About globe controller -->
+  <script type="module" src="aboutGlobe.js"></script>
+
+  <!-- Main JS (existing functionality preserved) -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+
