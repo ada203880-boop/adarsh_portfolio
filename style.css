@@ -2279,3 +2279,60 @@ about-dev-social-links {
     margin-right: 10px; /* Adjust this to 8px or 12px depending on your preference */
     color: #bb86fc;    /* This will make the icon match your purple theme */
 }
+/* --- MOBILE RESPONSIVE STYLES --- */
+
+/* Targets mobile phones (screens 768px and smaller) */
+@media (max-width: 768px) {
+    
+    /* 1. Reset Containers: Make sure your website doesn't overflow */
+    body, html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* 2. Adjust Layout: Change horizontal rows/flexboxes into vertical columns */
+    .container, .main-content, .hero, .projects-grid {
+        flex-direction: column !important;
+        width: 90% !important; /* Give some breathing room on the sides */
+        margin: 0 auto;
+        padding: 10px;
+    }
+
+    /* 3. Navigation Bar: Stack links vertically for mobile */
+    nav, .navbar {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav a {
+        display: block;
+        margin: 10px 0;
+    }
+
+    /* 4. Images: Make sure images shrink to fit the screen */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* 5. Typography: Shrink large headings for mobile */
+    h1 {
+        font-size: 28px !important;
+    }
+    
+    h2 {
+        font-size: 24px !important;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    /* 6. Buttons: Make them easier to tap with a thumb */
+    .btn, button {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
+}
