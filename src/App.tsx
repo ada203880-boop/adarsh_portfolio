@@ -247,6 +247,7 @@ function Header() {
   const [scrolled, setScrolled] = useState(false);
   const close = useCallback(() => setOpen(false), []);
 
+  const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf`;
   const links: [string, string][] = [
     ['About', '#about'],
     ['What I Do', '#services'],
@@ -254,7 +255,7 @@ function Header() {
     ['Projects', '#projects'],
     ['Tech Stack', '#stack'],
     ['Certifications', '#certifications'],
-    ['Resume', '/resume.pdf'],
+    ['Resume', resumeUrl],
     ['Contact', '#contact'],
   ];
 
@@ -477,7 +478,7 @@ export default function App() {
                 </a>
                 <a
                   className="btn btn-ghost"
-                  href="/resume.pdf"
+                  href={`${import.meta.env.BASE_URL}resume.pdf`}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="View Resume / CV (opens in new tab)"
