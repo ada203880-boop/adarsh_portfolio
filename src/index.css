@@ -54,3 +54,19 @@ body {
   outline: 2px solid #22d3ee;
   outline-offset: 3px;
 }
+
+/* Toast progress bar drain animation */
+@keyframes toast-drain {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}
+
+/* Scroll reveal — sections start invisible, JS animates in */
+.reveal-ready {
+  opacity: 0;
+}

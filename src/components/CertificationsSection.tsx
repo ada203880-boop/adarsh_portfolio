@@ -1,14 +1,15 @@
-import { Award, Shield, Cpu, Cloud, Palette, CheckCircle2, Sparkles } from 'lucide-react';
+import { Award, Shield, Cpu, Cloud, Palette, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react';
 
 const CERTIFICATIONS = [
   {
     id: 'nptel',
     num: '01',
     name: 'Practical Cyber Security for Cyber Security Practitioners',
-    issuer: 'NPTEL — IIT Kanpur',
+    issuer: 'NPTEL - IIT Kanpur',
     category: 'CYBER SECURITY',
     color: 'rose',
     icon: Shield,
+    verifyUrl: 'https://nptel.ac.in/noc/Ecertificate/',
     description:
       'Comprehensive course covering network security principles, threat analysis, vulnerability assessment, and practical defense strategies for real-world systems.',
     skills: ['Network Security', 'Threat Analysis', 'Vulnerability Assessment', 'Ethical Hacking'],
@@ -21,6 +22,7 @@ const CERTIFICATIONS = [
     category: 'DATA SCIENCE',
     color: 'cyan',
     icon: Cpu,
+    verifyUrl: 'https://learnwik.com',
     description:
       'Hands-on industrial training covering Python-based data analysis, NumPy and Pandas pipelines, exploratory data analysis, and introductory machine learning workflows.',
     skills: ['Python', 'NumPy', 'Pandas', 'Machine Learning', 'EDA'],
@@ -33,6 +35,7 @@ const CERTIFICATIONS = [
     category: 'CLOUD SECURITY',
     color: 'orange',
     icon: Cloud,
+    verifyUrl: 'https://www.coursera.org/professional-certificates/palo-alto-networks-cybersecurity',
     description:
       'Foundational cloud security curriculum covering identity & access management, secure cloud architecture principles, and network protection in modern cloud environments.',
     skills: ['IAM', 'Cloud Architecture', 'Zero Trust', 'Network Protection'],
@@ -45,8 +48,9 @@ const CERTIFICATIONS = [
     category: 'UX DESIGN',
     color: 'emerald',
     icon: Palette,
+    verifyUrl: 'https://www.coursera.org/professional-certificates/google-ux-design',
     description:
-      'Google-authored course on UX design thinking — covering user research, wireframing, usability testing, and inclusive design principles for digital products.',
+      'Google-authored course on UX design thinking - covering user research, wireframing, usability testing, and inclusive design principles for digital products.',
     skills: ['UX Research', 'Wireframing', 'Usability Testing', 'Inclusive Design'],
   },
 ];
@@ -138,6 +142,21 @@ export function CertificationsSection() {
                       </span>
                     ))}
                   </div>
+
+                  {/* Verify link */}
+                  <a
+                    href={cert.verifyUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`
+                      mt-5 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5
+                      font-mono text-[10px] uppercase tracking-widest transition-all duration-200
+                      ${c.badge} hover:opacity-90 hover:scale-[1.02]
+                    `}
+                  >
+                    <ExternalLink size={10} />
+                    Verify Credential
+                  </a>
                 </div>
 
                 {/* Left accent bar */}

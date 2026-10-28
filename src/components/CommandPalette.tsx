@@ -56,6 +56,9 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               <span className="text-white font-semibold">contact</span> <span>Display email, phone, and coordinates</span>
               <span className="text-white font-semibold">about</span> <span>Read background & engineering focus</span>
               <span className="text-white font-semibold">sudo hire</span> <span>Initiate recruitment / interview request</span>
+              <span className="text-white font-semibold">hire me</span> <span>Show open-to-work status</span>
+              <span className="text-white font-semibold">whoami</span> <span>Identity lookup</span>
+              <span className="text-emerald-400 font-semibold">matrix</span> <span className="text-emerald-400/70">Secret easter egg</span>
               <span className="text-white font-semibold">clear</span> <span>Clear console logs</span>
             </div>
           </div>
@@ -150,6 +153,73 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               className="mt-2.5 inline-block rounded bg-emerald-500 px-3 py-1.5 font-bold text-black hover:bg-emerald-400 transition"
             >
               Open Direct Mail
+            </a>
+          </div>
+        );
+        break;
+
+      case 'matrix':
+        sound.playSuccess();
+        output = (
+          <span className="text-emerald-400 font-mono text-xs animate-pulse">
+            Initiating Matrix rain... 🟩 (Easter egg unlocked! You found it.)
+          </span>
+        );
+        // Trigger a temporary full-screen matrix overlay
+        (() => {
+          const canvas = document.createElement('canvas');
+          canvas.style.cssText = 'position:fixed;inset:0;z-index:99999;pointer-events:none;opacity:0.92;';
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          document.body.appendChild(canvas);
+          const ctx = canvas.getContext('2d')!;
+          const cols = Math.floor(canvas.width / 16);
+          const drops = Array(cols).fill(1);
+          const chars = 'アイウエオカキクケコ0123456789ABCDEF'.split('');
+          let frame = 0;
+          const draw = () => {
+            ctx.fillStyle = 'rgba(0,0,0,0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff41';
+            ctx.font = '14px monospace';
+            drops.forEach((y, i) => {
+              const char = chars[Math.floor(Math.random() * chars.length)];
+              ctx.fillText(char, i * 16, y * 16);
+              if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+              drops[i]++;
+            });
+            frame = requestAnimationFrame(draw);
+          };
+          draw();
+          setTimeout(() => {
+            cancelAnimationFrame(frame);
+            canvas.remove();
+          }, 5000);
+        })();
+        break;
+
+      case 'whoami':
+        output = (
+          <span className="text-cyan-300 font-mono text-xs">
+            adarsh@portfolio:~$ <span className="text-white">Adarsh Panda</span> — Full-Stack Developer, Bhubaneswar, India
+          </span>
+        );
+        break;
+
+      case 'open to work':
+      case 'hire me':
+        sound.playSuccess();
+        output = (
+          <div className="rounded border border-cyan-500/30 bg-cyan-950/20 p-3 text-xs font-mono text-cyan-300">
+            <p className="font-bold flex items-center gap-1.5">
+              <Sparkles size={14} /> STATUS: ACTIVELY SEEKING OPPORTUNITIES
+            </p>
+            <p className="mt-1 text-zinc-300">B.Tech CSE 2025 · Full-Stack Developer · Available immediately.</p>
+            <a
+              href={`mailto:${portfolio.email}?subject=Opportunity%20for%20Adarsh%20Panda`}
+              className="mt-2.5 inline-block rounded bg-cyan-500 px-3 py-1.5 font-bold text-black hover:bg-cyan-400 transition"
+            >
+              Send Offer →
             </a>
           </div>
         );
