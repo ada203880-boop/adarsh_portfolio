@@ -1,40 +1,56 @@
-/* Global reset and base — fonts loaded via index.html link tags */
+@import "tailwindcss";
+
 :root {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: #f0f3ff;
-  background: #050813;
+  background-color: #03060c;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-optical-sizing: auto;
-  font-weight: 400;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 92px;
+  scroll-behavior: auto;
+  /* Let Lenis handle the inertia smooth scroll */
+  background: #03060c;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #050813;
+  background: #03060c;
   overflow-x: hidden;
 }
 
-a { color: inherit; text-decoration: none; }
-button { font: inherit; cursor: pointer; }
-
-::selection {
-  background: #7c44ee;
-  color: #fff;
+/* Custom cinematic scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Focus visible outline — a11y */
+::-webkit-scrollbar-track {
+  background: #03060c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.6);
+}
+
+::selection {
+  background: #06b6d4;
+  color: #000;
+}
+
 :focus-visible {
-  outline: 2px solid #42d8ff;
+  outline: 2px solid #22d3ee;
   outline-offset: 3px;
 }
