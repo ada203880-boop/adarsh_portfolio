@@ -4,14 +4,24 @@ import { portfolio } from '../data/portfolio';
 import characterScene from '../assets/character-scene.png';
 import { sound } from '../lib/sound';
 import { useScrambleText } from '../lib/useScrambleText';
+import { useTypewriter } from '../lib/useTypewriter';
 
 interface HeroSectionProps {
   onOpenTerminal: () => void;
+  onOpenResume?: () => void;
 }
 
-export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
+export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const { displayText: headlinePurpose, trigger: triggerScramble } = useScrambleText('Purpose.');
+
+  const roleText = useTypewriter([
+    'FULL-STACK SOFTWARE ENGINEER',
+    'REACT.JS & SYSTEM ARCHITECT',
+    'NODE.JS & PYTHON DEVELOPER',
+    'REST APIS & DATABASE DESIGN',
+    'OPEN FOR FULL-TIME ROLES',
+  ], 65, 2000);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (window.innerWidth < 1024) return;
@@ -19,6 +29,14 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
     setTilt({ x: x * 18, y: -y * 18 });
+  };
+
+  const handleResumeClick = (e: React.MouseEvent) => {
+    sound.playHover();
+    if (onOpenResume) {
+      e.preventDefault();
+      onOpenResume();
+    }
   };
 
   return (
@@ -30,7 +48,7 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
       <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[550px] w-[550px] rounded-full bg-cyan-600/[0.12] blur-[140px]" />
       <div className="pointer-events-none absolute bottom-10 right-10 h-[450px] w-[450px] rounded-full bg-indigo-600/[0.1] blur-[150px]" />
 
-      {/* ── Left vertical social dock (desktop) ────────────── */}
+      {/* Left vertical social dock (desktop) */}
       <div className="pointer-events-none absolute left-5 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-5 lg:flex">
         {/* Vertical line top */}
         <div className="h-20 w-[1px] bg-gradient-to-b from-transparent to-white/20" />
@@ -58,14 +76,12 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
         <div className="h-20 w-[1px] bg-gradient-to-b from-white/20 to-transparent" />
       </div>
 
-      {/* ── Floating Resume Badge (bottom-right, desktop) ──── */}
+      {/* Floating Resume Badge (bottom-right, desktop) */}
       <a
         href={`${import.meta.env.BASE_URL}resume.pdf`}
-        target="_blank"
-        rel="noreferrer"
-        onClick={() => sound.playClick()}
+        onClick={handleResumeClick}
         data-cursor="RESUME"
-        className="pointer-events-auto absolute bottom-24 right-6 z-20 hidden flex-col items-center gap-4 lg:flex"
+        className="pointer-events-auto absolute bottom-24 right-6 z-20 hidden flex-col items-center gap-4 lg:flex cursor-pointer"
       >
         <div className="h-16 w-[1px] bg-gradient-to-b from-transparent to-white/20" />
         <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-4 py-2 font-mono text-[10px] tracking-widest text-white/60 backdrop-blur-md transition hover:border-cyan-400 hover:text-cyan-300">
@@ -74,7 +90,7 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
         <div className="h-16 w-[1px] bg-gradient-to-b from-white/20 to-transparent" />
       </a>
 
-      {/* ── Main Content ─────────────────────────────────────── */}
+      {/* Main Content */}
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 z-10 flex-1 flex flex-col justify-center">
 
         {/* Status capsule */}
@@ -83,8 +99,10 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
             <span>AVAILABLE FOR OPPORTUNITIES // 2026</span>
           </div>
-          <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 text-[10px] font-mono tracking-widest text-white/50">
-            FULL-STACK SOFTWARE ENGINEER
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-950/30 px-3 py-1 text-[10px] font-mono tracking-widest text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
+            <Sparkles size={11} className="text-cyan-400" />
+            <span>{roleText}</span>
+            <span className="inline-block w-1.5 h-3 bg-cyan-400 animate-pulse ml-0.5" />
           </div>
         </div>
 
@@ -127,11 +145,9 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
 
               <a
                 href={`${import.meta.env.BASE_URL}resume.pdf`}
-                target="_blank"
-                rel="noreferrer"
+                onClick={handleResumeClick}
                 data-cursor="RESUME"
-                onClick={() => sound.playHover()}
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-xs font-semibold tracking-wider text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-xs font-semibold tracking-wider text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/10 cursor-pointer"
               >
                 <FileText size={14} className="text-cyan-400" />
                 RESUME / CV
@@ -147,7 +163,7 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
               </button>
             </div>
 
-            {/* Social links (mobile/tablet — the dock hides on desktop) */}
+            {/* Social links (mobile/tablet - dock hides on desktop) */}
             <div className="mt-10 flex items-center gap-6 border-t border-white/10 pt-6 lg:hidden">
               <a href={portfolio.links.github} target="_blank" rel="noreferrer"
                 className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-cyan-400 transition">
@@ -183,7 +199,7 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900/90 to-black p-2 border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.8)]">
                 <img
                   src={characterScene}
-                  alt="Adarsh Panda — Full Stack Developer character artwork"
+                  alt="Adarsh Panda - Full Stack Developer character artwork"
                   className="w-full h-auto object-cover rounded-xl transition-transform duration-700 hover:scale-105"
                   loading="eager"
                 />
@@ -195,7 +211,7 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
                     <span className="flex items-center gap-1.5"><Sparkles size={11} /> ADARSH PANDA // CSE</span>
                     <span className="text-white/40">CGPA 7.6 / 10</span>
                   </div>
-                  <div className="mt-1 text-xs font-medium text-white/90">Full-Stack Engineer • React & Python • Node.js</div>
+                  <div className="mt-1 text-xs font-medium text-white/90">Full-Stack Engineer · React & Python · Node.js</div>
                 </div>
 
                 <div className="absolute top-4 right-4 rounded-lg border border-cyan-400/40 bg-cyan-950/80 px-2.5 py-1 text-[9px] font-mono font-bold tracking-wider text-cyan-300 backdrop-blur-md"
@@ -212,7 +228,7 @@ export function HeroSection({ onOpenTerminal }: HeroSectionProps) {
       {/* Bottom Tech Ticker */}
       <div className="mt-16 border-y border-white/10 bg-white/[0.01] py-3.5 overflow-hidden">
         <div className="flex animate-pulse whitespace-nowrap gap-12 font-mono text-xs tracking-[0.25em] text-white/30">
-          {['REACT.JS', '•', 'NODE.JS', '•', 'PYTHON', '•', 'EXPRESS.JS', '•', 'REST APIS', '•', 'MYSQL', '•', 'WORDPRESS', '•', 'TAILWIND', '•', 'GSAP', '•', 'DATA SCIENCE'].map((t, i) => (
+          {['REACT.JS', '·', 'NODE.JS', '·', 'PYTHON', '·', 'EXPRESS.JS', '·', 'REST APIS', '·', 'MYSQL', '·', 'WORDPRESS', '·', 'TAILWIND', '·', 'GSAP', '·', 'DATA SCIENCE'].map((t, i) => (
             <span key={i}>{t}</span>
           ))}
         </div>
