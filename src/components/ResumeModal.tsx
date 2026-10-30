@@ -1,13 +1,14 @@
-import { FileText, Download, X, ExternalLink } from 'lucide-react';
+import { FileText, Download, X, ExternalLink, Sparkles } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { toast } from '../lib/toast';
 
 interface ResumeModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenInteractive?: () => void;
 }
 
-export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
+export function ResumeModal({ isOpen, onClose, onOpenInteractive }: ResumeModalProps) {
   if (!isOpen) return null;
 
   const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf`;
@@ -43,6 +44,20 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
           </div>
 
           <div className="flex items-center gap-2">
+            {onOpenInteractive && (
+              <button
+                type="button"
+                onClick={() => {
+                  sound.playClick();
+                  onOpenInteractive();
+                }}
+                className="hidden sm:flex items-center gap-1.5 rounded-lg border border-violet-500/40 bg-violet-950/40 px-3 py-1.5 font-mono text-[11px] font-medium text-violet-300 transition hover:bg-violet-900/50"
+              >
+                <Sparkles size={13} />
+                <span>Web Resume</span>
+              </button>
+            )}
+
             <a
               href={resumeUrl}
               download="Adarsh_Panda_Resume.pdf"

@@ -17,6 +17,18 @@ import { CRTOverlay } from './components/CRTOverlay';
 import { AudioVisualizerHUD } from './components/AudioVisualizerHUD';
 import { sound } from './lib/sound';
 
+// Advanced & Interactive Additions
+import { AskAdarshChat } from './components/AskAdarshChat';
+import { KonamiCode } from './components/KonamiCode';
+import { HiringStatusWidget } from './components/HiringStatusWidget';
+import MusicPlayer from './components/MusicPlayer';
+import { AdminView } from './components/AdminView';
+import { InteractiveResume } from './components/InteractiveResume';
+import { MultiDeviceMockup } from './components/MultiDeviceMockup';
+import { WorldMap } from './components/WorldMap';
+import { AchievementsSection } from './components/AchievementsSection';
+import WorkspaceGallery from './components/WorkspaceGallery';
+
 // Page Sections
 import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
@@ -35,6 +47,7 @@ export default function App() {
   const [loaderDone, setLoaderDone] = useState(false);
   const [isTerminalOpen, setTerminal] = useState(false);
   const [isResumeOpen, setResumeOpen] = useState(false);
+  const [isInteractiveResumeOpen, setInteractiveResumeOpen] = useState(false);
   const [activeSection, setSection] = useState('home');
   const [crtMode, setCrtMode] = useState(false);
   const [isMuted, setMuted] = useState(!sound.enabled);
@@ -104,7 +117,7 @@ export default function App() {
 
   // Active section tracker for nav pills
   useEffect(() => {
-    const IDS = ['home', 'about', 'skills', 'projects', 'telemetry', 'journey', 'education', 'certifications', 'services', 'contact'];
+    const IDS = ['home', 'about', 'skills', 'projects', 'devices', 'worldmap', 'achievements', 'telemetry', 'journey', 'education', 'certifications', 'workspace', 'services', 'contact'];
     const onScroll = () => {
       const y = window.scrollY + 220;
       for (const id of IDS) {
@@ -139,14 +152,40 @@ export default function App() {
       <CinematicCanvas />
       <CustomCursor />
 
-      {/* Overlays */}
+      {/* Overlays & Interactive Systems */}
       <CommandPalette
         isOpen={isTerminalOpen}
         onClose={() => setTerminal(false)}
         onToggleCRT={toggleCRT}
       />
-      <ResumeModal isOpen={isResumeOpen} onClose={() => setResumeOpen(false)} />
+      <ResumeModal
+        isOpen={isResumeOpen}
+        onClose={() => setResumeOpen(false)}
+        onOpenInteractive={() => {
+          setResumeOpen(false);
+          setInteractiveResumeOpen(true);
+        }}
+      />
+      <InteractiveResume
+        isOpen={isInteractiveResumeOpen}
+        onClose={() => setInteractiveResumeOpen(false)}
+      />
       <ToastContainer />
+
+      {/* Secret Diagnostic Admin View (#admin or PIN 2580) */}
+      <AdminView />
+
+      {/* Konami Code Easter Egg (↑↑↓↓←→←→BA) */}
+      <KonamiCode />
+
+      {/* AI "Ask Adarsh" Chat Widget (Gemini 2.0 Flash) */}
+      <AskAdarshChat />
+
+      {/* Ambient Lo-Fi Background Music Player */}
+      <MusicPlayer />
+
+      {/* Sticky Hiring Status Quick Widget (Desktop) */}
+      <HiringStatusWidget />
 
       {/* CRT Phosphor Mode */}
       <CRTOverlay active={crtMode} />
@@ -189,26 +228,38 @@ export default function App() {
         {/* 04 FEATURED SYSTEMS / PROJECTS */}
         <ProjectsSection />
 
-        {/* 05 LIVE GITHUB TELEMETRY RADAR */}
+        {/* 05 CROSS-DEVICE PERFECTION (Multi-Device Mockup) */}
+        <MultiDeviceMockup />
+
+        {/* 06 WHERE I'VE SHIPPED (Interactive World Map) */}
+        <WorldMap />
+
+        {/* 07 MILESTONE ACHIEVEMENTS (Gamer XP Log) */}
+        <AchievementsSection />
+
+        {/* 08 LIVE GITHUB TELEMETRY RADAR & HEATMAP */}
         <section id="telemetry" className="relative w-full max-w-full overflow-hidden bg-[#03060c] pb-20 sm:pb-24 text-white">
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
             <GithubActivity />
           </div>
         </section>
 
-        {/* 06 CAREER & EXPERIENCE TIMELINE */}
+        {/* 09 CAREER & EXPERIENCE TIMELINE */}
         <CareerTimeline />
 
-        {/* 07 ACADEMIC FOUNDATION */}
+        {/* 10 ACADEMIC FOUNDATION */}
         <EducationSection />
 
-        {/* 08 PROFESSIONAL CERTIFICATIONS */}
+        {/* 11 PROFESSIONAL CERTIFICATIONS */}
         <CertificationsSection />
 
-        {/* 09 WHAT I DO (SERVICES FOR CLIENTS) */}
+        {/* 12 BEHIND THE BUILD (Workspace Code Gallery) */}
+        <WorkspaceGallery />
+
+        {/* 13 WHAT I DO (SERVICES FOR CLIENTS) */}
         <WhatIDoSection />
 
-        {/* 10 CONTACT / TRANSMISSION DOCK */}
+        {/* 14 CONTACT / TRANSMISSION DOCK */}
         <ContactSection />
 
       </main>

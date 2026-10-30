@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Terminal, VolumeX, Menu, X, ArrowUpRight } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { AudioSpectrum } from './AudioSpectrum';
+import { LanguageToggle } from './LanguageToggle';
 
 interface NavigationProps {
   onOpenTerminal: () => void;
@@ -107,8 +108,11 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
             })}
           </nav>
 
-          {/* Action HUD: Sound + Terminal + Let's Talk */}
-          <div className="flex items-center gap-2">
+          {/* Action HUD: Sound + Language + Terminal + Let's Talk */}
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Language Toggle */}
+            <LanguageToggle />
+
             {/* Audio Toggle with Live Real-time Spectrum HUD */}
             <button
               onClick={toggleSound}

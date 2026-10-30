@@ -92,6 +92,7 @@ export function CommandPalette({ isOpen, onClose, onToggleCRT }: CommandPaletteP
               <span className="text-white font-semibold">skills</span> <span>List technical stack & proficiencies</span>
               <span className="text-white font-semibold">contact</span> <span>Display email, phone, and coordinates</span>
               <span className="text-white font-semibold">about</span> <span>Read background & engineering focus</span>
+              <span className="text-white font-semibold">admin</span> <span>Open system diagnostics console</span>
               <span className="text-white font-semibold">sudo hire</span> <span>Initiate recruitment / interview request</span>
               <span className="text-white font-semibold">clear</span> <span>Clear console logs</span>
             </div>
@@ -160,6 +161,12 @@ export function CommandPalette({ isOpen, onClose, onToggleCRT }: CommandPaletteP
             </p>
           </div>
         );
+        break;
+
+      case 'admin':
+        window.dispatchEvent(new CustomEvent('open-admin-panel'));
+        onClose();
+        output = <span className="text-emerald-400 font-mono">Launching diagnostics console...</span>;
         break;
 
       case 'about':

@@ -9,6 +9,7 @@ import { SpotlightCard } from './SpotlightCard';
 import { HolographicGlobe } from './HolographicGlobe';
 import { BlurFadeText } from './BlurFadeText';
 import { useTypewriter } from '../lib/useTypewriter';
+import { useI18n } from '../lib/useI18n';
 import profileImg from '../assets/profile.jpeg';
 
 interface HeroSectionProps {
@@ -25,6 +26,7 @@ const ROLES = [
 ];
 
 export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) {
+  const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'architecture' | 'stack' | 'status' | 'globe'>('architecture');
 
   const typedRole = useTypewriter(ROLES, 70, 2200);
@@ -63,7 +65,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              AVAILABLE FOR HIRE // IMMEDIATE
+              {t('status.available')}
             </span>
           </div>
 
@@ -101,12 +103,12 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.25]">
               {/* Namaste on its own line */}
               <div>
-                <BlurFadeText text="Namaste 🙏" delay={100} />
+                <BlurFadeText text={t('hero.greeting')} delay={100} />
               </div>
               {/* I'm Adarsh Panda on the next line */}
               <div className="mt-1">
                 <span className="font-semibold text-cyan-300 drop-shadow-[0_0_25px_rgba(34,211,238,0.45)]">
-                  <BlurFadeText text="I'm Adarsh Panda" delay={250} />
+                  <BlurFadeText text={t('hero.name')} delay={250} />
                 </span>
               </div>
             </h1>
@@ -133,7 +135,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 onClick={() => sound.playClick()}
                 className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
-                Explore My Work
+                {t('hero.cta.work')}
                 <ArrowDown size={14} />
               </a>
 
@@ -142,7 +144,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 onClick={() => sound.playClick()}
                 className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-4 sm:px-5 py-3 sm:py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
-                Contact Me
+                {t('hero.cta.contact')}
                 <ArrowUpRight size={14} />
               </a>
 
@@ -153,7 +155,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 title="View Resume PDF"
               >
                 <FileText size={14} className="text-cyan-400" />
-                Resume (PDF)
+                {t('hero.cta.resume')}
               </a>
             </div>
 
