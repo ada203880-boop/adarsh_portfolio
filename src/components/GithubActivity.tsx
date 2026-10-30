@@ -84,19 +84,29 @@ function getLangColor(lang: string): string {
   return LANG_COLORS[lang] ?? '#6b7280';
 }
 
-/* ─── Heatmap generator ──────────────────────────────────────────────────── */
+/* ─── Heatmap generator (deterministic — no Math.random) ─────────────────── */
 function generateHeatmap(): number[][] {
   const weeks = 52;
   const days = 7;
   const grid: number[][] = [];
+  // Deterministic seed based on week+day index — no random values
+  // Pattern reflects realistic sparse commit activity typical of a student developer
+
   for (let w = 0; w < weeks; w++) {
     const week: number[] = [];
     for (let d = 0; d < days; d++) {
-      const r = Math.random();
-      if (r < 0.60) week.push(0);
-      else if (r < 0.80) week.push(Math.floor(Math.random() * 3) + 1);
-      else if (r < 0.95) week.push(Math.floor(Math.random() * 3) + 4);
-      else week.push(Math.floor(Math.random() * 5) + 7);
+      // Deterministic pseudo-random using integer arithmetic only
+      const hash = ((w * 31 + d * 17) ^ (w * 7)) % 100;
+      // Weekend days (Sat=6, Sun=0) have lower activity
+      const isWeekend = d === 0 || d === 6;
+      const threshold = isWeekend ? 80 : 55;
+      // Sprint weeks (roughly every 4 weeks) have higher density
+      const isSprintWeek = w % 4 === 0 || w % 4 === 1;
+      const adjusted = isSprintWeek ? hash - 15 : hash;
+      if (adjusted >= threshold) week.push(0);
+      else if (adjusted >= threshold - 20) week.push((hash % 3) + 1);
+      else if (adjusted >= threshold - 35) week.push((hash % 3) + 4);
+      else week.push((hash % 4) + 7);
     }
     grid.push(week);
   }
@@ -406,6 +416,12 @@ export function GithubActivity() {
       ─────────────────────────────────────────────────────────────────── */}
       <div>
         <SectionHeader>// CONTRIBUTION_ACTIVITY (2024–2025)</SectionHeader>
+        <div className="mb-3 flex items-start gap-2 rounded-lg border border-amber-500/20 bg-amber-950/20 px-3 py-2 text-[11px] font-mono text-amber-400/80">
+          <span className="shrink-0">⚠</span>
+          <span>Heatmap is illustrative — GitHub Pages does not support authenticated API calls. For live data, visit{' '}
+            <a href="https://github.com/ada203880-boop" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-300">github.com/ada203880-boop</a>
+          </span>
+        </div>
         <div className="relative overflow-x-auto">
           {/* Month labels */}
           <div className="mb-1 flex" style={{ gap: 2 }}>

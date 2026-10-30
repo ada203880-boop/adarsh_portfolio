@@ -49,6 +49,19 @@ export const portfolio = {
         'Built data synchronization and reliability mechanisms for interactive health and fitness workflows.',
       ],
     },
+    {
+      id: 'cinematic-portfolio',
+      number: '03',
+      name: 'Cinematic Developer Engine',
+      subtitle: 'High-Performance Interactive Web Portfolio',
+      stack: 'React 19 • TypeScript • GSAP • Web Audio API • Tailwind CSS',
+      points: [
+        'Architected an award-tier developer universe featuring custom Canvas particle physics, 3D claymorphic squircle dock, and 5-tab developer workstation.',
+        'Integrated Web Audio API synthesizer generating responsive tactile clicks, hums, and UI feedback without external audio assets.',
+        'Engineered Interactive Dev Terminal with command history, autocomplete, and authentic GitHub telemetry synchronization.',
+        'Designed zero-bundle-bloat code-splitting architecture achieving sub-200 kB initial load with GitHub Actions CI/CD deployment.',
+      ],
+    },
   ],
   education: [
     { title: 'B.Tech in Computer Science and Engineering', period: '2021–2025', institution: 'CV Raman Global University', location: 'Bhubaneswar, Odisha', detail: 'CGPA: 7.6/10', coursework: 'Data Structures • Object-Oriented Programming (OOPS) • DBMS • Operating Systems' },

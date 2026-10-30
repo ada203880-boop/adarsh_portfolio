@@ -90,6 +90,9 @@ export function CommandPalette({ isOpen, onClose, onToggleCRT }: CommandPaletteP
             <div className="grid grid-cols-[110px_1fr] gap-1 pt-1">
               <span className="text-white font-semibold">projects</span> <span>View deployed systems & case studies</span>
               <span className="text-white font-semibold">skills</span> <span>List technical stack & proficiencies</span>
+              <span className="text-white font-semibold">playground</span> <span>Open safe interactive engineering sandbox</span>
+              <span className="text-white font-semibold">achievements</span> <span>Inspect verified engineering milestones</span>
+              <span className="text-white font-semibold">worldmap</span> <span>View international telemetry & reach</span>
               <span className="text-white font-semibold">contact</span> <span>Display email, phone, and coordinates</span>
               <span className="text-white font-semibold">about</span> <span>Read background & engineering focus</span>
               <span className="text-white font-semibold">admin</span> <span>Open system diagnostics console</span>
@@ -275,6 +278,28 @@ export function CommandPalette({ isOpen, onClose, onToggleCRT }: CommandPaletteP
             </a>
           </div>
         );
+        break;
+
+      case 'playground':
+      case 'sandbox':
+        sound.playSuccess();
+        onClose();
+        window.location.hash = '#playground';
+        break;
+
+      case 'achievements':
+      case 'milestones':
+        sound.playSuccess();
+        onClose();
+        window.location.hash = '#achievements';
+        break;
+
+      case 'worldmap':
+      case 'reach':
+      case 'map':
+        sound.playSuccess();
+        onClose();
+        window.location.hash = '#worldmap';
         break;
 
       case 'clear':

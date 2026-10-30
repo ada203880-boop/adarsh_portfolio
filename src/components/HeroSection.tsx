@@ -1,7 +1,8 @@
-import { useState, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import {
   ArrowDown, FileText, ArrowUpRight,
-  Code2, Server, Database, Sparkles
+  Code2, Server, Database, MapPin, Clock,
+  ShieldCheck, Send, ChevronRight, Activity
 } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { SpotlightCard } from './SpotlightCard';
@@ -29,9 +30,81 @@ const ROLES = [
   'REST API & Systems Builder',
 ];
 
+const ARCHITECTURE_FLOW = [
+  {
+    id: 'client',
+    label: 'Client Browser',
+    sub: 'React 19 • GSAP',
+    tech: 'React.js 19 + Tailwind v4 + Web Audio',
+    role: 'Responsive rendering, state machines, audio synthesis, 60fps canvas particles, Zero-G physics.',
+    metric: '< 200kB Core Bundle',
+    color: 'border-cyan-500/40 text-cyan-300 bg-cyan-950/20',
+    activeBadge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+    icon: Code2,
+  },
+  {
+    id: 'gateway',
+    label: 'REST API Gateway',
+    sub: 'Node.js • Express',
+    tech: 'Express.js & REST Architecture',
+    role: 'Endpoint routing, IP rate limiting, input sanitization, standardized JSON envelopes, CORS control.',
+    metric: '~45ms Avg Response',
+    color: 'border-violet-500/40 text-violet-300 bg-violet-950/20',
+    activeBadge: 'bg-violet-500/20 text-violet-300 border-violet-500/40',
+    icon: Server,
+  },
+  {
+    id: 'security',
+    label: 'Security & Auth',
+    sub: 'JWT • MIME Guard',
+    tech: 'IIT Kanpur Certified Best Practices',
+    role: 'Prescription upload integrity validation, strict MIME-type whitelist, Bearer auth tokens.',
+    metric: '100% Deterministic',
+    color: 'border-amber-500/40 text-amber-300 bg-amber-950/20',
+    activeBadge: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+    icon: ShieldCheck,
+  },
+  {
+    id: 'database',
+    label: 'Relational Database',
+    sub: 'MySQL 8.0 • InnoDB',
+    tech: 'MySQL & Relational Normalization',
+    role: 'Indexed product queries, ACID transactions, 3NF schemas, foreign key referential integrity.',
+    metric: 'B-Tree Indexed',
+    color: 'border-emerald-500/40 text-emerald-300 bg-emerald-950/20',
+    activeBadge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+    icon: Database,
+  },
+  {
+    id: 'dispatch',
+    label: 'Webhook Dispatch',
+    sub: 'WhatsApp • Alerts',
+    tech: 'WooCommerce & WhatsApp Webhooks',
+    role: 'Real-time order confirmation dispatch, status notifications directly to customer devices.',
+    metric: 'Instant Webhook Sync',
+    color: 'border-pink-500/40 text-pink-300 bg-pink-950/20',
+    activeBadge: 'bg-pink-500/20 text-pink-300 border-pink-500/40',
+    icon: Send,
+  },
+];
+
 export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) {
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'terminal' | 'architecture' | 'stack' | 'status' | 'globe'>('terminal');
+  const [selectedFlowNode, setSelectedFlowNode] = useState<number>(0);
+  const [currentTime, setCurrentTime] = useState<string>('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setCurrentTime(
+        now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      );
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const hour = new Date().getHours();
   const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
@@ -64,7 +137,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
 
         {/* Top Header Row with Greeting Badges & Circular 3D Glow Profile in Top-Right Corner */}
         <div className="flex items-start justify-between gap-3 mb-6">
-          {/* Status Badges only */}
+          {/* Status & Telemetry Badges */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/25 bg-violet-950/20 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-violet-300">
               <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
@@ -78,6 +151,19 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               </span>
               {t('status.available')}
             </span>
+
+            {/* Live Coordinate & Clock Telemetry */}
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/25 bg-cyan-950/20 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-cyan-300">
+              <MapPin size={11} className="text-cyan-400" />
+              20.29°N, 85.82°E
+            </span>
+
+            {currentTime && (
+              <span className="hidden min-[480px]:inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-zinc-400">
+                <Clock size={11} className="text-zinc-500" />
+                {currentTime} IST
+              </span>
+            )}
           </div>
 
           {/* Profile Picture in Top-Right Corner on all screen sizes — responsive, circular, 3D glow */}
@@ -139,6 +225,26 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               Computer Science graduate and software engineer specializing in <strong className="text-white font-medium">React.js</strong>, <strong className="text-white font-medium">Node.js</strong>, <strong className="text-white font-medium">Python</strong>, and <strong className="text-white font-medium">MySQL</strong>.
               I architect dependable full-stack web platforms, custom WooCommerce e-commerce pipelines, and production-grade REST APIs designed for real-world reliability and scale.
             </p>
+
+            {/* Command Center Quick Telemetry Strip */}
+            <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-xl">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">FOUNDATION</div>
+                <div className="font-mono text-xs font-semibold text-cyan-300 mt-0.5">B.Tech CSE '25</div>
+              </div>
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">PRODUCTION</div>
+                <div className="font-mono text-xs font-semibold text-emerald-400 mt-0.5">Live E-Commerce</div>
+              </div>
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">ARCH</div>
+                <div className="font-mono text-xs font-semibold text-violet-300 mt-0.5">MySQL &amp; REST</div>
+              </div>
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">FOOTPRINT</div>
+                <div className="font-mono text-xs font-semibold text-amber-300 mt-0.5">&lt; 200 kB Core</div>
+              </div>
+            </div>
 
             {/* Primary Action Buttons with Subtle Magnetic Physics */}
             <div className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
@@ -267,48 +373,98 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 </div>
               )}
 
-              {/* Tab 1: Architecture Highlights */}
+              {/* Tab 1: Interactive Pipeline Architecture */}
               {activeTab === 'architecture' && (
                 <div
                   id="panel-architecture"
                   role="tabpanel"
                   aria-labelledby="tab-architecture"
-                  className="space-y-3 font-mono text-xs focus:outline-none"
+                  className="space-y-3 font-mono text-xs focus:outline-none animate-in fade-in duration-300"
                   tabIndex={0}
                 >
-                  <div className="rounded-lg bg-black/40 border border-white/[0.06] p-3 text-zinc-300 space-y-2">
-                    <div className="text-cyan-400 font-semibold">// Engineering Focus &amp; Philosophy</div>
-                    <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
-                      Writing predictable, type-safe full-stack code. Integrating responsive user interfaces with resilient API endpoints and relational schemas.
-                    </p>
+                  {/* Top Bar with Live Stream Telemetry Indicator */}
+                  <div className="flex items-center justify-between border-b border-white/[0.08] pb-2 text-[10px]">
+                    <div className="flex items-center gap-1.5 text-cyan-400 font-semibold">
+                      <Activity size={12} className="animate-pulse" />
+                      <span>// PRODUCTION DATA FLOW PIPELINE</span>
+                    </div>
+                    <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-emerald-400 border border-emerald-500/20">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+                      Deterministic
+                    </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px]">
-                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
-                        <Code2 size={12} /> Frontend
-                      </div>
-                      <div className="text-zinc-400">React.js, Tailwind, TS</div>
-                    </div>
-                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
-                        <Server size={12} /> Backend
-                      </div>
-                      <div className="text-zinc-400">Node.js, Express, Python</div>
-                    </div>
-                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
-                        <Database size={12} /> Databases
-                      </div>
-                      <div className="text-zinc-400">MySQL, Relational Design</div>
-                    </div>
-                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
-                        <Sparkles size={12} /> E-Commerce
-                      </div>
-                      <div className="text-zinc-400">WooCommerce &amp; PHP</div>
-                    </div>
+                  {/* 5-Stage Interactive Pipeline Stepper */}
+                  <div className="flex items-center gap-1 overflow-x-auto pb-1 no-scrollbar">
+                    {ARCHITECTURE_FLOW.map((node, idx) => {
+                      const Icon = node.icon;
+                      const isSelected = selectedFlowNode === idx;
+                      return (
+                        <div key={node.id} className="flex items-center shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedFlowNode(idx);
+                              sound.playHover();
+                            }}
+                            className={`group relative flex flex-col items-center rounded-xl border px-2.5 py-1.5 text-left transition-all ${
+                              isSelected
+                                ? `${node.color} shadow-[0_0_15px_rgba(6,182,212,0.25)] border-cyan-400`
+                                : 'border-white/10 bg-white/[0.02] text-zinc-400 hover:border-white/20 hover:text-zinc-200'
+                            }`}
+                          >
+                            <div className="flex items-center gap-1 text-[9px] font-mono opacity-60">
+                              <span>0{idx + 1}</span>
+                            </div>
+                            <div className="mt-0.5 flex items-center gap-1 text-[11px] font-semibold whitespace-nowrap">
+                              <Icon size={12} className={isSelected ? 'animate-bounce' : ''} />
+                              <span>{node.label}</span>
+                            </div>
+                          </button>
+
+                          {/* Animated Pipeline Connector */}
+                          {idx < ARCHITECTURE_FLOW.length - 1 && (
+                            <div className="mx-1 flex items-center text-zinc-600">
+                              <ChevronRight size={12} className="animate-pulse text-cyan-400/60" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
+
+                  {/* Selected Node Deep-Dive Inspection Card */}
+                  {(() => {
+                    const activeNode = ARCHITECTURE_FLOW[selectedFlowNode];
+                    const ActiveIcon = activeNode.icon;
+                    return (
+                      <div className="rounded-xl border border-white/10 bg-black/60 p-3.5 space-y-2 shadow-inner">
+                        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                          <div className="flex items-center gap-2">
+                            <div className={`p-1.5 rounded-lg border ${activeNode.color}`}>
+                              <ActiveIcon size={14} />
+                            </div>
+                            <div>
+                              <div className="text-white text-xs font-semibold">{activeNode.label}</div>
+                              <div className="text-[10px] text-zinc-400">{activeNode.tech}</div>
+                            </div>
+                          </div>
+                          <span className={`rounded-md border px-2 py-0.5 text-[10px] font-mono ${activeNode.activeBadge}`}>
+                            {activeNode.metric}
+                          </span>
+                        </div>
+
+                        <p className="text-[11px] text-zinc-300 font-sans leading-relaxed pt-0.5">
+                          {activeNode.role}
+                        </p>
+
+                        <div className="flex items-center justify-between pt-1 font-mono text-[9px] text-zinc-500">
+                          <span>Subsystem: {activeNode.sub}</span>
+                          <span className="text-cyan-400/80">Click steps 01-05 to inspect</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 

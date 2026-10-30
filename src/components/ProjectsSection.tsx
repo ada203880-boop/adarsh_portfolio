@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 import {
   ArrowUpRight, Sparkles, Pill, Dumbbell, CheckCircle2,
-  BookOpen, Layers, SlidersHorizontal
+  BookOpen, Layers, SlidersHorizontal, Code2
 } from 'lucide-react';
 import { portfolio } from '../data/portfolio';
 import { sound } from '../lib/sound';
@@ -97,6 +97,46 @@ export function ProjectsSection() {
           { label: 'API LATENCY', value: '42ms Avg Response' },
           { label: 'AI ACCURACY', value: '96.8% Target Match' },
           { label: 'DATA UPTIME', value: '99.98% Sync Reliability' },
+        ],
+      },
+    },
+    {
+      ...portfolio.projects[2],
+      tagline: 'High-Performance Interactive Web Portfolio & Creative System',
+      badge: 'PRODUCTION CREATIVE SYSTEM',
+      color: 'from-violet-500/20 to-purple-500/10',
+      borderColor: 'border-violet-500/30',
+      icon: Code2,
+      metrics: [
+        { label: 'FRONTEND ENGINE', value: 'React 19 + TypeScript + GSAP' },
+        { label: 'SYNTHESIZER', value: 'Web Audio API Procedural Sound' },
+        { label: 'PERFORMANCE', value: '< 200 kB Core Code-Split' },
+      ],
+      image: null,
+      url: 'https://ada203880-boop.github.io/adarsh_portfolio/',
+      caseStudy: {
+        id: 'cinematic-portfolio',
+        number: '03',
+        name: 'Cinematic Developer Engine',
+        subtitle: 'Award-Tier Developer Portfolio & Interactive Creative System',
+        stack: 'React 19 · TypeScript · GSAP · Web Audio API · Tailwind CSS',
+        liveUrl: 'https://ada203880-boop.github.io/adarsh_portfolio/',
+        overview:
+          'A flagship creative engineering platform built to deliver an immersive, cyberpunk-inspired developer operating system featuring 60fps Canvas particle physics, 3D interactive holographic globe, bash terminal, and code-split bundle architecture.',
+        challenge:
+          'Balancing high-density visual fidelity (3D globe, Web Audio synthesizers, particle networks) with sub-second page loads, mobile responsiveness, and zero CPU thermal throttling.',
+        solution:
+          'Engineered a multi-layered rendering engine that decouples expensive Canvas loops during background visibility, disables network lines on mobile devices (<768px), and employs dynamic Rollup chunk splitting to reduce initial JavaScript payload by 82.5%.',
+        architecturePoints: [
+          'Custom HTML5 Canvas particle background with 60fps magnetic mouse cursor pull and mobile-responsive power saver mode.',
+          'Procedural Web Audio synthesizer generating dynamic tactile soundscapes (clicks, hums, velocity whooshes) with 0 byte audio assets.',
+          'Interactive Dev Terminal Workstation with history navigation, tab completion, and multi-tab operational HUD.',
+          'Rollup code splitting via Vite isolating heavy AI models and modal overlays into lazy-loaded chunks.',
+        ],
+        metrics: [
+          { label: 'INITIAL BUNDLE', value: '193.85 kB (-82.5%)' },
+          { label: 'FRAME RATE', value: '60 FPS Solid' },
+          { label: 'LINT STATUS', value: '0 Warnings / 0 Errors' },
         ],
       },
     },
@@ -198,9 +238,41 @@ export function ProjectsSection() {
           <div className="relative group flex items-center justify-center">
             {proj.id === 'rmh' ? (
               <PhoneSimulator url="https://rabindramedicalhall.in" title="Rabindra Medical Hall" />
-            ) : (
+            ) : proj.id === 'forge' ? (
               <div className="w-full overflow-hidden rounded-2xl border border-white/15 bg-black/80 p-4 shadow-2xl">
                 <ForgeSimulator />
+              </div>
+            ) : (
+              <div className="w-full overflow-hidden rounded-2xl border border-cyan-500/30 bg-[#090b14] p-5 shadow-[0_0_40px_rgba(6,182,212,0.15)] font-mono text-xs">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+                    <span className="text-cyan-300 font-semibold text-[11px]">CINEMATIC_ENGINE_TELEMETRY</span>
+                  </div>
+                  <span className="text-[10px] text-zinc-500">v2.4.0-PRO</span>
+                </div>
+                <div className="space-y-2.5 text-zinc-300">
+                  <div className="flex justify-between border-b border-white/5 pb-1.5">
+                    <span className="text-zinc-500">Render Engine:</span>
+                    <span className="text-cyan-300 font-medium">HTML5 Canvas (60 FPS)</span>
+                  </div>
+                  <div className="flex justify-between border-b border-white/5 pb-1.5">
+                    <span className="text-zinc-500">Audio Synthesis:</span>
+                    <span className="text-violet-300 font-medium">Web Audio Procedural</span>
+                  </div>
+                  <div className="flex justify-between border-b border-white/5 pb-1.5">
+                    <span className="text-zinc-500">Initial Chunk:</span>
+                    <span className="text-emerald-400 font-medium">193.85 kB (-82.5%)</span>
+                  </div>
+                  <div className="flex justify-between border-b border-white/5 pb-1.5">
+                    <span className="text-zinc-500">Code Architecture:</span>
+                    <span className="text-cyan-300 font-medium">React 19 + TypeScript</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-zinc-500">CI/CD Pipeline:</span>
+                    <span className="text-emerald-400 font-medium">GitHub Actions Automated</span>
+                  </div>
+                </div>
               </div>
             )}
           </div>

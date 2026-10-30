@@ -23,6 +23,11 @@ const ResumeModal = lazy(() => import('./components/ResumeModal').then((m) => ({
 const InteractiveResume = lazy(() => import('./components/InteractiveResume').then((m) => ({ default: m.InteractiveResume })));
 const AdminView = lazy(() => import('./components/AdminView').then((m) => ({ default: m.AdminView })));
 const AskAdarshChat = lazy(() => import('./components/AskAdarshChat').then((m) => ({ default: m.AskAdarshChat })));
+const MultiDeviceMockup = lazy(() => import('./components/MultiDeviceMockup').then((m) => ({ default: m.MultiDeviceMockup })));
+const WorkspaceGallery = lazy(() => import('./components/WorkspaceGallery').then((m) => ({ default: m.default })));
+const CodePlayground = lazy(() => import('./components/CodePlayground').then((m) => ({ default: m.CodePlayground })));
+const AchievementsSection = lazy(() => import('./components/AchievementsSection').then((m) => ({ default: m.AchievementsSection })));
+const WorldMap = lazy(() => import('./components/WorldMap').then((m) => ({ default: m.WorldMap })));
 
 // Page Sections
 import { HeroSection } from './components/HeroSection';
@@ -140,7 +145,7 @@ export default function App() {
 
   // Active section tracker for nav pills
   useEffect(() => {
-    const IDS = ['home', 'about', 'skills', 'projects', 'telemetry', 'journey', 'education', 'certifications', 'services', 'contact'];
+    const IDS = ['home', 'about', 'skills', 'projects', 'playground', 'telemetry', 'journey', 'achievements', 'education', 'certifications', 'services', 'worldmap', 'contact'];
     const onScroll = () => {
       const y = window.scrollY + 220;
       for (const id of IDS) {
@@ -248,6 +253,21 @@ export default function App() {
         {/* 04 FEATURED SYSTEMS / PROJECTS */}
         <ProjectsSection />
 
+        {/* 04B MULTI-DEVICE RESPONSIVE SHOWCASE (MacBook, iPad, iPhone) */}
+        <Suspense fallback={null}>
+          <MultiDeviceMockup />
+        </Suspense>
+
+        {/* 04C WORKSPACE GALLERY — BEHIND THE BUILD (Code Architecture) */}
+        <Suspense fallback={null}>
+          <WorkspaceGallery />
+        </Suspense>
+
+        {/* 04D INTERACTIVE CODE PLAYGROUND */}
+        <Suspense fallback={null}>
+          <CodePlayground />
+        </Suspense>
+
         {/* 05 LIVE GITHUB TELEMETRY RADAR & HEATMAP */}
         <section id="telemetry" className="relative w-full max-w-full overflow-hidden bg-[#03060c] pb-20 sm:pb-24 text-white">
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
@@ -258,6 +278,11 @@ export default function App() {
         {/* 06 CAREER & EXPERIENCE TIMELINE */}
         <CareerTimeline />
 
+        {/* 06B ACHIEVEMENTS & MILESTONES */}
+        <Suspense fallback={null}>
+          <AchievementsSection />
+        </Suspense>
+
         {/* 07 ACADEMIC FOUNDATION */}
         <EducationSection />
 
@@ -266,6 +291,11 @@ export default function App() {
 
         {/* 09 WHAT I DO (SERVICES FOR CLIENTS) */}
         <WhatIDoSection />
+
+        {/* 09B WORLD REACH MAP */}
+        <Suspense fallback={null}>
+          <WorldMap />
+        </Suspense>
 
         {/* 10 CONTACT / TRANSMISSION DOCK */}
         <ContactSection />

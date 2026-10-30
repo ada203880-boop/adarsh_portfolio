@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import {
-  Code2, Server, Database, Layers, Sparkles, Atom, LayoutGrid, Globe
+  Code2, Server, Database, Layers, Sparkles, Atom, LayoutGrid, Globe, Network
 } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { SpotlightCard } from './SpotlightCard';
 import { TechStackPhysics } from './TechStackPhysics';
 import { SkillSphere3D } from './SkillSphere3D';
 import { BlurFadeText } from './BlurFadeText';
+import { SkillsConstellation } from './SkillsConstellation';
 
 const SKILL_CATEGORIES = [
   {
@@ -67,7 +68,7 @@ const SKILL_CATEGORIES = [
 
 export function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<'matrix' | 'physics' | 'sphere'>('matrix');
+  const [viewMode, setViewMode] = useState<'constellation' | 'matrix' | 'physics' | 'sphere'>('constellation');
 
   const filteredCategories = SKILL_CATEGORIES.filter((cat) => {
     if (activeCategory === 'all') return true;
@@ -95,8 +96,20 @@ export function SkillsSection() {
             </h2>
           </div>
           
-          {/* View Mode Toggle: Matrix vs Zero-G Physics vs 3D Sphere */}
+          {/* View Mode Toggle: Constellation vs Matrix vs Zero-G Physics vs 3D Sphere */}
           <div className="flex flex-wrap items-center gap-1 rounded-2xl sm:rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur-md">
+            <button
+              type="button"
+              onClick={() => { setViewMode('constellation'); sound.playClick(); }}
+              className={`flex items-center gap-1.5 rounded-full px-2.5 sm:px-3.5 py-1 sm:py-1.5 font-mono text-[11px] sm:text-xs transition-all ${
+                viewMode === 'constellation'
+                  ? 'bg-cyan-500 text-black font-semibold shadow-[0_0_15px_rgba(6,182,212,0.5)]'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <Network size={13} />
+              <span>Constellation Map</span>
+            </button>
             <button
               type="button"
               onClick={() => { setViewMode('matrix'); sound.playClick(); }}
@@ -136,7 +149,12 @@ export function SkillsSection() {
           </div>
         </div>
 
-        {viewMode === 'sphere' ? (
+        {viewMode === 'constellation' ? (
+          /* Interactive Full-Stack Technology Constellation */
+          <div className="mt-10">
+            <SkillsConstellation />
+          </div>
+        ) : viewMode === 'sphere' ? (
           /* Interactive 3D Skill Sphere with Drag-to-Rotate + Filter by Category */
           <div className="mt-10 overflow-hidden rounded-3xl border border-emerald-500/30 bg-[#060e18]/80 p-4 sm:p-6 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">

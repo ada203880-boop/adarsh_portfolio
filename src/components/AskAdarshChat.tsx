@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bot, Send, X, Sparkles, User, RefreshCw, Key, ChevronDown, MessageSquare } from 'lucide-react';
+import { Bot, Send, X, Sparkles, User, RefreshCw, Key, ChevronDown, MessageSquare, Briefcase } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { GoogleGenAI } from '@google/genai';
 
@@ -8,6 +8,7 @@ interface Message {
   sender: 'user' | 'assistant';
   text: string;
   timestamp: string;
+  source?: 'verified-knowledge' | 'live-gemini' | 'local-fallback';
 }
 
 const SYSTEM_PROMPT = `You are Adarsh Panda's official AI Portfolio Assistant. Answer in first-person as Adarsh Panda or as Adarsh's trusted representative. Be concise, polite, professional, and enthusiastic.
@@ -37,25 +38,40 @@ const DEFAULT_QUESTIONS = [
   "What are your key certifications?",
 ];
 
-const PRE_CACHED_ANSWERS: Record<string, string> = {
-  "what is your tech stack?":
-    "My core stack revolves around React.js, TypeScript, and Tailwind CSS on the frontend, with Node.js, Express.js, and Python on the backend. For databases and persistence, I specialize in MySQL and relational schema design, along with production WordPress/WooCommerce architecture.",
-  "are you available for hire?":
-    "Yes, absolutely! I am a B.Tech CSE '25 graduate actively looking for Junior Full-Stack, Frontend (React), or Backend (Node.js) roles. I am available immediately and open to both on-site and remote opportunities. Feel free to email me at ada203880@gmail.com or WhatsApp me at +91 9861054025!",
-  "tell me about your live project":
-    "I engineered the live e-pharmacy platform Rabindra Medical Hall (https://rabindramedicalhall.in). It runs on a custom WooCommerce & PHP stack with full catalog navigation, prescription upload safeguards, secure checkout, and instant WhatsApp order notifications.",
-  "what are your key certifications?":
-    "I hold accredited credentials in Practical Cyber Security from IIT Kanpur (NPTEL), Industrial Data Science from LearnWik Solutions, Cloud Security Fundamentals from Palo Alto Networks, and UX Design Foundations from Google.",
+const RECRUITER_QUESTIONS = [
+  "Why should I hire Adarsh?",
+  "What full-stack projects has he built?",
+  "Which technologies does he use?",
+  "What problems can he solve?",
+  "Where can I view his work?",
+  "How can I contact him?",
+];
+
+const RECRUITER_ANSWERS: Record<string, string> = {
+  "why should i hire adarsh?":
+    "Adarsh brings verified end-to-end full-stack capabilities, production deployment experience (Rabindra Medical Hall), strong foundations in Computer Science (B.Tech '25, CGPA 7.6/10), and accredited credentials in Cyber Security (IIT Kanpur) and Cloud Security (Palo Alto). He writes clean, type-safe code and is immediately available.",
+  "what full-stack projects has he built?":
+    "1. Rabindra Medical Hall: Live production e-pharmacy with WooCommerce, custom PHP prescription upload safeguards, and automated WhatsApp alerts.\n2. FORGE Fitness: AI-driven telemetry platform with Python REST APIs, MySQL schema, and workout progression.\n3. Cinematic Portfolio Engine: High-performance interactive developer operating system with React 19, GSAP, Web Audio API, and sub-200kB bundle architecture.",
+  "which technologies does he use?":
+    "Frontend: React.js 19, JavaScript (ES6+), TypeScript, Tailwind CSS v4, HTML5/CSS3.\nBackend: Node.js, Express.js, Python, PHP, RESTful APIs.\nDatabases: MySQL, relational schema modeling, WordPress/WooCommerce.\nTools: Git, Vite, Postman, Web Audio API, GitHub Actions CI/CD.",
+  "what problems can he solve?":
+    "He solves real-world full-stack challenges: architecting responsive user interfaces, designing secure and validated REST APIs, optimizing relational database queries to reduce checkout latencies, building custom e-commerce checkout flows, and integrating AI models with deterministic offline fallbacks.",
+  "where can i view his work?":
+    "You can inspect his live production store at rabindramedicalhall.in, view his open-source repositories and code history at github.com/ada203880-boop, and explore this interactive portfolio at ada203880-boop.github.io/adarsh_portfolio/.",
+  "how can i contact him?":
+    "You can reach Adarsh directly via:\n• Email: ada203880@gmail.com\n• Phone / WhatsApp: +91 9861054025\n• LinkedIn: linkedin.com/in/adarsh-panda-5181b9214\n• GitHub: github.com/ada203880-boop",
 };
 
 export function AskAdarshChat() {
   const [isOpen, setIsOpen] = useState(false);
+  const [chatMode, setChatMode] = useState<'general' | 'recruiter'>('general');
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init-1',
       sender: 'assistant',
       text: "Namaste! 🙏 I'm Adarsh's AI assistant. Ask me anything about my engineering background, projects, tech stack, or hiring availability!",
       timestamp: 'Just now',
+      source: 'verified-knowledge',
     },
   ]);
   const [input, setInput] = useState('');
@@ -99,6 +115,27 @@ export function AskAdarshChat() {
     // Client-side length truncation & sanitization (max 400 chars)
     const sanitizedQuery = query.slice(0, 400);
     const normalizedQuery = sanitizedQuery.toLowerCase();
+
+    // 1a. Check recruiter-specific answers first when in recruiter mode
+    const recruiterKey = Object.keys(RECRUITER_ANSWERS).find((k) => normalizedQuery.includes(k.replace('?', '')));
+    if (chatMode === 'recruiter' && recruiterKey) {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: String(Date.now() + 1),
+            sender: 'assistant',
+            text: RECRUITER_ANSWERS[recruiterKey],
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            source: 'verified-knowledge' as const,
+          },
+        ]);
+        sound.playHover();
+        setIsGenerating(false);
+      }, 350);
+      return;
+    }
+
     const matchedKey = Object.keys(PRE_CACHED_ANSWERS).find((k) => normalizedQuery.includes(k.replace('?', '')));
 
     // 1. Check pre-cached responses for instant zero-latency answers
@@ -111,6 +148,7 @@ export function AskAdarshChat() {
             sender: 'assistant',
             text: PRE_CACHED_ANSWERS[matchedKey],
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            source: 'verified-knowledge' as const,
           },
         ]);
         sound.playHover();
@@ -138,6 +176,7 @@ export function AskAdarshChat() {
             sender: 'assistant',
             text: reply,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            source: 'live-gemini' as const,
           },
         ]);
         sound.playHover();
@@ -173,6 +212,7 @@ export function AskAdarshChat() {
               sender: 'assistant',
               text: data.reply,
               timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              source: 'live-gemini' as const,
             },
           ]);
           sound.playHover();
@@ -193,6 +233,7 @@ export function AskAdarshChat() {
           sender: 'assistant',
           text: `I'd love to help with "${sanitizedQuery}"! I specialize in React, Node.js, Python, and MySQL. For live deployment questions or immediate hiring, reach out directly to Adarsh at ada203880@gmail.com or via WhatsApp at +91 9861054025.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          source: 'local-fallback' as const,
         },
       ]);
       sound.playHover();
@@ -290,6 +331,32 @@ export function AskAdarshChat() {
             </div>
           </div>
 
+          {/* Mode Toggle: General | Recruiter */}
+          <div className="flex border-b border-white/[0.06] bg-black/20">
+            <button
+              type="button"
+              onClick={() => { setChatMode('general'); sound.playClick(); }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 font-mono text-[11px] font-semibold transition-colors ${
+                chatMode === 'general'
+                  ? 'text-cyan-300 border-b-2 border-cyan-400 bg-cyan-950/30'
+                  : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              <MessageSquare size={12} /> General
+            </button>
+            <button
+              type="button"
+              onClick={() => { setChatMode('recruiter'); sound.playClick(); }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 font-mono text-[11px] font-semibold transition-colors ${
+                chatMode === 'recruiter'
+                  ? 'text-violet-300 border-b-2 border-violet-400 bg-violet-950/30'
+                  : 'text-zinc-500 hover:text-zinc-300'
+              }`}
+            >
+              <Briefcase size={12} /> Recruiter
+            </button>
+          </div>
+
           {/* Optional API Key banner */}
           {showKeyInput && (
             <div className="border-b border-cyan-500/20 bg-cyan-950/40 p-3">
@@ -338,9 +405,22 @@ export function AskAdarshChat() {
                   }`}
                 >
                   <p className="whitespace-pre-wrap">{m.text}</p>
-                  <span className="mt-1 block text-right font-mono text-[9px] text-white/40">
-                    {m.timestamp}
-                  </span>
+                  <div className="mt-1 flex items-center justify-between gap-2">
+                    {m.source && m.sender === 'assistant' && (
+                      <span className={`font-mono text-[8px] px-1.5 py-0.5 rounded-full border ${
+                        m.source === 'live-gemini'
+                          ? 'text-cyan-400 border-cyan-500/30 bg-cyan-950/40'
+                          : m.source === 'local-fallback'
+                          ? 'text-amber-400 border-amber-500/30 bg-amber-950/40'
+                          : 'text-emerald-400 border-emerald-500/30 bg-emerald-950/40'
+                      }`}>
+                        {m.source === 'live-gemini' ? '⚡ Live Gemini' : m.source === 'local-fallback' ? '⚠ Local Fallback' : '✓ Verified KB'}
+                      </span>
+                    )}
+                    <span className="ml-auto font-mono text-[9px] text-white/40">
+                      {m.timestamp}
+                    </span>
+                  </div>
                 </div>
                 {m.sender === 'user' && (
                   <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-950 border border-violet-500/40 text-violet-300">
@@ -360,16 +440,20 @@ export function AskAdarshChat() {
 
           {/* Quick Questions Row */}
           <div className="border-t border-white/[0.06] bg-black/30 px-3 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-            <span className="shrink-0 text-cyan-400/80 font-mono text-[10px] flex items-center gap-1">
-              <MessageSquare size={11} /> Prompt:
+            <span className={`shrink-0 font-mono text-[10px] flex items-center gap-1 ${chatMode === 'recruiter' ? 'text-violet-400/80' : 'text-cyan-400/80'}`}>
+              {chatMode === 'recruiter' ? <Briefcase size={11} /> : <MessageSquare size={11} />} Prompt:
             </span>
-            {DEFAULT_QUESTIONS.map((q) => (
+            {(chatMode === 'recruiter' ? RECRUITER_QUESTIONS : DEFAULT_QUESTIONS).map((q) => (
               <button
                 key={q}
                 type="button"
                 onClick={() => handleSend(q)}
                 disabled={isGenerating}
-                className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[10px] text-zinc-300 hover:border-cyan-400/50 hover:bg-cyan-950/40 hover:text-cyan-200 transition-colors disabled:opacity-50"
+                className={`shrink-0 rounded-full border px-2.5 py-1 font-mono text-[10px] transition-colors disabled:opacity-50 ${
+                  chatMode === 'recruiter'
+                    ? 'border-violet-400/20 bg-violet-950/20 text-zinc-300 hover:border-violet-400/50 hover:bg-violet-950/50 hover:text-violet-200'
+                    : 'border-white/10 bg-white/[0.04] text-zinc-300 hover:border-cyan-400/50 hover:bg-cyan-950/40 hover:text-cyan-200'
+                }`}
               >
                 {q}
               </button>

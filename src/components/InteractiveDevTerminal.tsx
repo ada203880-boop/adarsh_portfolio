@@ -11,23 +11,181 @@ const COMMAND_RESPONSES: Record<string, string> = {
   about: `[PROFILE: ADARSH PANDA]
 Full-Stack Software Engineer with dedicated focus on resilient web architecture, production WooCommerce & E-Commerce pipeline builds, and production-grade REST API reliability scaling. Experienced in engineering end-to-end web applications with secure workflows, MySQL schema modeling, and zero-compromise UX performance.`,
 
-  skills: `.
-├── 📂 Frontend/
-│   ├── ⚛️  React.js (Modern Architecture & State Machines)
-│   ├── 🔷 TypeScript & ES6+ JavaScript
-│   └── 🎨 Tailwind CSS & Responsive Design
-├── 📂 Backend/
-│   ├── 🟢 Node.js & Express.js Services
-│   ├── 🐍 Python & Scripting Automation
-│   └── 🔌 Production REST APIs & Authentication
-└── 📂 Database/
-    ├── 🗄️  MySQL & Relational Schema Modeling
-    └── 🛒 WooCommerce & WordPress Architecture`,
+  whoami: `adarsh-panda
+=========================================
+Name       : Adarsh Panda
+Role       : Full-Stack Software Engineer
+Degree     : B.Tech CSE - CV Raman Global University, 2025
+CGPA       : 7.6 / 10
+Location   : Bhubaneswar, Odisha, India
+Status     : AVAILABLE FOR HIRE (Immediate)
+=========================================
+Email      : ada203880@gmail.com
+WhatsApp   : +91 9861054025
+GitHub     : github.com/ada203880-boop
+LinkedIn   : linkedin.com/in/adarsh-panda-5181b9214`,
+
+  skills: `.\n├── Frontend/
+│   ├── React.js 19 (Modern Architecture & State Machines)
+│   ├── TypeScript & ES6+ JavaScript
+│   └── Tailwind CSS v4 & Responsive Design
+├── Backend/
+│   ├── Node.js & Express.js Services
+│   ├── Python & Scripting Automation
+│   └── Production REST APIs & Authentication
+├── Database/
+│   ├── MySQL & Relational Schema Modeling
+│   └── WooCommerce & WordPress Architecture
+├── DevOps/
+│   ├── Git, GitHub Actions CI/CD
+│   └── Vite & Rollup Build Systems
+└── AI & Cloud/
+    ├── Gemini AI API Integration
+    └── Serverless Edge Functions`,
+
+  projects: `[PRODUCTION PROJECTS]
+=========================================
+1. Rabindra Medical Hall (LIVE)
+   URL  : https://rabindramedicalhall.in
+   Desc : WooCommerce e-pharmacy, prescription upload, WhatsApp order alerts
+   Stack: WordPress, PHP, WooCommerce, MySQL
+
+2. FORGE Fitness (AI Health Platform)
+   Desc : Workout tracking, nutrition analytics, AI fitness coaching
+   Stack: React, Node.js, Python, REST API, MySQL
+
+3. Cinematic Developer Portfolio Engine
+   URL  : https://ada203880-boop.github.io/adarsh_portfolio/
+   Desc : Sub-200kB interactive portfolio OS
+   Stack: React 19, TypeScript, Vite, Tailwind CSS v4, GSAP, Gemini AI`,
+
+  'cat resume': `[RESUME OVERVIEW - ADARSH PANDA]
+=========================================
+Education  : B.Tech Computer Science & Engineering (2021-2025)
+             CV Raman Global University - CGPA 7.6/10
+
+Experience : E-Commerce Architecture - Rabindra Medical Hall
+             WooCommerce storefront, prescription validation,
+             WhatsApp webhooks, MySQL schema design.
+
+Certifications:
+  [NPTEL]        Practical Cyber Security (IIT Kanpur)
+  [LearnWik]     Industrial Training in Data Science
+  [Palo Alto]    Cloud Security Fundamentals (Coursera)
+  [Google]       Foundations of UX Design (Coursera)
+
+Contact    : ada203880@gmail.com | +91 9861054025`,
+
+  contact: `[CONTACT CHANNELS]
+=========================================
+Email      : ada203880@gmail.com
+WhatsApp   : +91 9861054025
+LinkedIn   : linkedin.com/in/adarsh-panda-5181b9214
+GitHub     : github.com/ada203880-boop
+Portfolio  : ada203880-boop.github.io/adarsh_portfolio/
+=========================================
+Availability: OPEN TO FULL-TIME, CONTRACT & REMOTE ROLES`,
+
+  tree: `portfolio-source/
+├── src/
+│   ├── components/             # 50+ React components
+│   │   ├── HeroSection.tsx     # Command center header
+│   │   ├── HolographicGlobe.tsx
+│   │   ├── InteractiveDevTerminal.tsx  # (you are here)
+│   │   ├── SkillsConstellation.tsx
+│   │   ├── CodePlayground.tsx
+│   │   ├── AskAdarshChat.tsx   # Gemini AI integration
+│   │   └── ...
+│   ├── lib/
+│   │   └── sound.ts            # Web Audio API engine
+│   ├── App.tsx                 # Root orchestrator
+│   └── index.css               # Tailwind + custom CSS
+├── docs/                       # GitHub Pages output (vite build)
+├── api/
+│   └── chat.ts                 # Gemini serverless handler
+├── vite.config.ts
+└── index.html`,
+
+  ls: `src/components/:
+AboutSection.tsx    AdminView.tsx         AskAdarshChat.tsx
+AudioVisualizerHUD.tsx  BentoGrid.tsx     CareerTimeline.tsx
+CaseStudyModal.tsx  CertificationsSection.tsx  CinematicCanvas.tsx
+CinematicLoader.tsx CodePlayground.tsx    CommandPalette.tsx
+ContactSection.tsx  CRTOverlay.tsx        CustomCursor.tsx
+EducationSection.tsx FloatingDock.tsx     GithubActivity.tsx
+HeroSection.tsx     HolographicGlobe.tsx  InteractiveDevTerminal.tsx
+InteractiveResume.tsx  KonamiCode.tsx     MultiDeviceMockup.tsx
+Navigation.tsx      ProjectsSection.tsx   ResumeModal.tsx
+SkillsConstellation.tsx  SkillsSection.tsx  WorkspaceGallery.tsx
+(and 20+ more...)`,
+
+  curl: `$ curl -X POST https://api.forgefitness.dev/v1/workouts \\
+  -H "Content-Type: application/json" \\
+  -H "Authorization: Bearer <JWT_TOKEN>" \\
+  -d '{"userId":"u_1042","type":"strength","duration_min":45}'
+
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "status": "created",
+  "workoutId": "w_8831",
+  "userId": "u_1042",
+  "type": "strength",
+  "duration_min": 45,
+  "caloriesBurned": 312,
+  "timestamp": "2025-01-15T09:42:11Z",
+  "nextSuggestion": "Active recovery - yoga or light cardio"
+}
+
+[FORGE Fitness REST API - deterministic simulation]`,
+
+  'sudo hire adarsh': `[sudo] password for recruiter: ...........
+Authenticating... #################### 100%
+
+ACCESS GRANTED - Authorization: HIRE_ADARSH_PANDA
+=========================================
+Deploying talent acquisition protocol...
+
+  [✓] Skills verified: React 19, Node.js, Python, MySQL
+  [✓] Production experience: E-pharmacy (LIVE)
+  [✓] Availability: IMMEDIATE
+  [✓] Communication: English (Professional)
+
+RECOMMENDATION: HIRE WITH HIGH CONFIDENCE
+=========================================
+Next step: ada203880@gmail.com | +91 9861054025`,
+
+  matrix: `Initializing neural matrix...
+
+  +------------------------------------+
+  |  01000001 01000100 01000001 01010010 |
+  |  01010011 01001000 00100000 01010000 |
+  |  01000001 01001110 01000100 01000001 |
+  |                                    |
+  |  "There is no spoon..."            |
+  |  ...only clean React components    |
+  |  and well-indexed MySQL schemas.   |
+  +------------------------------------+
+
+  [Matrix mode deactivated - reality restored]`,
 
   help: `Available operations:
-  • about   - Full-stack engineering focus, WooCommerce pipelines & API reliability
-  • skills  - Structural ASCII directory map of core technical stacks
-  • clear   - Wipe the terminal log feed panel`,
+  -----------------------------------------
+  about         Full-stack engineering profile
+  whoami        Identity card with contact links
+  skills        ASCII map of core tech stacks
+  projects      Production project list with URLs
+  cat resume    Formatted resume overview
+  contact       All verified contact channels
+  ls            List portfolio source components
+  tree          Full source directory structure
+  curl          Simulate FORGE Fitness REST API
+  clear         Wipe the terminal log feed panel
+  -----------------------------------------
+  Easter eggs:  sudo hire adarsh  |  matrix
+  Tip: Use Up/Down arrows for history
+       Press Tab to autocomplete`,
 };
 
 export function InteractiveDevTerminal() {
@@ -57,7 +215,20 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
     scrollToBottom();
   }, [logs, scrollToBottom]);
 
+  // All valid top-level command names for Tab autocomplete
+  const ALL_COMMANDS = Object.keys(COMMAND_RESPONSES).filter((k) => !k.includes(' ')).concat(['clear']);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Tab: autocomplete to first matching command
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const partial = inputVal.toLowerCase().trim();
+      if (!partial) return;
+      const match = ALL_COMMANDS.find((cmd) => cmd.startsWith(partial));
+      if (match) setInputVal(match);
+      return;
+    }
+
     // Arrow-up: navigate backward in command history
     if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -224,7 +395,7 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type 'help', 'about', 'skills'..."
+          placeholder="Type 'help', 'whoami', 'projects', or 'sudo hire adarsh'..."
           className="flex-1 bg-transparent text-emerald-300 outline-none placeholder:text-zinc-600 font-mono text-xs caret-cyan-400"
           autoCapitalize="none"
           autoComplete="off"
