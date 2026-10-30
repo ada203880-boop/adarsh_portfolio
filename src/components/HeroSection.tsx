@@ -8,6 +8,7 @@ import { SpotlightCard } from './SpotlightCard';
 import { HolographicGlobe } from './HolographicGlobe';
 import { BlurFadeText } from './BlurFadeText';
 import { ClaymorphicSocialBadges } from './ClaymorphicSocialBadges';
+import { InteractiveDevTerminal } from './InteractiveDevTerminal';
 import { useTypewriter } from '../lib/useTypewriter';
 import { useI18n } from '../lib/useI18n';
 import { useMagnetic } from '../lib/useMagnetic';
@@ -28,7 +29,7 @@ const ROLES = [
 
 export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) {
   const { t } = useI18n();
-  const [activeTab, setActiveTab] = useState<'architecture' | 'stack' | 'status' | 'globe'>('architecture');
+  const [activeTab, setActiveTab] = useState<'terminal' | 'architecture' | 'stack' | 'status' | 'globe'>('terminal');
 
   const hour = new Date().getHours();
   const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
@@ -196,7 +197,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                   <span className="ml-2 font-mono text-[11px] text-zinc-400">adarsh-dev-environment</span>
                 </div>
                 <div className="flex flex-wrap gap-1">
-                  {(['architecture', 'stack', 'status', 'globe'] as const).map((tab) => (
+                  {(['terminal', 'architecture', 'stack', 'status', 'globe'] as const).map((tab) => (
                     <button
                       key={tab}
                       type="button"
@@ -209,11 +210,18 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                         : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                     >
-                      {tab === 'globe' ? '🌐 3D Globe' : tab}
+                      {tab === 'terminal' ? '💻 Shell' : tab === 'globe' ? '🌐 3D Globe' : tab}
                     </button>
                   ))}
                 </div>
               </div>
+
+              {/* Tab 0: Interactive Bash Shell Terminal */}
+              {activeTab === 'terminal' && (
+                <div className="py-1">
+                  <InteractiveDevTerminal />
+                </div>
+              )}
 
               {/* Tab 1: Architecture Highlights */}
               {activeTab === 'architecture' && (

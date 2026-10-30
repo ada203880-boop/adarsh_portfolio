@@ -1,5 +1,14 @@
 import { useEffect, useRef } from 'react';
 
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  baseAlpha: number;
+}
+
 export function CinematicCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -7,257 +16,137 @@ export function CinematicCanvas() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+    let rafId: number;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let isMobile = width < 768;
 
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
+    // Mouse coordinates tracking
+    let mouseX = -9999;
+    let mouseY = -9999;
+    let isMouseOver = false;
 
-    const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // 65 floating micro-particles in soft teal/cyan tints with ~0.18 opacity and 1px - 3px sizes
+    const PARTICLE_COUNT = 65;
+    const particles: Particle[] = [];
+
+    const initParticles = () => {
+      particles.length = 0;
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.55,
+          vy: (Math.random() - 0.5) * 0.55,
+          size: 1 + Math.random() * 2, // 1px to 3px
+          baseAlpha: 0.14 + Math.random() * 0.08, // around 0.18
+        });
+      }
+    };
+
+    const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = `${width}px`;
-      canvas.style.height = `${height}px`;
-      ctx.scale(dpr, dpr);
+      isMobile = width < 768;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // Keep particles bounded within new dimensions
+      for (const p of particles) {
+        if (p.x > width) p.x = Math.random() * width;
+        if (p.y > height) p.y = Math.random() * height;
+      }
     };
 
-    resize();
-
-    // Data pipeline stack layers
-    const LAYERS = [
-      { name: 'UI / Client', color: '#61dafb', glow: 'rgba(97, 218, 251, 0.9)' },
-      { name: 'API Gateway', color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.9)' },
-      { name: 'Microservices', color: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.9)' },
-      { name: 'Cache / Redis', color: '#f43f5e', glow: 'rgba(244, 63, 94, 0.9)' },
-      { name: 'Database Cluster', color: '#10b981', glow: 'rgba(16, 185, 129, 0.9)' },
-      { name: 'AI / Telemetry', color: '#a855f7', glow: 'rgba(168, 85, 247, 0.9)' },
-      { name: 'Cloud Pipelines', color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.9)' },
-    ];
-
-    const nodeCount = width < 768 ? 40 : 80;
-
-    type PipelineNode = {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-      layer: string;
-      color: string;
-      glowColor: string;
-      pulse: number;
-      pulseSpeed: number;
-    };
-
-    type DataBeam = {
-      fromIndex: number;
-      toIndex: number;
-      progress: number;
-      speed: number;
-      trailLength: number;
-      color: string;
-      glowColor: string;
-    };
-
-    const nodes: PipelineNode[] = Array.from({ length: nodeCount }, () => {
-      const layer = LAYERS[Math.floor(Math.random() * LAYERS.length)];
-      return {
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.35,
-        size: Math.random() * 2.2 + 1.2,
-        layer: layer.name,
-        color: layer.color,
-        glowColor: layer.glow,
-        pulse: Math.random() * Math.PI,
-        pulseSpeed: 0.02 + Math.random() * 0.03,
-      };
-    });
-
-    // Generate traveling data beams connecting services
-    const beamCount = Math.floor(nodeCount * 0.75);
-    const beams: DataBeam[] = Array.from({ length: beamCount }, () => {
-      const from = Math.floor(Math.random() * nodes.length);
-      let to = Math.floor(Math.random() * nodes.length);
-      if (to === from) to = (from + 1) % nodes.length;
-      return {
-        fromIndex: from,
-        toIndex: to,
-        progress: Math.random(),
-        speed: Math.random() * 0.009 + 0.005,
-        trailLength: 0.18 + Math.random() * 0.12,
-        color: nodes[from].color,
-        glowColor: nodes[from].glowColor,
-      };
-    });
-
-    const mouse = {
-      x: width / 2,
-      y: height / 2,
-      targetX: width / 2,
-      targetY: height / 2,
-      active: false,
-    };
+    canvas.width = width;
+    canvas.height = height;
+    initParticles();
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.targetX = e.clientX;
-      mouse.targetY = e.clientY;
-      mouse.active = true;
+      if (isMobile) return;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      isMouseOver = true;
     };
 
     const handleMouseLeave = () => {
-      mouse.active = false;
+      isMouseOver = false;
+      mouseX = -9999;
+      mouseY = -9999;
     };
 
+    window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseleave', handleMouseLeave);
-    window.addEventListener('resize', resize, { passive: true });
-
-    let rafId: number;
+    document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 
     const render = () => {
-      ctx.clearRect(0, 0, width, height);
+      // Deep canvas background color matching #0b0c10
+      ctx.fillStyle = '#0b0c10';
+      ctx.fillRect(0, 0, width, height);
 
-      // Smooth mouse movement
-      mouse.x += (mouse.targetX - mouse.x) * 0.08;
-      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      // Desktop proximity magnetic radius & network parameters
+      const magneticRadius = 130;
+      const networkBoundary = 90;
 
-      // Cursor interactive aura
-      if (mouse.active) {
-        const aura = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 320);
-        aura.addColorStop(0, 'rgba(6, 182, 212, 0.12)');
-        aura.addColorStop(0.4, 'rgba(139, 92, 246, 0.05)');
-        aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = aura;
-        ctx.fillRect(0, 0, width, height);
-      }
+      // Update and draw particles
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
 
-      // Update node positions
-      for (const node of nodes) {
-        node.x += node.vx;
-        node.y += node.vy;
-        node.pulse += node.pulseSpeed;
+        // Position update
+        p.x += p.vx;
+        p.y += p.vy;
 
-        // Mouse gentle repulsion
-        if (mouse.active) {
-          const dx = mouse.x - node.x;
-          const dy = mouse.y - node.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 180 && dist > 0) {
-            const force = (1 - dist / 180) * 0.7;
-            node.x -= (dx / dist) * force;
-            node.y -= (dy / dist) * force;
+        // Wrap around boundaries smoothly
+        if (p.x < 0) p.x = width;
+        else if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        else if (p.y > height) p.y = 0;
+
+        // Desktop mousemove proximity magnetic logic loop
+        if (!isMobile && isMouseOver) {
+          const dx = mouseX - p.x;
+          const dy = mouseY - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < magneticRadius && dist > 1) {
+            const force = (1 - dist / magneticRadius) * 0.04;
+            p.x += dx * force;
+            p.y += dy * force;
           }
         }
 
-        // Screen boundary bounce/wrap
-        if (node.x < 0) node.x = width;
-        if (node.x > width) node.x = 0;
-        if (node.y < 0) node.y = height;
-        if (node.y > height) node.y = 0;
-      }
+        // Draw individual micro-particle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        // Soft teal/cyan tint (rgb 45, 212, 191 / rgb 6, 182, 212)
+        ctx.fillStyle = `rgba(34, 211, 238, ${p.baseAlpha})`;
+        ctx.fill();
 
-      // Draw connection conduits (every layer of the stack connected)
-      const maxDist = width < 768 ? 120 : 155;
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[i].x - nodes[j].x;
-          const dy = nodes[i].y - nodes[j].y;
-          const dist = Math.hypot(dx, dy);
+        // MOBILE RENDER RULE:
+        // On screens under 768px, disable line tracing calculations entirely to save CPU/battery
+        if (!isMobile) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p.x - p2.x;
+            const dy = p.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < maxDist) {
-            const alpha = (1 - dist / maxDist) * 0.18;
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-
-            // Dual tone gradient conduit line
-            const grad = ctx.createLinearGradient(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
-            grad.addColorStop(0, `${nodes[i].color}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`);
-            grad.addColorStop(1, `${nodes[j].color}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`);
-
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 0.75;
-            ctx.stroke();
+            // Draw fine network lines between separate nodes passing within 90px boundary radius
+            if (dist < networkBoundary) {
+              const lineAlpha = (1 - dist / networkBoundary) * 0.16;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(6, 182, 212, ${lineAlpha})`;
+              ctx.lineWidth = 0.75;
+              ctx.stroke();
+            }
           }
         }
-      }
-
-      // Draw traveling animated data beams (laser pulses with comet tails)
-      for (const beam of beams) {
-        beam.progress += beam.speed;
-        if (beam.progress >= 1) {
-          beam.progress = 0;
-          beam.fromIndex = Math.floor(Math.random() * nodes.length);
-          beam.toIndex = (beam.fromIndex + Math.floor(Math.random() * 6) + 1) % nodes.length;
-          beam.color = nodes[beam.fromIndex].color;
-          beam.glowColor = nodes[beam.fromIndex].glowColor;
-        }
-
-        const p1 = nodes[beam.fromIndex];
-        const p2 = nodes[beam.toIndex];
-        const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
-
-        if (dist < 260) {
-          // Head position
-          const hx = p1.x + (p2.x - p1.x) * beam.progress;
-          const hy = p1.y + (p2.y - p1.y) * beam.progress;
-
-          // Tail position
-          const tailProg = Math.max(0, beam.progress - beam.trailLength);
-          const tx = p1.x + (p2.x - p1.x) * tailProg;
-          const ty = p1.y + (p2.y - p1.y) * tailProg;
-
-          // Comet tail
-          const beamGrad = ctx.createLinearGradient(tx, ty, hx, hy);
-          beamGrad.addColorStop(0, 'transparent');
-          beamGrad.addColorStop(1, beam.color);
-
-          ctx.beginPath();
-          ctx.moveTo(tx, ty);
-          ctx.lineTo(hx, hy);
-          ctx.strokeStyle = beamGrad;
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-
-          // Laser head pulse with glowing halo
-          ctx.beginPath();
-          ctx.arc(hx, hy, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#ffffff';
-          ctx.shadowColor = beam.glowColor;
-          ctx.shadowBlur = 10;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      }
-
-      // Render connected service nodes with breathing glow
-      for (const node of nodes) {
-        const pulseFactor = 0.8 + 0.35 * Math.sin(node.pulse);
-        const radius = node.size * pulseFactor;
-
-        // Ambient outer glow
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, radius * 2.8, 0, Math.PI * 2);
-        ctx.fillStyle = `${node.color}15`;
-        ctx.fill();
-
-        // Node center
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.color;
-        ctx.shadowColor = node.glowColor;
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
       }
 
       rafId = requestAnimationFrame(render);
@@ -267,16 +156,21 @@ export function CinematicCanvas() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
-      window.removeEventListener('resize', resize);
     };
   }, []);
 
   return (
     <canvas
+      id="portfolioCanvasBG"
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 opacity-85"
+      className="pointer-events-none fixed inset-0 w-full h-full"
+      style={{
+        zIndex: -1,
+        backgroundColor: '#0b0c10',
+      }}
       aria-hidden="true"
     />
   );
