@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Mail, Phone, Github, Linkedin, MapPin, Copy, Check, ArrowUpRight, Send, Sparkles } from 'lucide-react';
+import { Mail, Github, Linkedin, MapPin, Copy, Check, ArrowUpRight, Send, Sparkles, MessageCircle, Instagram } from 'lucide-react';
 import { portfolio } from '../data/portfolio';
 import { sound } from '../lib/sound';
+import { ReactionMatrix } from './ReactionMatrix';
 
 export function ContactSection() {
   const [copied, setCopied] = useState(false);
@@ -92,25 +93,62 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* Phone Card */}
+            {/* WhatsApp Direct Chat Card */}
             <a
-              href={`tel:${portfolio.phone}`}
-              data-cursor="CALL"
+              href="https://wa.me/919861054025?text=Hello%20Adarsh!%20I%20saw%20your%20portfolio.%20How%20can%20you%20help%20me%3F"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="WHATSAPP"
               onClick={() => sound.playClick()}
-              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-white/[0.04]"
+              className="group flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-6 backdrop-blur-xl transition-all duration-300 hover:border-emerald-400/60 hover:bg-emerald-950/35 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
             >
               <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 text-white/80 group-hover:text-cyan-400">
-                  <Phone size={18} />
+                <span
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                    boxShadow: '0 8px 20px rgba(37,211,102,0.45), inset 0 2px 2px rgba(255,255,255,0.4)',
+                  }}
+                >
+                  <MessageCircle size={22} className="text-white drop-shadow-md" />
                 </span>
                 <div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">DIRECT LINE / WHATSAPP</div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-emerald-400">WHATSAPP DIRECT CHAT</div>
                   <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
-                    {portfolio.phone}
+                    +91 9861054025 (Tap to Chat)
                   </strong>
                 </div>
               </div>
-              <ArrowUpRight size={18} className="text-white/40 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition" />
+              <ArrowUpRight size={18} className="text-emerald-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+
+            {/* Instagram Card */}
+            <a
+              href="https://www.instagram.com/__a_._d_._i__?srtk=MWpwd2IwczBqaHN2eA=="
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="INSTA"
+              onClick={() => sound.playHover()}
+              className="group flex items-center justify-between rounded-2xl border border-pink-500/30 bg-pink-950/15 p-6 backdrop-blur-xl transition-all duration-300 hover:border-pink-400/60 hover:bg-pink-950/30 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(236,72,153,0.2)]"
+            >
+              <div className="flex items-center gap-4">
+                <span
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)',
+                    boxShadow: '0 8px 20px rgba(253,29,29,0.45), inset 0 2px 2px rgba(255,255,255,0.4)',
+                  }}
+                >
+                  <Instagram size={22} className="text-white drop-shadow-md" />
+                </span>
+                <div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-pink-400">INSTAGRAM</div>
+                  <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                    @__a_._d_._i__
+                  </strong>
+                </div>
+              </div>
+              <ArrowUpRight size={18} className="text-pink-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
             </a>
 
             {/* LinkedIn Card */}
@@ -120,20 +158,26 @@ export function ContactSection() {
               rel="noreferrer"
               data-cursor="PROFILE"
               onClick={() => sound.playHover()}
-              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-white/[0.04]"
+              className="group flex items-center justify-between rounded-2xl border border-sky-500/25 bg-sky-950/15 p-6 backdrop-blur-xl transition-all duration-300 hover:border-sky-400/60 hover:bg-sky-950/30 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(14,165,233,0.2)]"
             >
               <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 text-white/80 group-hover:text-cyan-400">
-                  <Linkedin size={18} />
+                <span
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #0077b5, #005582)',
+                    boxShadow: '0 8px 20px rgba(0,119,181,0.45), inset 0 2px 2px rgba(255,255,255,0.4)',
+                  }}
+                >
+                  <Linkedin size={22} className="text-white drop-shadow-md" />
                 </span>
                 <div>
-                  <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">PROFESSIONAL NETWORK</div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-sky-400">PROFESSIONAL NETWORK</div>
                   <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
                     linkedin.com/in/adarsh-panda-5181b9214
                   </strong>
                 </div>
               </div>
-              <ArrowUpRight size={18} className="text-white/40 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition" />
+              <ArrowUpRight size={18} className="text-sky-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
             </a>
 
             {/* GitHub Card */}
@@ -143,11 +187,17 @@ export function ContactSection() {
               rel="noreferrer"
               data-cursor="CODE"
               onClick={() => sound.playHover()}
-              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-white/[0.04]"
+              className="group flex items-center justify-between rounded-2xl border border-zinc-700/40 bg-zinc-900/40 p-6 backdrop-blur-xl transition-all duration-300 hover:border-zinc-500/60 hover:bg-zinc-900/70 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
             >
               <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-zinc-900 text-white/80 group-hover:text-cyan-400">
-                  <Github size={18} />
+                <span
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: 'linear-gradient(135deg, #333333, #181717)',
+                    boxShadow: '0 8px 20px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.2)',
+                  }}
+                >
+                  <Github size={22} className="text-white drop-shadow-md" />
                 </span>
                 <div>
                   <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">OPEN SOURCE WORKSPACE</div>
@@ -156,13 +206,13 @@ export function ContactSection() {
                   </strong>
                 </div>
               </div>
-              <ArrowUpRight size={18} className="text-white/40 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition" />
+              <ArrowUpRight size={18} className="text-white/60 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
             </a>
 
             {/* Location Coordinate */}
             <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.01] p-6 font-mono text-xs text-zinc-400">
               <MapPin size={18} className="text-cyan-400" />
-              <span>GEOLOCATION: Bhubaneswar, Odisha, India [IST +5:30]</span>
+              <span>Location: Bhubaneswar, Odisha, India</span>
             </div>
           </div>
 
@@ -227,15 +277,27 @@ export function ContactSection() {
           </div>
         </div>
 
+        {/* Visitor Reaction Matrix */}
+        <div className="mt-20 border-t border-white/[0.06] pt-12">
+          <div className="text-center mb-8">
+            <div className="font-mono text-xs uppercase tracking-widest text-violet-400 mb-2 flex items-center justify-center gap-2">
+              <Sparkles size={13} />
+              VISITOR GUESTBOOK — Leave Your Reaction
+            </div>
+            <p className="text-zinc-400 text-sm font-light">What does this portfolio make you feel? Tap to leave your mark.</p>
+          </div>
+          <ReactionMatrix />
+        </div>
+
         {/* Footer */}
-        <footer className="mt-28 border-t border-white/10 pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
+        <footer className="mt-20 border-t border-white/10 pt-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">
           <div>
             © {new Date().getFullYear()} ADARSH PANDA. ALL RIGHTS RESERVED.
           </div>
           <div className="flex items-center gap-6">
             <a href="#home" className="hover:text-cyan-400 transition">BACK TO TOP ↑</a>
             <span>•</span>
-            <span>BUILT WITH REACT 19 & GSAP</span>
+            <span>BUILT WITH REACT 19 &amp; GSAP</span>
           </div>
         </footer>
       </div>

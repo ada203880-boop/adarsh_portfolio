@@ -1,23 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle2, Info, AlertTriangle, X } from 'lucide-react';
-
-export type ToastType = 'success' | 'info' | 'warning';
-
-export interface ToastMessage {
-  id: string;
-  type: ToastType;
-  message: string;
-  emoji?: string;
-}
-
-// Global toast queue — use this from anywhere
-let _dispatch: ((t: ToastMessage) => void) | null = null;
-
-export function toast(message: string, type: ToastType = 'success', emoji?: string) {
-  if (_dispatch) {
-    _dispatch({ id: Math.random().toString(36).slice(2), type, message, emoji });
-  }
-}
+import { registerToastHandler, type ToastMessage } from '../lib/toast';
 
 const ICONS = {
   success: CheckCircle2,
@@ -97,8 +80,8 @@ export function ToastContainer() {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   useEffect(() => {
-    _dispatch = (t) => setToasts((prev) => [...prev.slice(-3), t]);
-    return () => { _dispatch = null; };
+    registerToastHandler((t) => setToasts((prev) => [...prev.slice(-3), t]));
+    return () => registerToastHandler(null);
   }, []);
 
   return (

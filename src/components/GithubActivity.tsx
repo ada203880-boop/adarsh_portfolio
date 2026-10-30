@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GitCommit, GitBranch, Github, Sparkles, ExternalLink } from 'lucide-react';
+import { GitCommit, Github, ExternalLink } from 'lucide-react';
 import { sound } from '../lib/sound';
 
 interface GithubEvent {

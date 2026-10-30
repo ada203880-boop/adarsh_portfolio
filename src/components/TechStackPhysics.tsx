@@ -73,6 +73,27 @@ export function TechStackPhysics() {
 
     canvas.addEventListener('mousemove', onMouseMove, { passive: true });
     canvas.addEventListener('mouseleave', onMouseLeave);
+
+    const onPointerDown = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+
+      // Burst impulse
+      balls.forEach((b) => {
+        const dx = b.x - clickX;
+        const dy = b.y - clickY;
+        const dist = Math.hypot(dx, dy) || 1;
+        const maxRange = 300;
+        if (dist < maxRange) {
+          const power = (1 - dist / maxRange) * 8.5;
+          b.vx += (dx / dist) * power;
+          b.vy += (dy / dist) * power;
+        }
+      });
+    };
+
+    canvas.addEventListener('mousedown', onPointerDown);
     window.addEventListener('resize', resize, { passive: true });
 
     // Determine ball radius by canvas width
@@ -216,6 +237,7 @@ export function TechStackPhysics() {
       cancelAnimationFrame(animRef.current);
       canvas.removeEventListener('mousemove', onMouseMove);
       canvas.removeEventListener('mouseleave', onMouseLeave);
+      canvas.removeEventListener('mousedown', onPointerDown);
       window.removeEventListener('resize', resize);
     };
   }, []);

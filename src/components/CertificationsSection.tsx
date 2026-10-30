@@ -1,15 +1,14 @@
-import { Award, Shield, Cpu, Cloud, Palette, CheckCircle2, Sparkles, ExternalLink } from 'lucide-react';
+import { Award, Shield, Cpu, Cloud, Palette, CheckCircle2, Sparkles } from 'lucide-react';
 
 const CERTIFICATIONS = [
   {
     id: 'nptel',
     num: '01',
     name: 'Practical Cyber Security for Cyber Security Practitioners',
-    issuer: 'NPTEL - IIT Kanpur',
+    issuer: 'NPTEL — IIT Kanpur',
     category: 'CYBER SECURITY',
     color: 'rose',
     icon: Shield,
-    verifyUrl: 'https://nptel.ac.in/noc/Ecertificate/',
     description:
       'Comprehensive course covering network security principles, threat analysis, vulnerability assessment, and practical defense strategies for real-world systems.',
     skills: ['Network Security', 'Threat Analysis', 'Vulnerability Assessment', 'Ethical Hacking'],
@@ -22,7 +21,6 @@ const CERTIFICATIONS = [
     category: 'DATA SCIENCE',
     color: 'cyan',
     icon: Cpu,
-    verifyUrl: 'https://learnwik.com',
     description:
       'Hands-on industrial training covering Python-based data analysis, NumPy and Pandas pipelines, exploratory data analysis, and introductory machine learning workflows.',
     skills: ['Python', 'NumPy', 'Pandas', 'Machine Learning', 'EDA'],
@@ -35,7 +33,6 @@ const CERTIFICATIONS = [
     category: 'CLOUD SECURITY',
     color: 'orange',
     icon: Cloud,
-    verifyUrl: 'https://www.coursera.org/professional-certificates/palo-alto-networks-cybersecurity',
     description:
       'Foundational cloud security curriculum covering identity & access management, secure cloud architecture principles, and network protection in modern cloud environments.',
     skills: ['IAM', 'Cloud Architecture', 'Zero Trust', 'Network Protection'],
@@ -48,17 +45,16 @@ const CERTIFICATIONS = [
     category: 'UX DESIGN',
     color: 'emerald',
     icon: Palette,
-    verifyUrl: 'https://www.coursera.org/professional-certificates/google-ux-design',
     description:
-      'Google-authored course on UX design thinking - covering user research, wireframing, usability testing, and inclusive design principles for digital products.',
+      'Google-authored course on UX design thinking — covering user research, wireframing, usability testing, and inclusive design principles for digital products.',
     skills: ['UX Research', 'Wireframing', 'Usability Testing', 'Inclusive Design'],
   },
 ];
 
 const COLOR_MAP: Record<string, { border: string; bg: string; badge: string; icon: string; num: string; glow: string }> = {
-  rose:    { border: 'border-rose-500/30',    bg: 'bg-rose-950/15 hover:bg-rose-950/30',    badge: 'border-rose-500/30 bg-rose-900/30 text-rose-300',       icon: 'text-rose-400',    num: 'text-rose-400/50',    glow: 'bg-rose-500/10'    },
-  cyan:    { border: 'border-cyan-500/30',    bg: 'bg-cyan-950/15 hover:bg-cyan-950/30',    badge: 'border-cyan-500/30 bg-cyan-900/30 text-cyan-300',       icon: 'text-cyan-400',    num: 'text-cyan-400/50',    glow: 'bg-cyan-500/10'    },
-  orange:  { border: 'border-orange-500/30',  bg: 'bg-orange-950/15 hover:bg-orange-950/30', badge: 'border-orange-500/30 bg-orange-900/30 text-orange-300', icon: 'text-orange-400',  num: 'text-orange-400/50',  glow: 'bg-orange-500/10'  },
+  rose: { border: 'border-rose-500/30', bg: 'bg-rose-950/15 hover:bg-rose-950/30', badge: 'border-rose-500/30 bg-rose-900/30 text-rose-300', icon: 'text-rose-400', num: 'text-rose-400/50', glow: 'bg-rose-500/10' },
+  cyan: { border: 'border-cyan-500/30', bg: 'bg-cyan-950/15 hover:bg-cyan-950/30', badge: 'border-cyan-500/30 bg-cyan-900/30 text-cyan-300', icon: 'text-cyan-400', num: 'text-cyan-400/50', glow: 'bg-cyan-500/10' },
+  orange: { border: 'border-orange-500/30', bg: 'bg-orange-950/15 hover:bg-orange-950/30', badge: 'border-orange-500/30 bg-orange-900/30 text-orange-300', icon: 'text-orange-400', num: 'text-orange-400/50', glow: 'bg-orange-500/10' },
   emerald: { border: 'border-emerald-500/30', bg: 'bg-emerald-950/15 hover:bg-emerald-950/30', badge: 'border-emerald-500/30 bg-emerald-900/30 text-emerald-300', icon: 'text-emerald-400', num: 'text-emerald-400/50', glow: 'bg-emerald-500/10' },
 };
 
@@ -142,30 +138,14 @@ export function CertificationsSection() {
                       </span>
                     ))}
                   </div>
-
-                  {/* Verify link */}
-                  <a
-                    href={cert.verifyUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`
-                      mt-5 inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5
-                      font-mono text-[10px] uppercase tracking-widest transition-all duration-200
-                      ${c.badge} hover:opacity-90 hover:scale-[1.02]
-                    `}
-                  >
-                    <ExternalLink size={10} />
-                    Verify Credential
-                  </a>
                 </div>
 
                 {/* Left accent bar */}
-                <div className={`absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity ${
-                  cert.color === 'rose'    ? 'bg-rose-400'    :
-                  cert.color === 'cyan'    ? 'bg-cyan-400'    :
-                  cert.color === 'orange'  ? 'bg-orange-400'  :
-                  'bg-emerald-400'
-                }`} />
+                <div className={`absolute left-0 top-0 bottom-0 w-[3px] rounded-l-2xl opacity-60 group-hover:opacity-100 transition-opacity ${cert.color === 'rose' ? 'bg-rose-400' :
+                  cert.color === 'cyan' ? 'bg-cyan-400' :
+                    cert.color === 'orange' ? 'bg-orange-400' :
+                      'bg-emerald-400'
+                  }`} />
               </div>
             );
           })}

@@ -49,15 +49,23 @@ export function CustomCursor() {
     const animate = () => {
       // Lerp ring towards mouse position
       const ease = 0.18;
-      ring.current.x += (mouse.current.x - ring.current.x) * ease;
-      ring.current.y += (mouse.current.y - ring.current.y) * ease;
+      const dx = mouse.current.x - ring.current.x;
+      const dy = mouse.current.y - ring.current.y;
+      ring.current.x += dx * ease;
+      ring.current.y += dy * ease;
+
+      // Dynamic velocity squash and stretch
+      const speed = Math.min(Math.hypot(dx, dy), 80);
+      const angle = Math.atan2(dy, dx);
+      const stretch = 1 + speed * 0.0035;
+      const squash = Math.max(0.7, 1 / stretch);
 
       if (dotRef.current) {
         dotRef.current.style.transform = `translate3d(${mouse.current.x}px, ${mouse.current.y}px, 0)`;
       }
 
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ring.current.x}px, ${ring.current.y}px, 0)`;
+        ringRef.current.style.transform = `translate3d(${ring.current.x}px, ${ring.current.y}px, 0) rotate(${angle}rad) scale(${stretch}, ${squash})`;
       }
 
       rafId = requestAnimationFrame(animate);
@@ -84,7 +92,7 @@ export function CustomCursor() {
       {/* Precision core dot */}
       <div
         ref={dotRef}
-        className={`fixed left-0 top-0 -ml-1 -mt-1 h-2 w-2 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)] transition-transform duration-75 ${isHovered ? 'scale-0' : 'scale-100'
+        className={`fixed left-0 top-0 -ml-1 -mt-1 h-2 w-2 rounded-full bg-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.8)] transition-transform duration-75 ${isHovered ? 'scale-0' : 'scale-100'
           }`}
       />
 
@@ -92,13 +100,13 @@ export function CustomCursor() {
       <div
         ref={ringRef}
         className={`fixed left-0 top-0 flex items-center justify-center rounded-full border transition-[width,height,margin,border-color,background-color] duration-300 ease-out ${cursorText
-            ? '-ml-8 -mt-8 h-16 w-16 border-cyan-400/80 bg-cyan-950/80 backdrop-blur-md text-[9px] font-mono font-bold tracking-widest text-cyan-300 uppercase shadow-[0_0_25px_rgba(6,182,212,0.4)]'
+            ? '-ml-8 -mt-8 h-16 w-16 border-violet-400/80 bg-violet-950/80 backdrop-blur-md text-[9px] font-mono font-medium tracking-widest text-violet-200 uppercase shadow-[0_0_20px_rgba(139,92,246,0.35)]'
             : isHovered
-              ? '-ml-6 -mt-6 h-12 w-12 border-white/80 bg-white/10 backdrop-blur-sm'
-              : '-ml-4 -mt-4 h-8 w-8 border-white/30 bg-transparent'
+              ? '-ml-5 -mt-5 h-10 w-10 border-violet-400/60 bg-violet-500/10 backdrop-blur-sm'
+              : '-ml-3.5 -mt-3.5 h-7 w-7 border-white/20 bg-transparent'
           }`}
       >
-        {cursorText && <span className="animate-pulse">{cursorText}</span>}
+        {cursorText && <span>{cursorText}</span>}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,43 +7,52 @@ import { CinematicLoader } from './components/CinematicLoader';
 import { CinematicCanvas } from './components/CinematicCanvas';
 import { CustomCursor } from './components/CustomCursor';
 import { CommandPalette } from './components/CommandPalette';
-import { Navigation } from './components/Navigation';
-import { ScrollIndicator } from './components/ScrollIndicator';
-import { ToastContainer } from './components/Toast';
-import { HireMeBanner } from './components/HireMeBanner';
 import { ResumeModal } from './components/ResumeModal';
+import { ToastContainer } from './components/Toast';
+import { Navigation } from './components/Navigation';
+import { VelocityMarquee } from './components/VelocityMarquee';
+import { BentoGrid } from './components/BentoGrid';
+import { FloatingDock } from './components/FloatingDock';
+import { CRTOverlay } from './components/CRTOverlay';
+import { AudioVisualizerHUD } from './components/AudioVisualizerHUD';
+import { sound } from './lib/sound';
 
-// ── Page Sections (in clean separated sequence) ──────────────
-import { HeroSection } from './components/HeroSection';                   // 01 HERO
-import { WhatIDoSection } from './components/WhatIDoSection';             // 02 WHAT I DO + TECHSTACK
-import { ProjectsSection } from './components/ProjectsSection';           // 03 FEATURED WORK
-import { SkillsSection } from './components/SkillsSection';               // 04 CAPABILITY MATRIX
-import { EducationSection } from './components/EducationSection';         // 05 EDUCATION (SEPARATE)
-import { CertificationsSection } from './components/CertificationsSection';// 06 CERTIFICATIONS (SEPARATE)
-import { AboutSection } from './components/AboutSection';                 // 07 PHILOSOPHY & ABOUT
-import { ContactSection } from './components/ContactSection';             // 08 CONTACT
+// Page Sections
+import { HeroSection } from './components/HeroSection';
+import { AboutSection } from './components/AboutSection';
+import { SkillsSection } from './components/SkillsSection';
+import { ProjectsSection } from './components/ProjectsSection';
+import { GithubActivity } from './components/GithubActivity';
+import { CareerTimeline } from './components/CareerTimeline';
+import { EducationSection } from './components/EducationSection';
+import { CertificationsSection } from './components/CertificationsSection';
+import { WhatIDoSection } from './components/WhatIDoSection';
+import { ContactSection } from './components/ContactSection';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const SECTION_IDS = [
-  'home',
-  'services',
-  'projects',
-  'skills',
-  'education',
-  'certifications',
-  'about',
-  'contact',
-];
 
 export default function App() {
   const [loaderDone, setLoaderDone] = useState(false);
   const [isTerminalOpen, setTerminal] = useState(false);
   const [isResumeOpen, setResumeOpen] = useState(false);
   const [activeSection, setSection] = useState('home');
-  const mainRef = useRef<HTMLElement>(null);
+  const [crtMode, setCrtMode] = useState(false);
+  const [isMuted, setMuted] = useState(!sound.enabled);
+  const [scrollVel, setScrollVel] = useState(0);
 
-  // ── Lenis smooth scroll + GSAP ticker sync ────────────────
+  // Sync sound mute state with navigation toggle
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const custom = e as CustomEvent<{ enabled: boolean }>;
+      if (custom.detail) {
+        setMuted(!custom.detail.enabled);
+      }
+    };
+    window.addEventListener('sound-state-change', handler);
+    return () => window.removeEventListener('sound-state-change', handler);
+  }, []);
+
+  // Lenis smooth scroll + GSAP ticker sync
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -54,72 +63,49 @@ export default function App() {
       touchMultiplier: 2,
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    lenis.on('scroll', (e: { velocity: number }) => {
+      ScrollTrigger.update();
+      if (typeof e.velocity === 'number') {
+        sound.playScrollFlow(e.velocity);
+        setScrollVel(e.velocity);
+      }
+      if (prefersReducedMotion) return;
+      const main = document.getElementById('main-content');
+      if (main && typeof e.velocity === 'number') {
+        const clampedSkew = Math.max(-1.5, Math.min(1.5, e.velocity * 0.06));
+        main.style.transform = Math.abs(clampedSkew) > 0.05 ? `skewY(${clampedSkew.toFixed(3)}deg)` : 'none';
+        main.style.transition = 'transform 0.15s cubic-bezier(0.2, 0, 0, 1)';
+      }
+    });
 
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
-    return () => {
-      gsap.ticker.remove(tick);
-      lenis.destroy();
-    };
+    return () => { gsap.ticker.remove(tick); lenis.destroy(); };
   }, []);
 
-  // ── GSAP scroll-triggered section reveals ────────────────
-  useEffect(() => {
-    if (!loaderDone) return;
-
-    const sections = mainRef.current?.querySelectorAll<HTMLElement>('section[id]');
-    if (!sections) return;
-
-    sections.forEach((section) => {
-      const heading = section.querySelector('h2');
-      if (heading) {
-        gsap.fromTo(
-          heading,
-          { opacity: 0, y: 44 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.85,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: heading,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          },
-        );
-      }
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    };
-  }, [loaderDone]);
-
-  // ── Keyboard: Cmd/Ctrl + K → terminal toggle ──────────────
+  // Keyboard: Cmd/Ctrl + K -> terminal toggle
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setTerminal((p) => !p);
       }
-      if (e.key === 'Escape') {
-        setTerminal(false);
-        setResumeOpen(false);
-      }
+      if (e.key === 'Escape') setTerminal(false);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // ── Active section tracker for nav pills ──────────────────
+  // Active section tracker for nav pills
   useEffect(() => {
+    const IDS = ['home', 'about', 'skills', 'projects', 'telemetry', 'journey', 'education', 'certifications', 'services', 'contact'];
     const onScroll = () => {
       const y = window.scrollY + 220;
-      for (const id of SECTION_IDS) {
+      for (const id of IDS) {
         const el = document.getElementById(id);
         if (el && y >= el.offsetTop && y < el.offsetTop + el.offsetHeight) {
           setSection(id);
@@ -131,70 +117,98 @@ export default function App() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const toggleCRT = () => setCrtMode((p) => !p);
+
   return (
     <div className="relative min-h-screen bg-[#03060c] text-white selection:bg-cyan-500 selection:text-black">
-      {/* ── Boot preloader ── */}
+
+      {/* Boot preloader */}
       {!loaderDone && <CinematicLoader onDone={() => setLoaderDone(true)} />}
 
-      {/* ── Always-on background layers ── */}
+      {/* Audio Visualizer HUD — bottom bar, appears when audio is active */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-[200] pointer-events-none transition-opacity duration-500"
+        style={{ opacity: !isMuted ? 1 : 0.25, height: '36px' }}
+      >
+        <AudioVisualizerHUD active={!isMuted} scrollVelocity={scrollVel} />
+      </div>
+
+      {/* Always-on background layers (with data pipeline network beams across whole page) */}
       <CinematicCanvas />
       <CustomCursor />
-      <ScrollIndicator />
 
-      {/* ── Global toast notifications ── */}
+      {/* Overlays */}
+      <CommandPalette
+        isOpen={isTerminalOpen}
+        onClose={() => setTerminal(false)}
+        onToggleCRT={toggleCRT}
+      />
+      <ResumeModal isOpen={isResumeOpen} onClose={() => setResumeOpen(false)} />
       <ToastContainer />
 
-      {/* ── Modals & Overlays ── */}
-      <CommandPalette isOpen={isTerminalOpen} onClose={() => setTerminal(false)} />
-      <ResumeModal isOpen={isResumeOpen} onClose={() => setResumeOpen(false)} />
+      {/* CRT Phosphor Mode */}
+      <CRTOverlay active={crtMode} />
 
-      {/* ── Global Navigation HUD ── */}
+      {/* Floating Vertical Shortcut Dock shifted slightly right to eliminate screen overlap */}
+      <FloatingDock
+        onOpenTerminal={() => setTerminal(true)}
+        onOpenResume={() => setResumeOpen(true)}
+      />
+
+      {/* Global Navigation HUD with Signature branding */}
       <Navigation
         onOpenTerminal={() => setTerminal(true)}
         activeSection={activeSection}
       />
 
-      {/* ── Sticky "Open to Work" bottom banner ── */}
-      <HireMeBanner />
+      {/* =====================================================
+          PAGE FLOW — seamlessly unified creative journey
+          ===================================================== */}
+      <main id="main-content" className="relative z-10">
 
-      {/*
-        PAGE FLOW - All sections separate & in logical narrative order:
-        01 HERO
-        02 SERVICES / WHAT I DO + TECHSTACK PHYSICS
-        03 PROJECTS (WORK)
-        04 SKILLS MATRIX
-        05 EDUCATION (SEPARATE)
-        06 CERTIFICATIONS (SEPARATE)
-        07 PHILOSOPHY & ABOUT (WITH LIVE GITHUB TELEMETRY)
-        08 CONTACT TRANSMISSION DOCK
-      */}
-      <main id="main-content" ref={mainRef} className="relative z-10">
-        {/* 01 ── HERO */}
+        {/* 01 HERO */}
         <HeroSection
           onOpenTerminal={() => setTerminal(true)}
           onOpenResume={() => setResumeOpen(true)}
         />
 
-        {/* 02 ── WHAT I DO + TECHSTACK */}
-        <WhatIDoSection />
+        {/* VELOCITY MARQUEE */}
+        <VelocityMarquee />
 
-        {/* 03 ── FEATURED PROJECTS */}
-        <ProjectsSection />
+        {/* 02 ABOUT (Replaced in place of services) */}
+        <AboutSection />
 
-        {/* 04 ── CAPABILITY MATRIX */}
+        {/* BENTO GRID — animated full-stack pipeline viz */}
+        <BentoGrid />
+
+        {/* 03 VERIFIED SKILLS & INTERACTIVE ZERO-G PHYSICS LAB */}
         <SkillsSection />
 
-        {/* 05 ── EDUCATION (SEPARATE) */}
+        {/* 04 FEATURED SYSTEMS / PROJECTS */}
+        <ProjectsSection />
+
+        {/* 05 LIVE GITHUB TELEMETRY RADAR */}
+        <section id="telemetry" className="relative bg-[#03060c] pb-24 text-white">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+            <GithubActivity />
+          </div>
+        </section>
+
+        {/* 06 CAREER & EXPERIENCE TIMELINE */}
+        <CareerTimeline />
+
+        {/* 07 ACADEMIC FOUNDATION */}
         <EducationSection />
 
-        {/* 06 ── CERTIFICATIONS (SEPARATE) */}
+        {/* 08 PROFESSIONAL CERTIFICATIONS */}
         <CertificationsSection />
 
-        {/* 07 ── PHILOSOPHY & ABOUT */}
-        <AboutSection onOpenResume={() => setResumeOpen(true)} />
+        {/* 09 WHAT I DO (SERVICES FOR CLIENTS) */}
+        <WhatIDoSection />
 
-        {/* 08 ── CONTACT */}
+        {/* 10 CONTACT / TRANSMISSION DOCK */}
         <ContactSection />
+
       </main>
     </div>
   );

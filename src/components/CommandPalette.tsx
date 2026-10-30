@@ -1,14 +1,15 @@
-import { useEffect, useState, useRef } from 'react';
-import { Terminal, X, CornerDownLeft, Sparkles, ExternalLink } from 'lucide-react';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { Terminal, X, CornerDownLeft, Sparkles, ExternalLink, Play } from 'lucide-react';
 import { portfolio } from '../data/portfolio';
 import { sound } from '../lib/sound';
 
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
+  onToggleCRT?: () => void;
 }
 
-export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
+export function CommandPalette({ isOpen, onClose, onToggleCRT }: CommandPaletteProps) {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<Array<{ cmd: string; result: string | React.ReactNode }>>([
     {
@@ -17,24 +18,60 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         <span className="text-zinc-400">
           Welcome to <span className="text-cyan-400 font-semibold">Adarsh's Terminal v2.6</span>. Type{' '}
           <span className="text-white bg-zinc-800 px-1 py-0.5 rounded font-mono">help</span> or click suggestions below.
+          <br />
+          <span className="text-violet-400 text-[10px]">TIP: Press <strong>▶ PLAY DEMO</strong> to watch an auto-guided tour.</span>
         </span>
       ),
     },
   ]);
+  const [isDemoRunning, setDemoRunning] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const demoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 80);
       sound.playClick();
     }
+    // Stop demo if terminal closes
+    if (!isOpen && demoTimerRef.current) {
+      clearTimeout(demoTimerRef.current);
+      setDemoRunning(false);
+    }
   }, [isOpen]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
+
+  // Auto-Demo sequence: types each command with a typewriter delay
+  const DEMO_SEQUENCE = ['about', 'projects', 'skills', 'contact', 'sudo hire'];
+
+  const runAutoDemo = useCallback(() => {
+    if (isDemoRunning) return;
+    setDemoRunning(true);
+    setHistory([{ cmd: 'init', result: <span className="text-violet-400 font-mono text-xs animate-pulse">▶ AUTO-DEMO MODE ACTIVATED — sit back and watch...</span> }]);
+
+    let delay = 600;
+    DEMO_SEQUENCE.forEach((cmd) => {
+      // Show typing animation then execute
+      demoTimerRef.current = setTimeout(() => {
+        setInput(cmd);
+        demoTimerRef.current = setTimeout(() => {
+          setInput('');
+          handleCommand(cmd);
+        }, 700);
+      }, delay);
+      delay += 2800;
+    });
+
+    demoTimerRef.current = setTimeout(() => {
+      setDemoRunning(false);
+      setHistory(prev => [...prev, { cmd: '---', result: <span className="text-emerald-400 font-mono text-xs">✓ Demo complete. Type <strong>help</strong> to explore further.</span> }]);
+    }, delay + 300);
+  }, [isDemoRunning]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCommand = (cmdText: string) => {
     const raw = cmdText.trim();
@@ -56,9 +93,6 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               <span className="text-white font-semibold">contact</span> <span>Display email, phone, and coordinates</span>
               <span className="text-white font-semibold">about</span> <span>Read background & engineering focus</span>
               <span className="text-white font-semibold">sudo hire</span> <span>Initiate recruitment / interview request</span>
-              <span className="text-white font-semibold">hire me</span> <span>Show open-to-work status</span>
-              <span className="text-white font-semibold">whoami</span> <span>Identity lookup</span>
-              <span className="text-emerald-400 font-semibold">matrix</span> <span className="text-emerald-400/70">Secret easter egg</span>
               <span className="text-white font-semibold">clear</span> <span>Clear console logs</span>
             </div>
           </div>
@@ -198,6 +232,17 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         })();
         break;
 
+      case 'crt':
+      case 'phosphor':
+        sound.playSuccess();
+        if (onToggleCRT) onToggleCRT();
+        output = (
+          <span className="text-[#00ff41] font-mono text-xs">
+            ▶ CRT PHOSPHOR MODE TOGGLED — scanlines + barrel distortion active
+          </span>
+        );
+        break;
+
       case 'whoami':
         output = (
           <span className="text-cyan-300 font-mono text-xs">
@@ -292,7 +337,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
         {/* Quick Suggestion Pills */}
         <div className="flex flex-wrap gap-2 border-t border-zinc-800/80 bg-zinc-950/40 px-4 py-2 text-[11px] font-mono">
           <span className="text-zinc-500 self-center">Try:</span>
-          {['help', 'projects', 'skills', 'contact', 'sudo hire', 'clear'].map((btn) => (
+          {['help', 'projects', 'skills', 'contact', 'sudo hire', 'crt', 'clear'].map((btn) => (
             <button
               key={btn}
               onClick={() => handleCommand(btn)}
@@ -301,6 +346,21 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
               {btn}
             </button>
           ))}
+
+          {/* Auto-Demo button */}
+          <button
+            onClick={runAutoDemo}
+            disabled={isDemoRunning}
+            className={`ml-auto flex items-center gap-1.5 rounded border px-3 py-0.5 font-semibold transition ${
+              isDemoRunning
+                ? 'border-violet-500/40 bg-violet-950/30 text-violet-400 cursor-wait animate-pulse'
+                : 'border-violet-500/60 bg-violet-900/30 text-violet-300 hover:border-violet-400 hover:text-violet-200'
+            }`}
+            title="Watch an auto-guided demo of this terminal"
+          >
+            <Play size={11} />
+            {isDemoRunning ? 'Running...' : '▶ PLAY DEMO'}
+          </button>
         </div>
 
         {/* Input Bar */}

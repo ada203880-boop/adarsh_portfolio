@@ -10,12 +10,12 @@ interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export function SpotlightCard({
   children,
   className = '',
-  spotlightColor = 'rgba(6, 182, 212, 0.12)',
+  spotlightColor = 'rgba(139, 92, 246, 0.12)',
   enableTilt = false,
   ...props
 }: SpotlightCardProps) {
   const divRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: -200, y: -200 });
+  const [position, setPosition] = useState({ x: -300, y: -300 });
   const [opacity, setOpacity] = useState(0);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
@@ -26,11 +26,11 @@ export function SpotlightCard({
     const y = e.clientY - rect.top;
     setPosition({ x, y });
 
-    if (enableTilt) {
+    if (enableTilt && window.innerWidth >= 1024) {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -7;
-      const rotateY = ((x - centerX) / centerX) * 7;
+      const rotateX = ((y - centerY) / centerY) * -5;
+      const rotateY = ((x - centerX) / centerX) * 5;
       setTilt({ x: rotateX, y: rotateY });
     }
   };
@@ -53,23 +53,24 @@ export function SpotlightCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       style={{
-        transform: enableTilt
+        transform: enableTilt && window.innerWidth >= 1024
           ? `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
           : undefined,
-        transition: enableTilt ? 'transform 0.15s ease-out' : undefined,
+        transition: enableTilt ? 'transform 0.18s cubic-bezier(0.2, 0, 0, 1)' : undefined,
       }}
       className={`relative overflow-hidden ${className}`}
       {...props}
     >
-      {/* Radial spotlight overlay */}
+      {/* Restrained radial spotlight */}
       <div
         className="pointer-events-none absolute -inset-px transition-opacity duration-300"
         style={{
           opacity,
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 50%)`,
+          background: `radial-gradient(550px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 60%)`,
         }}
       />
       {children}
     </div>
   );
 }
+

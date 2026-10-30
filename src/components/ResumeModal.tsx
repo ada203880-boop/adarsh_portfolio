@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { FileText, Download, X, ExternalLink } from 'lucide-react';
 import { sound } from '../lib/sound';
-import { toast } from './Toast';
+import { toast } from '../lib/toast';
 
 interface ResumeModalProps {
   isOpen: boolean;
@@ -8,6 +9,19 @@ interface ResumeModalProps {
 }
 
 export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const resumeUrl = `${import.meta.env.BASE_URL}resume.pdf`;
@@ -19,17 +33,20 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Resume Preview Modal"
       className="fixed inset-0 z-[10005] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 sm:p-6"
       onClick={onClose}
     >
       <div
-        className="relative flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-cyan-500/30 bg-[#090d16] shadow-[0_0_80px_rgba(6,182,212,0.2)]"
+        className="relative flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-violet-500/30 bg-[#0a081a] shadow-[0_0_80px_rgba(139,92,246,0.2)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-white/[0.02]">
+        <div className="flex items-center justify-between border-b border-white/[0.08] px-6 py-4 bg-white/[0.02]">
           <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-400/30 bg-cyan-950/40 text-cyan-300">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-violet-500/30 bg-violet-950/40 text-violet-300">
               <FileText size={16} />
             </span>
             <div>
@@ -47,7 +64,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
               href={resumeUrl}
               download="Adarsh_Panda_Resume.pdf"
               onClick={handleDownload}
-              className="flex items-center gap-1.5 rounded-lg border border-cyan-500/40 bg-cyan-950/40 px-3 py-1.5 font-mono text-[11px] font-medium text-cyan-300 transition hover:bg-cyan-900/50"
+              className="flex items-center gap-1.5 rounded-lg border border-violet-500/30 bg-violet-950/40 px-3 py-1.5 font-mono text-[11px] font-medium text-violet-300 transition hover:bg-violet-900/50"
             >
               <Download size={13} />
               <span className="hidden sm:inline">Download</span>
@@ -61,7 +78,7 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
                 sound.playClick();
                 toast('Opened resume in new tab', 'info', '↗️');
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition hover:border-cyan-400 hover:text-cyan-300"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 transition hover:border-violet-400 hover:text-violet-300"
               title="Open full PDF"
             >
               <ExternalLink size={14} />

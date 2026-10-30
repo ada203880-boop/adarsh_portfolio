@@ -1,35 +1,33 @@
 import { useState } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, FileText, Sparkles, Terminal, ArrowUpRight } from 'lucide-react';
+import {
+  ArrowDown, Github, Linkedin, Mail, FileText, ArrowUpRight,
+  Code2, Server, Database, Sparkles, Instagram
+} from 'lucide-react';
 import { portfolio } from '../data/portfolio';
-import characterScene from '../assets/character-scene.png';
 import { sound } from '../lib/sound';
-import { useScrambleText } from '../lib/useScrambleText';
+import { SpotlightCard } from './SpotlightCard';
+import { HolographicGlobe } from './HolographicGlobe';
+import { BlurFadeText } from './BlurFadeText';
 import { useTypewriter } from '../lib/useTypewriter';
+import profileImg from '../assets/profile.jpeg';
 
 interface HeroSectionProps {
   onOpenTerminal: () => void;
   onOpenResume?: () => void;
 }
 
+const ROLES = [
+  'Software Developer',
+  'Full-Stack Web Engineer',
+  'React.js & Node.js Specialist',
+  'WooCommerce E-Commerce Architect',
+  'REST API & Systems Builder',
+];
+
 export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const { displayText: headlinePurpose, trigger: triggerScramble } = useScrambleText('Purpose.');
+  const [activeTab, setActiveTab] = useState<'architecture' | 'stack' | 'status' | 'globe'>('architecture');
 
-  const roleText = useTypewriter([
-    'FULL-STACK SOFTWARE ENGINEER',
-    'REACT.JS & SYSTEM ARCHITECT',
-    'NODE.JS & PYTHON DEVELOPER',
-    'REST APIS & DATABASE DESIGN',
-    'OPEN FOR FULL-TIME ROLES',
-  ], 65, 2000);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (window.innerWidth < 1024) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: x * 18, y: -y * 18 });
-  };
+  const typedRole = useTypewriter(ROLES, 70, 2200);
 
   const handleResumeClick = (e: React.MouseEvent) => {
     sound.playHover();
@@ -42,195 +40,382 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full overflow-hidden bg-[#03060c] pt-28 pb-16 text-white flex flex-col justify-between"
+      className="relative min-h-[95vh] w-full overflow-hidden bg-[#07060f] pt-28 pb-16 text-white flex flex-col justify-between"
     >
-      {/* Background glows */}
-      <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[550px] w-[550px] rounded-full bg-cyan-600/[0.12] blur-[140px]" />
-      <div className="pointer-events-none absolute bottom-10 right-10 h-[450px] w-[450px] rounded-full bg-indigo-600/[0.1] blur-[150px]" />
+      {/* Background restrained ambient glow */}
+      <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[550px] w-[550px] rounded-full bg-cyan-900/[0.1] blur-[160px]" />
+      <div className="pointer-events-none absolute bottom-12 right-12 h-[450px] w-[450px] rounded-full bg-violet-950/[0.15] blur-[150px]" />
 
-      {/* Left vertical social dock (desktop) */}
-      <div className="pointer-events-none absolute left-5 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-5 lg:flex">
-        {/* Vertical line top */}
-        <div className="h-20 w-[1px] bg-gradient-to-b from-transparent to-white/20" />
+      {/* Main Content Container */}
+      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12 z-10 flex-1 flex flex-col justify-center">
 
-        {[
-          { href: portfolio.links.github, Icon: Github, label: 'GitHub' },
-          { href: portfolio.links.linkedin, Icon: Linkedin, label: 'LinkedIn' },
-          { href: `mailto:${portfolio.email}`, Icon: Mail, label: 'Email' },
-        ].map(({ href, Icon, label }) => (
-          <a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={label}
-            title={label}
-            onClick={() => sound.playHover()}
-            className="pointer-events-auto flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white/50 backdrop-blur-sm transition-all duration-300 hover:border-cyan-400/60 hover:bg-cyan-950/40 hover:text-cyan-300 hover:shadow-[0_0_14px_rgba(6,182,212,0.4)]"
-          >
-            <Icon size={15} />
-          </a>
-        ))}
+        {/* Top Header Row with Greeting Badges & Circular 3D Glow Profile in Top-Right Corner */}
+        <div className="flex items-start justify-between gap-4 mb-6">
+          {/* Status Badges only (greeting removed from badge row) */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/25 bg-violet-950/20 px-3 py-1.5 font-mono text-xs text-violet-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
+              Adarsh Panda · B.Tech CSE '25
+            </span>
 
-        {/* Vertical line bottom */}
-        <div className="h-20 w-[1px] bg-gradient-to-b from-white/20 to-transparent" />
-      </div>
-
-      {/* Floating Resume Badge (bottom-right, desktop) */}
-      <a
-        href={`${import.meta.env.BASE_URL}resume.pdf`}
-        onClick={handleResumeClick}
-        data-cursor="RESUME"
-        className="pointer-events-auto absolute bottom-24 right-6 z-20 hidden flex-col items-center gap-4 lg:flex cursor-pointer"
-      >
-        <div className="h-16 w-[1px] bg-gradient-to-b from-transparent to-white/20" />
-        <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.04] px-4 py-2 font-mono text-[10px] tracking-widest text-white/60 backdrop-blur-md transition hover:border-cyan-400 hover:text-cyan-300">
-          RESUME <ArrowUpRight size={11} />
-        </div>
-        <div className="h-16 w-[1px] bg-gradient-to-b from-white/20 to-transparent" />
-      </a>
-
-      {/* Main Content */}
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-16 z-10 flex-1 flex flex-col justify-center">
-
-        {/* Status capsule */}
-        <div className="flex flex-wrap items-center gap-3 mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-950/20 px-3.5 py-1 text-[10px] font-mono tracking-widest text-emerald-300">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>AVAILABLE FOR OPPORTUNITIES // 2026</span>
-          </div>
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-400/30 bg-cyan-950/30 px-3 py-1 text-[10px] font-mono tracking-widest text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.2)]">
-            <Sparkles size={11} className="text-cyan-400" />
-            <span>{roleText}</span>
-            <span className="inline-block w-1.5 h-3 bg-cyan-400 animate-pulse ml-0.5" />
-          </div>
-        </div>
-
-        {/* Hero Grid */}
-        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-
-          {/* Left: Typography */}
-          <div>
-            <h1
-              className="select-none cursor-default text-5xl font-extralight tracking-tight sm:text-7xl lg:text-[6vw] xl:text-8xl leading-[0.9]"
-              onMouseEnter={() => { triggerScramble(); sound.playHover(); }}
-            >
-              Building Digital <br />
-              <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-sky-400">
-                Products
-              </span>{' '}
-              with <br />
-              <span className="font-mono italic font-normal text-cyan-300 underline decoration-cyan-400/50 underline-offset-8">
-                {headlinePurpose}
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/25 px-3 py-1.5 font-mono text-xs text-emerald-300">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
+              AVAILABLE FOR HIRE // IMMEDIATE
+            </span>
+          </div>
+
+          {/* Profile Picture in Top-Right Corner — Larger Circular with Elegant 3D Glow (No disco effect) */}
+          <div className="relative group shrink-0 hidden sm:block">
+            {/* Ethereal dual-tone cyan & violet 3D ambient aura */}
+            <div
+              className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/30 to-emerald-400/30 blur-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              style={{
+                boxShadow: '0 0 60px rgba(6,182,212,0.45), 0 0 90px rgba(139,92,246,0.3)',
+              }}
+            />
+
+            {/* 3D Glass Bevel Ring with Depth */}
+            <div className="relative h-36 w-36 lg:h-44 lg:w-44 rounded-full p-1 bg-gradient-to-b from-white/40 via-cyan-400/40 to-violet-600/50 shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.4)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1.5">
+              <img
+                src={profileImg}
+                alt="Adarsh Panda"
+                className="h-full w-full rounded-full object-cover object-center ring-2 ring-black"
+              />
+
+              {/* Verified Online Active Indicator */}
+              <span className="absolute bottom-1.5 right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-black border-2 border-emerald-400 shadow-[0_0_15px_#10b981]">
+                <span className="h-3 w-3 rounded-full bg-emerald-400 animate-pulse" />
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile-only Top Right profile circle if screen is small */}
+        <div className="sm:hidden flex justify-end mb-4">
+          <div className="relative group">
+            <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-500/35 via-violet-600/25 to-emerald-400/20 blur-lg opacity-80" />
+            <div className="relative h-28 w-28 rounded-full p-0.5 bg-gradient-to-b from-white/40 to-cyan-400/50 shadow-xl">
+              <img
+                src={profileImg}
+                alt="Adarsh Panda"
+                className="h-full w-full rounded-full object-cover ring-1 ring-black"
+              />
+              <span className="absolute bottom-0.5 right-0.5 h-5 w-5 rounded-full bg-emerald-400 border-2 border-black animate-pulse" />
+            </div>
+          </div>
+        </div>
+
+        {/* Hero Grid: Typography & Actions on Left, Architecture Stage on Right */}
+        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+
+          {/* Left Column: Headline & Bio */}
+          <div>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.25]">
+              {/* Namaste on its own line */}
+              <div>
+                <BlurFadeText text="Namaste 🙏" delay={100} />
+              </div>
+              {/* I'm Adarsh Panda on the next line */}
+              <div className="mt-1">
+                <span className="font-semibold text-cyan-300 drop-shadow-[0_0_25px_rgba(34,211,238,0.45)]">
+                  <BlurFadeText text="I'm Adarsh Panda" delay={250} />
+                </span>
+              </div>
             </h1>
 
-            <p className="mt-8 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg font-light">
-              Hi, I'm <strong className="text-white font-medium">Adarsh Panda</strong> — a Full-Stack Developer specializing in
-              React.js, Node.js, Python, and MySQL. I engineer responsive, high-performance web applications
-              and scalable digital platforms from end to end.
+            {/* Flowing Typewriter Sentence */}
+            <div className="mt-3 flex items-center gap-2 font-mono text-sm sm:text-base text-zinc-300">
+              <span className="text-cyan-400 font-medium">I am a</span>
+              <span className="font-semibold text-white border-b border-cyan-400/50 pb-0.5">
+                {typedRole}
+              </span>
+              <span className="animate-pulse font-bold text-cyan-400">|</span>
+            </div>
+
+            {/* Professional Bio Intro */}
+            <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-zinc-300 font-light">
+              Computer Science graduate and software engineer specializing in <strong className="text-white font-medium">React.js</strong>, <strong className="text-white font-medium">Node.js</strong>, <strong className="text-white font-medium">Python</strong>, and <strong className="text-white font-medium">MySQL</strong>.
+              I architect dependable full-stack web platforms, custom WooCommerce e-commerce pipelines, and production-grade REST APIs designed for real-world reliability and scale.
             </p>
 
-            {/* CTAs */}
-            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+            {/* Primary Action Buttons */}
+            <div className="mt-8 flex flex-wrap items-center gap-3.5">
               <a
                 href="#projects"
-                data-cursor="EXPLORE"
                 onClick={() => sound.playClick()}
-                className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-xs font-bold tracking-widest text-black transition-all duration-300 hover:bg-cyan-300 hover:shadow-[0_0_30px_rgba(34,211,238,0.5)]"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-6 py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
-                EXPLORE WORK
-                <ArrowDown size={14} className="transition-transform group-hover:translate-y-0.5" />
+                Explore My Work
+                <ArrowDown size={14} />
+              </a>
+
+              <a
+                href="#contact"
+                onClick={() => sound.playClick()}
+                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-5 py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              >
+                Contact Me
+                <ArrowUpRight size={14} />
               </a>
 
               <a
                 href={`${import.meta.env.BASE_URL}resume.pdf`}
                 onClick={handleResumeClick}
-                data-cursor="RESUME"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-xs font-semibold tracking-wider text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/10 cursor-pointer"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 text-xs font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-all duration-200"
+                title="View Resume PDF"
               >
                 <FileText size={14} className="text-cyan-400" />
-                RESUME / CV
+                Resume (PDF)
               </a>
-
-              <button
-                onClick={onOpenTerminal}
-                data-cursor="TERMINAL"
-                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-950/20 px-4 py-3.5 text-xs font-mono tracking-wider text-cyan-300 hover:bg-cyan-500/20 transition-all duration-300"
-              >
-                <Terminal size={14} />
-                TERMINAL
-              </button>
             </div>
 
-            {/* Social links (mobile/tablet - dock hides on desktop) */}
-            <div className="mt-10 flex items-center gap-6 border-t border-white/10 pt-6 lg:hidden">
-              <a href={portfolio.links.github} target="_blank" rel="noreferrer"
-                className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-cyan-400 transition">
-                <Github size={15} /> GITHUB
+            {/* Direct Verified Channels — Realistic Glowing 3D Social Icons */}
+            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/[0.08] pt-6">
+              {/* WhatsApp */}
+              <a
+                href={portfolio.links.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-center gap-2 rounded-xl px-3.5 py-2.5 transition-all duration-200 hover:-translate-y-0.5"
+                title="Chat directly on WhatsApp"
+                style={{
+                  background: 'linear-gradient(145deg,#128C7E,#075E54)',
+                  boxShadow: '0 4px 15px rgba(18,140,126,0.4), 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                }}
+              >
+                {/* WhatsApp SVG icon */}
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white drop-shadow-lg" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                <span className="font-mono text-[11px] text-white font-semibold">WhatsApp</span>
               </a>
-              <a href={portfolio.links.linkedin} target="_blank" rel="noreferrer"
-                className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-cyan-400 transition">
-                <Linkedin size={15} /> LINKEDIN
+
+              {/* Instagram */}
+              <a
+                href={portfolio.links.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-center gap-2 rounded-xl px-3.5 py-2.5 transition-all duration-200 hover:-translate-y-0.5"
+                title="Follow on Instagram"
+                style={{
+                  background: 'linear-gradient(145deg,#833ab4,#fd1d1d,#fcb045)',
+                  boxShadow: '0 4px 15px rgba(253,29,29,0.4), 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                }}
+              >
+                <Instagram size={15} className="text-white drop-shadow-lg" />
+                <span className="font-mono text-[11px] text-white font-semibold">Instagram</span>
               </a>
-              <a href={`mailto:${portfolio.email}`}
-                className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-cyan-400 transition">
-                <Mail size={15} /> EMAIL
+
+              {/* GitHub */}
+              <a
+                href={portfolio.links.github}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-center gap-2 rounded-xl px-3.5 py-2.5 transition-all duration-200 hover:-translate-y-0.5"
+                title="GitHub Profile"
+                style={{
+                  background: 'linear-gradient(145deg,#24292e,#1a1e22)',
+                  boxShadow: '0 4px 15px rgba(100,100,100,0.3), 0 2px 4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.15)',
+                }}
+              >
+                <Github size={15} className="text-white drop-shadow-lg" />
+                <span className="font-mono text-[11px] text-white font-semibold">GitHub</span>
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href={portfolio.links.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="group flex items-center gap-2 rounded-xl px-3.5 py-2.5 transition-all duration-200 hover:-translate-y-0.5"
+                title="LinkedIn Profile"
+                style={{
+                  background: 'linear-gradient(145deg,#0077b5,#005885)',
+                  boxShadow: '0 4px 15px rgba(0,119,181,0.45), 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                }}
+              >
+                <Linkedin size={15} className="text-white drop-shadow-lg" />
+                <span className="font-mono text-[11px] text-white font-semibold">LinkedIn</span>
+              </a>
+
+              {/* Gmail */}
+              <a
+                href={`mailto:${portfolio.email}`}
+                className="group flex items-center gap-2 rounded-xl px-3.5 py-2.5 transition-all duration-200 hover:-translate-y-0.5"
+                title="Send Email"
+                style={{
+                  background: 'linear-gradient(145deg,#EA4335,#c1271e)',
+                  boxShadow: '0 4px 15px rgba(234,67,53,0.4), 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)',
+                }}
+              >
+                <Mail size={15} className="text-white drop-shadow-lg" />
+                <span className="font-mono text-[11px] text-white font-semibold">Gmail</span>
               </a>
             </div>
           </div>
 
-          {/* Right: 3D Holographic Character Stage */}
-          <div
-            className="relative flex items-center justify-center"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-          >
-            <div
-              className="relative w-full max-w-[480px] transition-transform duration-200 ease-out"
-              style={{
-                transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
-                transformStyle: 'preserve-3d',
-              }}
+          {/* Right Column: Technical Credibility & Architecture Stage */}
+          <div className="relative">
+            <SpotlightCard
+              enableTilt
+              className="rounded-2xl border border-cyan-500/25 bg-[#0e0c20]/90 p-5 sm:p-6 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
             >
-              <div className="absolute -inset-4 rounded-3xl border border-cyan-500/20 bg-gradient-to-b from-cyan-500/10 to-transparent blur-sm -z-10" />
-              <div className="absolute -inset-1 rounded-3xl border border-white/10 -z-10" />
-
-              <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900/90 to-black p-2 border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.8)]">
-                <img
-                  src={characterScene}
-                  alt="Adarsh Panda - Full Stack Developer character artwork"
-                  className="w-full h-auto object-cover rounded-xl transition-transform duration-700 hover:scale-105"
-                  loading="eager"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-
-                <div className="absolute bottom-5 left-5 right-5 rounded-xl border border-white/15 bg-black/60 p-3.5 backdrop-blur-xl shadow-lg"
-                  style={{ transform: 'translateZ(30px)' }}>
-                  <div className="flex items-center justify-between text-[10px] font-mono text-cyan-400">
-                    <span className="flex items-center gap-1.5"><Sparkles size={11} /> ADARSH PANDA // CSE</span>
-                    <span className="text-white/40">CGPA 7.6 / 10</span>
-                  </div>
-                  <div className="mt-1 text-xs font-medium text-white/90">Full-Stack Engineer · React & Python · Node.js</div>
+              {/* Window Header */}
+              <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-rose-500/70" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
+                  <span className="ml-2 font-mono text-[11px] text-zinc-400">adarsh-dev-environment</span>
                 </div>
-
-                <div className="absolute top-4 right-4 rounded-lg border border-cyan-400/40 bg-cyan-950/80 px-2.5 py-1 text-[9px] font-mono font-bold tracking-wider text-cyan-300 backdrop-blur-md"
-                  style={{ transform: 'translateZ(20px)' }}>
-                  60 FPS ENGINE
+                <div className="flex gap-1">
+                  {(['architecture', 'stack', 'status', 'globe'] as const).map((tab) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => {
+                        setActiveTab(tab);
+                        sound.playHover();
+                      }}
+                      className={`px-2.5 py-1 rounded text-[10px] font-mono capitalize transition-colors ${activeTab === tab
+                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                        }`}
+                    >
+                      {tab === 'globe' ? '🌐 3D Globe' : tab}
+                    </button>
+                  ))}
                 </div>
               </div>
-            </div>
+
+              {/* Tab 1: Architecture Highlights */}
+              {activeTab === 'architecture' && (
+                <div className="space-y-3 font-mono text-xs">
+                  <div className="rounded-lg bg-black/40 border border-white/[0.06] p-3 text-zinc-300 space-y-2">
+                    <div className="text-cyan-400 font-semibold">// Engineering Focus & Philosophy</div>
+                    <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
+                      Writing predictable, type-safe full-stack code. Integrating responsive user interfaces with resilient API endpoints and relational schemas.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
+                        <Code2 size={12} /> Frontend
+                      </div>
+                      <div className="text-zinc-400">React.js, Tailwind, TS</div>
+                    </div>
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
+                        <Server size={12} /> Backend
+                      </div>
+                      <div className="text-zinc-400">Node.js, Express, Python</div>
+                    </div>
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
+                        <Database size={12} /> Databases
+                      </div>
+                      <div className="text-zinc-400">MySQL, Relational Design</div>
+                    </div>
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
+                      <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
+                        <Sparkles size={12} /> E-Commerce
+                      </div>
+                      <div className="text-zinc-400">WooCommerce & PHP</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Tab 2: Verified Stack */}
+              {activeTab === 'stack' && (
+                <div className="space-y-2.5 font-mono text-xs">
+                  <div className="text-zinc-400 text-[11px]">Core Verified Languages & Frameworks:</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['JavaScript', 'React.js', 'Python', 'Node.js', 'Express.js', 'MySQL', 'PHP', 'WordPress', 'WooCommerce', 'Git', 'Vite', 'HTML5/CSS3'].map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-md border border-cyan-500/20 bg-cyan-950/30 px-2.5 py-1 text-[11px] text-zinc-300"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-[11px] text-zinc-500 pt-2 font-sans leading-relaxed">
+                    Used across production e-pharmacy storefront, full-stack prototypes, and academic coursework.
+                  </p>
+                </div>
+              )}
+
+              {/* Tab 3: Current Status */}
+              {activeTab === 'status' && (
+                <div className="space-y-3 font-mono text-xs text-zinc-300">
+                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                    <span className="text-zinc-500">Degree:</span>
+                    <span className="text-cyan-300">B.Tech Computer Science</span>
+                  </div>
+                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                    <span className="text-zinc-500">Institution:</span>
+                    <span>CV Raman Global University</span>
+                  </div>
+                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                    <span className="text-zinc-500">Academic Score:</span>
+                    <span className="text-emerald-400">CGPA 7.6 / 10</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-zinc-500">Target Roles:</span>
+                    <span>Junior / Full-Stack / Software Dev</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Tab 4: 3D Holographic Globe */}
+              {activeTab === 'globe' && (
+                <div className="flex flex-col items-center justify-center py-2">
+                  <HolographicGlobe className="w-full max-w-[280px] h-[220px]" />
+                  <p className="mt-2 text-center font-mono text-[10px] text-zinc-400">
+                    Location Coordinates: <span className="text-cyan-400">20.2961° N, 85.8245° E (Bhubaneswar, IN)</span>
+                  </p>
+                </div>
+              )}
+
+              {/* Card Footer */}
+              <div className="mt-4 border-t border-white/[0.06] pt-3 flex items-center justify-between font-mono text-[10px] text-zinc-500">
+                <span>Location: Bhubaneswar, Odisha</span>
+                <button
+                  type="button"
+                  onClick={onOpenTerminal}
+                  className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  Press ⌘K for terminal →
+                </button>
+              </div>
+            </SpotlightCard>
           </div>
 
         </div>
       </div>
 
-      {/* Bottom Tech Ticker */}
-      <div className="mt-16 border-y border-white/10 bg-white/[0.01] py-3.5 overflow-hidden">
-        <div className="flex animate-pulse whitespace-nowrap gap-12 font-mono text-xs tracking-[0.25em] text-white/30">
-          {['REACT.JS', '·', 'NODE.JS', '·', 'PYTHON', '·', 'EXPRESS.JS', '·', 'REST APIS', '·', 'MYSQL', '·', 'WORDPRESS', '·', 'TAILWIND', '·', 'GSAP', '·', 'DATA SCIENCE'].map((t, i) => (
-            <span key={i}>{t}</span>
-          ))}
+      {/* Understated bottom technology strip */}
+      <div className="mt-12 border-y border-white/[0.06] bg-white/[0.01] py-3 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 flex flex-wrap items-center justify-between gap-4 font-mono text-xs text-zinc-400">
+          <span className="text-cyan-400/80 font-medium tracking-wider">ENGINEERING FOUNDATION:</span>
+          <span>React.js</span>
+          <span>·</span>
+          <span>Node.js</span>
+          <span>·</span>
+          <span>Python</span>
+          <span>·</span>
+          <span>Express.js</span>
+          <span>·</span>
+          <span>MySQL</span>
+          <span>·</span>
+          <span>WordPress / WooCommerce</span>
+          <span>·</span>
+          <span>REST APIs</span>
         </div>
       </div>
     </section>

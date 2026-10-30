@@ -1,21 +1,28 @@
 import { useState } from 'react';
-import { ArrowUpRight, Sparkles, Activity, Pill, Dumbbell, CheckCircle2, BookOpen, Laptop, Terminal } from 'lucide-react';
+import {
+  ArrowUpRight, Sparkles, Pill, Dumbbell, CheckCircle2,
+  BookOpen, Layers, SlidersHorizontal
+} from 'lucide-react';
 import { portfolio } from '../data/portfolio';
-import rmhScreenshot from '../assets/rmh-screenshot.png';
 import { sound } from '../lib/sound';
 import { CaseStudyModal } from './CaseStudyModal';
 import type { CaseStudyData } from './CaseStudyModal';
 import { SpotlightCard } from './SpotlightCard';
+import { ScrollStack } from './ScrollStack';
+import { ForgeSimulator } from './ProjectSimulators';
+import { PhoneSimulator } from './PhoneSimulator';
+import { BlurFadeText } from './BlurFadeText';
 
 export function ProjectsSection() {
   const [activeProject, setActiveProject] = useState(0);
+  const [viewLayout, setViewLayout] = useState<'stack' | 'single'>('stack');
   const [selectedCaseStudy, setSelectedCaseStudy] = useState<CaseStudyData | null>(null);
 
   const projects = [
     {
       ...portfolio.projects[0],
       tagline: 'Production E-Commerce Pharmacy & Prescription Workflow',
-      badge: 'LIVE PRODUCTION SYSTEM',
+      badge: 'LIVE PRODUCTION STOREFRONT',
       color: 'from-emerald-500/20 to-cyan-500/10',
       borderColor: 'border-emerald-500/30',
       icon: Pill,
@@ -24,7 +31,7 @@ export function ProjectsSection() {
         { label: 'WORKFLOW', value: 'Prescription Upload & Rx Safeguards' },
         { label: 'NOTIFICATIONS', value: 'Automated WhatsApp Dispatch' },
       ],
-      image: rmhScreenshot,
+      image: null,
       url: 'https://ravindramedicalhall.in',
       caseStudy: {
         id: 'rmh',
@@ -92,47 +99,114 @@ export function ProjectsSection() {
         ],
       },
     },
-    {
-      ...portfolio.projects[2],
-      tagline: 'High-Performance GPU Canvas & Physics Portfolio System',
-      badge: 'AWARD-TIER ENGINE',
-      color: 'from-violet-500/20 to-cyan-500/10',
-      borderColor: 'border-violet-500/30',
-      icon: Laptop,
-      metrics: [
-        { label: 'PHYSICS', value: 'Real-Time 2D Collision Engine' },
-        { label: 'AUDIO SYNTH', value: 'Web Audio API Procedural Sfx' },
-        { label: 'SMOOTHNESS', value: 'Lenis Inertia + 60fps Particle Canvas' },
-      ],
-      image: null,
-      url: 'https://ada203880-boop.github.io/adarsh_portfolio/',
-      caseStudy: {
-        id: 'cinematic-portfolio',
-        number: '03',
-        name: 'Cinematic Developer Engine',
-        subtitle: 'Award-Tier Portfolio Architecture',
-        stack: 'React 19 · TypeScript · GSAP · Web Audio API · Tailwind CSS v4',
-        liveUrl: 'https://ada203880-boop.github.io/adarsh_portfolio/',
-        overview:
-          'A modern cinematic portfolio designed for technical recruitment—featuring physics-driven simulation balls, procedural Web Audio synthesizer, full-fidelity case studies, and automated GitHub telemetry.',
-        challenge:
-          'Most developer portfolios are static templates that fail to stand out to engineering leaders and recruiters who review hundreds of resumes every day.',
-        solution:
-          'Engineered a bespoke web experience combining high-performance GPU canvas rendering, GSAP ScrollTrigger orchestration, and custom interactive physics to prove frontend mastery.',
-        architecturePoints: [
-          'Built real-time 2D canvas particle constellation with mouse repulsion math and adaptive resolution scaling.',
-          'Implemented custom Web Audio API oscillator synthesizer for tactile sound design without any mp3 asset downloads.',
-          'Created interactive Command Palette with custom terminal emulator, system commands, and easter eggs.',
-          'Automated CI/CD deployment via GitHub Actions direct to GitHub Pages with SPA fallback routing.',
-        ],
-        metrics: [
-          { label: 'RENDER FPS', value: 'Solid 60 FPS' },
-          { label: 'BUILD TIME', value: '< 1.8s Vite Build' },
-          { label: 'ASSET SIZE', value: 'Zero Audio MP3 Bloat' },
-        ],
-      },
-    },
   ];
+
+  const renderCard = (proj: (typeof projects)[0]) => {
+    const Icon = proj.icon;
+
+    return (
+      <SpotlightCard
+        key={proj.id}
+        enableTilt
+        className="rounded-3xl border border-white/15 bg-gradient-to-b from-[#090b18]/95 to-black/95 p-6 sm:p-10 shadow-[0_20px_70px_rgba(0,0,0,0.85)] backdrop-blur-2xl"
+      >
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          {/* Left: Project Specs & Architecture Details */}
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-950/60 text-cyan-300">
+                <Icon size={16} />
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono text-[10px] tracking-widest text-cyan-300">
+                {proj.badge}
+              </span>
+            </div>
+
+            <h3 className="mt-5 text-3xl font-light sm:text-5xl tracking-tight text-white">
+              {proj.name}
+            </h3>
+            <p className="mt-2 text-sm font-mono tracking-wider text-cyan-400/90 uppercase">
+              {proj.tagline}
+            </p>
+
+            <p className="mt-6 text-sm sm:text-base text-zinc-300 leading-relaxed font-light">
+              {proj.subtitle}
+            </p>
+
+            {/* Architecture Highlights */}
+            <div className="mt-8 space-y-3">
+              {(proj.points || []).map((pt, i) => (
+                <div key={i} className="flex items-start gap-3 text-xs sm:text-sm text-zinc-300">
+                  <CheckCircle2 size={16} className="text-cyan-400 shrink-0 mt-0.5" />
+                  <span>{pt}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Metric Badges */}
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-white/10 pt-6">
+              {(proj.metrics || []).map((m, i) => (
+                <div key={i} className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+                  <div className="font-mono text-[9px] text-white/40 tracking-wider uppercase">{m.label}</div>
+                  <div className="mt-1 text-xs font-semibold text-white/90">{m.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Tech Stack Pills & CTAs */}
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
+              <div className="flex flex-wrap gap-2">
+                {(proj.stack || '').split(/[·•]/).map((tech) => (
+                  <span
+                    key={tech}
+                    className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 text-xs font-mono text-zinc-300"
+                  >
+                    {tech.trim()}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Deep Dive Case Study Button */}
+                <button
+                  onClick={() => setSelectedCaseStudy(proj.caseStudy)}
+                  data-cursor="CASE STUDY"
+                  className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-950/40 px-4 py-2.5 text-xs font-mono tracking-wider text-cyan-300 hover:bg-cyan-500/20 transition"
+                >
+                  <BookOpen size={13} />
+                  <span>CASE STUDY</span>
+                </button>
+
+                {proj.url && (
+                  <a
+                    href={proj.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="VISIT"
+                    onClick={() => sound.playClick()}
+                    className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-5 py-2.5 text-xs font-bold tracking-wider text-black transition-all hover:bg-cyan-300 hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]"
+                  >
+                    LAUNCH SITE <ArrowUpRight size={14} />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Visual Showcase (Real Working Mobile Simulator or Interactive Telemetry) */}
+          <div className="relative group flex items-center justify-center">
+            {proj.id === 'rmh' ? (
+              <PhoneSimulator url="https://ravindramedicalhall.in" title="Rabindra Medical Hall" />
+            ) : (
+              <div className="w-full overflow-hidden rounded-2xl border border-white/15 bg-black/80 p-4 shadow-2xl">
+                <ForgeSimulator />
+              </div>
+            )}
+          </div>
+        </div>
+      </SpotlightCard>
+    );
+  };
 
   return (
     <section id="projects" className="relative min-h-screen bg-[#03060c] py-28 text-white">
@@ -154,7 +228,10 @@ export function ProjectsSection() {
               <span>03 // FEATURED SYSTEMS</span>
             </div>
             <h2 className="mt-4 text-4xl font-extralight tracking-tight sm:text-6xl lg:text-7xl">
-              Architected <span className="font-semibold text-white">End to End.</span>
+              <BlurFadeText text="Architected" delay={100} />{' '}
+              <span className="font-semibold text-white">
+                <BlurFadeText text="End to End." delay={300} />
+              </span>
             </h2>
           </div>
           <p className="max-w-md text-sm text-zinc-400 font-normal leading-relaxed">
@@ -162,249 +239,68 @@ export function ProjectsSection() {
           </p>
         </div>
 
-        {/* Project Selector Tabs */}
-        <div className="mt-12 flex flex-wrap gap-3">
-          {projects.map((proj, idx) => (
+        {/* Layout Switcher & Quick Filters */}
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-2.5">
+            {projects.map((proj, idx) => (
+              <button
+                key={proj.id}
+                onClick={() => {
+                  setActiveProject(idx);
+                  setViewLayout('single');
+                  sound.playHover();
+                }}
+                data-cursor="SELECT"
+                className={`flex items-center gap-2.5 rounded-full border px-4 py-2 font-mono text-xs tracking-wider transition-all duration-300 ${
+                  viewLayout === 'single' && activeProject === idx
+                    ? 'border-cyan-400 bg-cyan-500/10 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]'
+                    : 'border-white/10 bg-white/[0.02] text-white/50 hover:border-white/30 hover:text-white'
+                }`}
+              >
+                <span>{proj.number}</span>
+                <span className="font-semibold">{proj.name}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur-md">
             <button
-              key={proj.id}
-              onClick={() => {
-                setActiveProject(idx);
-                sound.playHover();
-              }}
-              data-cursor="SELECT"
-              className={`flex items-center gap-2.5 rounded-full border px-5 py-2.5 font-mono text-xs tracking-wider transition-all duration-300 ${
-                activeProject === idx
-                  ? 'border-cyan-400 bg-cyan-500/10 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]'
-                  : 'border-white/10 bg-white/[0.02] text-white/50 hover:border-white/30 hover:text-white'
+              type="button"
+              onClick={() => { setViewLayout('stack'); sound.playClick(); }}
+              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-xs transition-all ${
+                viewLayout === 'stack'
+                  ? 'bg-cyan-500 text-black font-semibold shadow-[0_0_15px_rgba(6,182,212,0.5)]'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
-              <span>{proj.number}</span>
-              <span className="font-semibold">{proj.name}</span>
+              <Layers size={13} />
+              <span>3D Card Stack</span>
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => { setViewLayout('single'); sound.playClick(); }}
+              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-xs transition-all ${
+                viewLayout === 'single'
+                  ? 'bg-cyan-500 text-black font-semibold shadow-[0_0_15px_rgba(6,182,212,0.5)]'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <SlidersHorizontal size={13} />
+              <span>Focused Tabs</span>
+            </button>
+          </div>
         </div>
 
-        {/* Selected Project Showcase with 3D Tilt Spotlight */}
-        {projects.map((proj, idx) => {
-          if (idx !== activeProject) return null;
-          const Icon = proj.icon;
-
-          return (
-            <SpotlightCard
-              key={proj.id}
-              enableTilt
-              className="mt-10 rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-black p-6 sm:p-10 shadow-[0_20px_70px_rgba(0,0,0,0.8)] backdrop-blur-xl"
-            >
-              <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-                {/* Left: Project Specs & Architecture Details */}
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-cyan-400/40 bg-cyan-950/60 text-cyan-300">
-                      <Icon size={16} />
-                    </span>
-                    <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 font-mono text-[10px] tracking-widest text-cyan-300">
-                      {proj.badge}
-                    </span>
-                  </div>
-
-                  <h3 className="mt-5 text-3xl font-light sm:text-5xl tracking-tight text-white">
-                    {proj.name}
-                  </h3>
-                  <p className="mt-2 text-sm font-mono tracking-wider text-cyan-400/90 uppercase">
-                    {proj.tagline}
-                  </p>
-
-                  <p className="mt-6 text-sm sm:text-base text-zinc-300 leading-relaxed font-light">
-                    {proj.subtitle}
-                  </p>
-
-                  {/* Architecture Highlights */}
-                  <div className="mt-8 space-y-3">
-                    {proj.points.map((pt, i) => (
-                      <div key={i} className="flex items-start gap-3 text-xs sm:text-sm text-zinc-300">
-                        <CheckCircle2 size={16} className="text-cyan-400 shrink-0 mt-0.5" />
-                        <span>{pt}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Metric Badges */}
-                  <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-white/10 pt-6">
-                    {proj.metrics.map((m, i) => (
-                      <div key={i} className="rounded-xl border border-white/10 bg-white/[0.02] p-3">
-                        <div className="font-mono text-[9px] text-white/40 tracking-wider uppercase">{m.label}</div>
-                        <div className="mt-1 text-xs font-semibold text-white/90">{m.value}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Tech Stack Pills & CTAs */}
-                  <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
-                    <div className="flex flex-wrap gap-2">
-                      {proj.stack.split('·').map((tech) => (
-                        <span
-                          key={tech}
-                          className="rounded-lg border border-white/10 bg-zinc-900/90 px-3 py-1 text-xs font-mono text-zinc-300"
-                        >
-                          {tech.trim()}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3">
-                      {/* Deep Dive Case Study Button */}
-                      <button
-                        onClick={() => setSelectedCaseStudy(proj.caseStudy)}
-                        data-cursor="CASE STUDY"
-                        className="inline-flex items-center gap-2 rounded-full border border-cyan-400/40 bg-cyan-950/40 px-4 py-2.5 text-xs font-mono tracking-wider text-cyan-300 hover:bg-cyan-500/20 transition"
-                      >
-                        <BookOpen size={13} />
-                        <span>CASE STUDY</span>
-                      </button>
-
-                      {proj.url && (
-                        <a
-                          href={proj.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          data-cursor="VISIT"
-                          onClick={() => sound.playClick()}
-                          className="inline-flex items-center gap-2 rounded-full bg-cyan-400 px-5 py-2.5 text-xs font-bold tracking-wider text-black transition-all hover:bg-cyan-300 hover:shadow-[0_0_25px_rgba(34,211,238,0.6)]"
-                        >
-                          LAUNCH SITE <ArrowUpRight size={14} />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right: Visual Showcase (Screenshot or Cyber Hologram) */}
-                <div className="relative group">
-                  <div className="overflow-hidden rounded-2xl border border-white/15 bg-black/80 p-2 shadow-2xl">
-                    {proj.image ? (
-                      <div className="relative overflow-hidden rounded-xl">
-                        <img
-                          src={proj.image}
-                          alt={proj.name}
-                          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-                      </div>
-                    ) : proj.id === 'cinematic-portfolio' ? (
-                      /* Cinematic Portfolio Architecture Telemetry HUD */
-                      <div className="relative flex flex-col justify-between rounded-xl bg-gradient-to-br from-[#0c0d1e] to-black p-8 min-h-[360px] border border-violet-500/30">
-                        <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                          <span className="font-mono text-xs text-violet-400 flex items-center gap-2">
-                            <Sparkles size={14} className="animate-spin text-cyan-400" /> CINEMATIC ENGINE HUD
-                          </span>
-                          <span className="rounded bg-violet-500/20 px-2 py-0.5 text-[10px] font-mono text-violet-300">
-                            REACT 19 + GSAP
-                          </span>
-                        </div>
-
-                        <div className="my-6 space-y-4">
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono text-zinc-400">
-                              <span>GPU Particle Constellation</span>
-                              <span className="text-cyan-300">60 FPS [Hardware Accel]</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-cyan-400 rounded-full w-[96%]" />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono text-zinc-400">
-                              <span>Web Audio API Procedural Synthesizer</span>
-                              <span className="text-violet-300">0 KB External MP3</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-violet-400 rounded-full w-[100%]" />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono text-zinc-400">
-                              <span>Lenis Inertial Physics Scroll</span>
-                              <span className="text-emerald-300">Fluid Momentum</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-emerald-400 rounded-full w-[92%]" />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border-t border-white/10 pt-4 flex justify-between items-center font-mono text-[11px] text-zinc-400">
-                          <span>INTERACTIVE PHYSICS STACK</span>
-                          <button
-                            onClick={() => setSelectedCaseStudy(proj.caseStudy)}
-                            className="text-cyan-400 underline hover:text-cyan-300 text-xs font-mono"
-                          >
-                            Explore Architecture
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      /* FORGE Interactive Mock Telemetry HUD */
-                      <div className="relative flex flex-col justify-between rounded-xl bg-gradient-to-br from-zinc-900 to-black p-8 min-h-[360px] border border-cyan-500/20">
-                        <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                          <span className="font-mono text-xs text-cyan-400 flex items-center gap-2">
-                            <Activity size={14} className="animate-pulse" /> FORGE AI BIOMETRICS ENGINE
-                          </span>
-                          <span className="rounded bg-cyan-500/20 px-2 py-0.5 text-[10px] font-mono text-cyan-300">
-                            v2.4 ACTIVE
-                          </span>
-                        </div>
-
-                        <div className="my-6 space-y-4">
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono text-zinc-400">
-                              <span>REST API Response Latency</span>
-                              <span className="text-cyan-300">42ms [Optimal]</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-cyan-400 rounded-full w-[85%]" />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono text-zinc-400">
-                              <span>AI Workout Recommendation Accuracy</span>
-                              <span className="text-emerald-300">96.8%</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-emerald-400 rounded-full w-[94%]" />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            <div className="flex justify-between text-xs font-mono text-zinc-400">
-                              <span>MySQL Data Sync Stability</span>
-                              <span className="text-indigo-300">99.98%</span>
-                            </div>
-                            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                              <div className="h-full bg-indigo-400 rounded-full w-[98%]" />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border-t border-white/10 pt-4 flex justify-between items-center font-mono text-[11px] text-zinc-400">
-                          <span>PERSISTENT DATA MODELS</span>
-                          <button
-                            onClick={() => setSelectedCaseStudy(proj.caseStudy)}
-                            className="text-cyan-400 underline hover:text-cyan-300 text-xs font-mono"
-                          >
-                            Explore Schema & Architecture
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </SpotlightCard>
-          );
-        })}
+        {/* Dynamic Project Presentation */}
+        <div className="mt-8">
+          {viewLayout === 'stack' ? (
+            <ScrollStack stickyOffset={95}>
+              {projects.map((proj) => renderCard(proj))}
+            </ScrollStack>
+          ) : (
+            renderCard(projects[activeProject])
+          )}
+        </div>
       </div>
     </section>
   );

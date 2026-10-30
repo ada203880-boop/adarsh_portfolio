@@ -1,13 +1,15 @@
 export const portfolio = {
   name: 'ADARSH PANDA',
   title: 'Full-Stack Developer',
-  specialization: 'JavaScript · React.js · Python · Node.js · Express.js',
+  specialization: 'JavaScript • React.js • Python • Node.js • Express.js',
   location: 'Bhubaneswar, Odisha',
   phone: '+91 9861054025',
   email: 'ada203880@gmail.com',
   links: {
     linkedin: 'https://www.linkedin.com/in/adarsh-panda-5181b9214',
     github: 'https://github.com/ada203880-boop',
+    instagram: 'https://www.instagram.com/__a_._d_._i__?srtk=MWpwd2IwczBqaHN2eA==',
+    whatsapp: 'https://wa.me/919861054025?text=Hi%20Adarsh!%20I%20reviewed%20your%20portfolio.%20How%20can%20you%20help%20me%3F',
     portfolio: 'https://ada203880-boop.github.io/adarsh_portfolio/',
   },
   summary:
@@ -26,7 +28,7 @@ export const portfolio = {
       number: '01',
       name: 'Rabindra Medical Hall',
       subtitle: 'E-Pharmacy Website',
-      stack: 'WordPress · WooCommerce · PHP · JavaScript · MySQL',
+      stack: 'WordPress • WooCommerce • PHP • JavaScript • MySQL',
       points: [
         'Engineered a responsive e-pharmacy storefront on an existing WooCommerce backend while preserving product, customer and order data.',
         'Developed end-to-end medicine purchasing workflows covering product categories, cart, checkout, order processing and prescription-required products.',
@@ -39,7 +41,7 @@ export const portfolio = {
       number: '02',
       name: 'FORGE Fitness',
       subtitle: 'AI-Powered Health Platform',
-      stack: 'JavaScript · Python · REST APIs · MySQL · AI Integration',
+      stack: 'JavaScript • Python • REST APIs • MySQL • AI Integration',
       points: [
         'Developed a feature-rich fitness application covering authentication, workout tracking, nutrition planning and recovery insights.',
         'Implemented REST API integrations, persistent data models, background processing and structured database migrations.',
@@ -47,28 +49,15 @@ export const portfolio = {
         'Built data synchronization and reliability mechanisms for interactive health and fitness workflows.',
       ],
     },
-    {
-      id: 'cinematic-portfolio',
-      number: '03',
-      name: 'Cinematic Developer Engine',
-      subtitle: 'High-Performance Interactive Web Portfolio',
-      stack: 'React 19 · TypeScript · GSAP · Web Audio API · Tailwind CSS v4',
-      points: [
-        'Architected an award-tier developer portfolio featuring custom elastic spring cursor, real-time particle constellation canvas, and 2D physics collision engine.',
-        'Integrated Web Audio API synthesizer generating responsive tactile clicks, hums, and UI feedback without external audio assets.',
-        'Designed Cmd+K terminal emulator with custom easter eggs and automated GitHub telemetry synchronization.',
-        'Engineered zero-bundle bloat Vite build pipeline with automated GitHub Actions CI/CD deployment.',
-      ],
-    },
   ],
   education: [
-    { title: 'B.Tech in Computer Science and Engineering', period: '2021-2025', institution: 'CV Raman Global University', location: 'Bhubaneswar, Odisha', detail: 'CGPA: 7.6/10', coursework: 'Data Structures · Object-Oriented Programming (OOPS) · DBMS · Operating Systems' },
-    { title: 'Intermediate - Class XII', period: '2018-2020', institution: 'Suddhananda Vidyalaya', location: 'Cuttack, Odisha' },
+    { title: 'B.Tech in Computer Science and Engineering', period: '2021–2025', institution: 'CV Raman Global University', location: 'Bhubaneswar, Odisha', detail: 'CGPA: 7.6/10', coursework: 'Data Structures • Object-Oriented Programming (OOPS) • DBMS • Operating Systems' },
+    { title: 'Intermediate — Class XII', period: '2018–2020', institution: 'Suddhananda Vidyalaya', location: 'Cuttack, Odisha' },
   ],
   certifications: [
-    'Practical Cyber Security for Cyber Security Practitioners - NPTEL, IIT Kanpur',
-    'Industrial Training in Data Science - LearnWik Solutions Pvt. Ltd.',
-    'Palo Alto Networks Cloud Security Fundamentals - Palo Alto Networks via Coursera',
-    'Foundations of User Experience (UX) Design - Google via Coursera',
+    'Practical Cyber Security for Cyber Security Practitioners — NPTEL, IIT Kanpur',
+    'Industrial Training in Data Science — LearnWik Solutions Pvt. Ltd.',
+    'Palo Alto Networks Cloud Security Fundamentals — Palo Alto Networks via Coursera',
+    'Foundations of User Experience (UX) Design — Google via Coursera',
   ],
 } as const;

@@ -1,9 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #f0f3ff;
-  background-color: #03060c;
+  --bg-primary: #07060f;
+  --bg-secondary: #0d0b1a;
+  --bg-surface: #121024;
+  --bg-card: rgba(18, 16, 36, 0.65);
+
+  --accent-violet: #8b5cf6;
+  --accent-violet-light: #a78bfa;
+  --accent-violet-dark: #6d28d9;
+  --accent-cyan: #38bdf8;
+
+  --border-subtle: rgba(139, 92, 246, 0.15);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(167, 139, 250, 0.35);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -16,57 +34,59 @@
 
 html {
   scroll-behavior: auto;
-  /* Let Lenis handle the inertia smooth scroll */
-  background: #03060c;
+  /* Handled smoothly by Lenis or system */
+  background: var(--bg-primary);
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background: #03060c;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
-/* Cinematic film grain noise overlay */
+/* Subtle, sophisticated ambient grain */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 9990;
   pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* Custom cinematic scrollbar */
+/* Custom restrained scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #03060c;
+  background: #07060f;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(139, 92, 246, 0.2);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(6, 182, 212, 0.6);
+  background: rgba(139, 92, 246, 0.5);
 }
 
 ::selection {
-  background: #06b6d4;
-  color: #000;
+  background: rgba(139, 92, 246, 0.35);
+  color: #ffffff;
 }
 
 :focus-visible {
-  outline: 2px solid #22d3ee;
+  outline: 2px solid #8b5cf6;
   outline-offset: 3px;
 }
 
-/* Toast progress bar drain animation */
+/* Toast progress animation */
 @keyframes toast-drain {
   from {
     width: 100%;
@@ -77,7 +97,100 @@ body::after {
   }
 }
 
-/* Scroll reveal - sections start invisible, JS animates in */
-.reveal-ready {
-  opacity: 0;
+/* ─── Beam laser travel animation ───────────────────────────────── */
+@keyframes beam-travel {
+  0%   { stroke-dashoffset: var(--beam-len, 500); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* ─── CRT Flicker ──────────────────────────────────────────────── */
+@keyframes crt-flicker {
+  0%, 97%, 100% { opacity: 1; }
+  98%            { opacity: 0.92; }
+  99%            { opacity: 1; }
+}
+
+.animate-crt-flicker {
+  animation: crt-flicker 4s infinite;
+}
+
+/* ─── Fade-in utility ──────────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease forwards;
+}
+
+/* ─── Profile Picture Laser Scanline Sweep ─────────────────────── */
+@keyframes scanline-sweep {
+  0%   { top: -10%; opacity: 0; }
+  20%  { opacity: 0.85; }
+  80%  { opacity: 0.85; }
+  100% { top: 110%; opacity: 0; }
+}
+
+/* ─── CRT Mode global overrides ───────────────────────────────── */
+body.crt-mode {
+  --accent-violet: #00ff41;
+  --accent-cyan:   #00e5ff;
+  --accent-violet-light: #69ff47;
+}
+
+body.crt-mode * {
+  font-family: 'DM Mono', monospace !important;
+}
+
+body.crt-mode a,
+body.crt-mode button:not([class*="bg-white"]) {
+  color: #00ff41;
+}
+
+body.crt-mode [class*="text-cyan"] {
+  color: #00ff41 !important;
+}
+
+body.crt-mode [class*="text-violet"],
+body.crt-mode [class*="text-purple"] {
+  color: #00e5ff !important;
+}
+
+body.crt-mode [class*="border-cyan"],
+body.crt-mode [class*="border-violet"] {
+  border-color: rgba(0,255,65,0.3) !important;
+}
+
+body.crt-mode [class*="bg-cyan"],
+body.crt-mode [class*="bg-violet"] {
+  background-color: rgba(0,255,65,0.08) !important;
+}
+
+body.crt-mode [class*="shadow"] {
+  box-shadow: 0 0 20px rgba(0,255,65,0.2) !important;
+}
+
+/* ─── Velocity Marquee CSS transforms (JS driven via style attr) ─ */
+#marquee-row1, #marquee-row2 {
+  will-change: transform;
+}
+
+/* Reduced motion overrides */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body::after {
+    display: none;
+  }
 }

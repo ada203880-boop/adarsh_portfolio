@@ -9,17 +9,34 @@ class SoundEngine {
   private ambientOsc2: OscillatorNode | null = null;
   private ambientFilter: BiquadFilterNode | null = null;
   public isAmbientPlaying: boolean = false;
+  public analyser: AnalyserNode | null = null;
+  private pentatonicIndex: number = 0;
+  private lastScrollNote: number = 0;
+
+  // Pentatonic scale (C4, D4, E4, G4, A4, C5, D5, E5, G5)
+  private readonly PENTATONIC = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25, 783.99];
 
   private init() {
     if (!this.ctx && typeof window !== 'undefined') {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
+        this.analyser = this.ctx.createAnalyser();
+        this.analyser.fftSize = 64;
+        this.analyser.smoothingTimeConstant = 0.8;
+        this.analyser.connect(this.ctx.destination);
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
       this.ctx.resume();
     }
+  }
+
+  public getAnalyserData(): Uint8Array {
+    if (!this.analyser) return new Uint8Array(16);
+    const data = new Uint8Array(this.analyser.frequencyBinCount);
+    this.analyser.getByteFrequencyData(data);
+    return data;
   }
 
   public toggle(): boolean {
@@ -28,10 +45,83 @@ class SoundEngine {
     if (this.enabled) {
       this.playPowerOn();
       this.startAmbient();
+      this.speakIntro();
     } else {
       this.stopAmbient();
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('sound-state-change', { detail: { enabled: this.enabled } }));
     }
     return this.enabled;
+  }
+
+  public speakIntro() {
+    if (!this.enabled || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const hour = new Date().getHours();
+      const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+      const introText =
+        `${greeting}! Namaste. I am Adarsh Panda, a Full-Stack Software Developer based in Bhubaneswar, India. Welcome to my creative portfolio. I specialize in building high-performance web applications, responsive frontend interfaces with React, scalable Node.js backend systems, and custom WooCommerce e-commerce platforms. Feel free to explore my verified projects, interactive device simulators, and technical architecture. Thank you for visiting!`;
+
+      const utterance = new SpeechSynthesisUtterance(introText);
+
+      // Select Indian English voice if available in the browser/OS, or best natural English voice
+      const voices = window.speechSynthesis.getVoices();
+      const inVoice =
+        voices.find(
+          (v) =>
+            v.lang.toLowerCase() === 'en-in' ||
+            v.lang.toLowerCase().includes('in') ||
+            v.name.toLowerCase().includes('india') ||
+            v.name.toLowerCase().includes('ravi') ||
+            v.name.toLowerCase().includes('heera') ||
+            v.name.toLowerCase().includes('aditi')
+        ) ||
+        voices.find((v) => v.lang.toLowerCase().startsWith('en')) ||
+        null;
+
+      if (inVoice) {
+        utterance.voice = inVoice;
+      }
+      utterance.lang = inVoice ? inVoice.lang : 'en-IN';
+      utterance.rate = 0.94; // natural human speaking rate
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      // Safe fallback
+    }
+  }
+
+  public speakSection(sectionName: string) {
+    if (!this.enabled || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(sectionName);
+      utterance.rate = 1.05;
+      utterance.pitch = 1.0;
+      utterance.volume = 0.75;
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      // Safe fallback
+    }
+  }
+
+  public playScrollFlow(velocity: number) {
+    if (!this.enabled || !this.ctx) return;
+    if (Math.abs(velocity) < 0.6) return;
+    const now = performance.now();
+    if (now - this.lastScrollNote < 220) return;
+    this.lastScrollNote = now;
+
+    // Harmonic pentatonic note triggered on scroll flow
+    this.playHover();
   }
 
   public startAmbient() {
@@ -60,7 +150,12 @@ class SoundEngine {
       this.ambientOsc1.connect(this.ambientFilter);
       this.ambientOsc2.connect(this.ambientFilter);
       this.ambientFilter.connect(this.ambientGain);
-      this.ambientGain.connect(this.ctx.destination);
+
+      if (this.analyser) {
+        this.ambientGain.connect(this.analyser);
+      } else {
+        this.ambientGain.connect(this.ctx.destination);
+      }
 
       this.ambientOsc1.start();
       this.ambientOsc2.start();
@@ -95,18 +190,26 @@ class SoundEngine {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(520, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.04);
+      // Pentatonic pitch selection
+      const freq = this.PENTATONIC[this.pentatonicIndex % this.PENTATONIC.length];
+      this.pentatonicIndex++;
 
-      gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.05, this.ctx.currentTime + 0.05);
+
+      gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.05);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      if (this.analyser) {
+        gain.connect(this.analyser);
+      } else {
+        gain.connect(this.ctx.destination);
+      }
 
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.04);
+      osc.stop(this.ctx.currentTime + 0.05);
     } catch {
       // Safe guard
     }
@@ -129,7 +232,11 @@ class SoundEngine {
       gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.06);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      if (this.analyser) {
+        gain.connect(this.analyser);
+      } else {
+        gain.connect(this.ctx.destination);
+      }
 
       osc.start();
       osc.stop(this.ctx.currentTime + 0.06);
@@ -158,7 +265,11 @@ class SoundEngine {
         gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.12);
 
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        if (this.analyser) {
+          gain.connect(this.analyser);
+        } else {
+          gain.connect(this.ctx.destination);
+        }
 
         osc.start(start);
         osc.stop(start + 0.12);
@@ -182,7 +293,11 @@ class SoundEngine {
       gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.25);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      if (this.analyser) {
+        gain.connect(this.analyser);
+      } else {
+        gain.connect(this.ctx.destination);
+      }
 
       osc.start();
       osc.stop(this.ctx.currentTime + 0.25);

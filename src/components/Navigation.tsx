@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Terminal, VolumeX, Menu, X, ArrowUpRight } from 'lucide-react';
 import { sound } from '../lib/sound';
+import { AudioSpectrum } from './AudioSpectrum';
 
 interface NavigationProps {
   onOpenTerminal: () => void;
@@ -46,40 +47,39 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
   };
 
   const navLinks = [
-    { label: 'SERVICES', href: '#services' },
-    { label: 'WORK', href: '#projects' },
+    { label: 'ABOUT', href: '#about' },
     { label: 'SKILLS', href: '#skills' },
+    { label: 'WORK', href: '#projects' },
+    { label: 'JOURNEY', href: '#journey' },
     { label: 'EDUCATION', href: '#education' },
     { label: 'CERTS', href: '#certifications' },
-    { label: 'ABOUT', href: '#about' },
+    { label: 'SERVICES', href: '#services' },
     { label: 'CONTACT', href: '#contact' },
   ];
 
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isScrolled
-            ? 'bg-[#03060c]/80 backdrop-blur-xl border-b border-white/[0.08] py-3.5 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
-            : 'bg-transparent py-5'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
+          ? 'bg-[#03060c]/85 backdrop-blur-xl border-b border-white/[0.08] py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
+          : 'bg-transparent py-4.5'
+          }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
-          {/* Brand Monogram */}
+          {/* Brand Signature */}
           <a
             href="#home"
             className="group flex items-center gap-3 text-white"
             data-cursor="HOME"
             onClick={() => sound.playHover()}
           >
-            <div className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-white/[0.04] font-mono text-sm font-bold tracking-tighter transition-all duration-300 group-hover:border-cyan-400 group-hover:bg-cyan-500/10">
-              <span className="text-white group-hover:text-cyan-400">AP</span>
-              <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            </div>
-            <div className="hidden sm:block">
-              <div className="text-xs font-semibold tracking-wider text-white">ADARSH PANDA</div>
+            <div className="flex flex-col">
+              <span className="font-serif italic text-xl sm:text-2xl tracking-wide bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-violet-300 transition-all duration-300 font-semibold select-none drop-shadow-[0_0_15px_rgba(34,211,238,0.35)]">
+                Adarsh Panda
+              </span>
               <div className="flex items-center gap-1.5 text-[9px] font-mono tracking-widest text-white/40">
-                <span>BHU, IN</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Bhubaneswar, IN</span>
                 <span>·</span>
                 <span className="text-cyan-400/90">{istTime || 'IST'}</span>
               </div>
@@ -96,11 +96,10 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
                   href={link.href}
                   onClick={() => sound.playHover()}
                   data-cursor="GO"
-                  className={`relative rounded-full px-3 py-1 text-[10px] font-mono font-medium tracking-[0.15em] transition-all duration-300 ${
-                    isActive
-                      ? 'bg-white text-black font-semibold shadow-[0_0_20px_rgba(255,255,255,0.4)]'
-                      : 'text-white/60 hover:text-white hover:bg-white/[0.06]'
-                  }`}
+                  className={`relative rounded-full px-3 py-1 text-[10px] font-mono font-medium tracking-[0.15em] transition-all duration-300 ${isActive
+                    ? 'bg-white text-black font-semibold shadow-[0_0_20px_rgba(255,255,255,0.4)]'
+                    : 'text-white/60 hover:text-white hover:bg-white/[0.06]'
+                    }`}
                 >
                   {link.label}
                 </a>
@@ -110,22 +109,19 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
 
           {/* Action HUD: Sound + Terminal + Let's Talk */}
           <div className="flex items-center gap-2">
-            {/* Audio Toggle with Equalizer bars */}
+            {/* Audio Toggle with Live Real-time Spectrum HUD */}
             <button
               onClick={toggleSound}
-              className={`flex h-9 items-center gap-1.5 rounded-full border px-2.5 text-[10px] font-mono tracking-wider transition-all duration-300 ${
-                soundEnabled
-                  ? 'border-cyan-400/40 bg-cyan-500/10 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-                  : 'border-white/10 bg-white/[0.02] text-white/40 hover:border-white/30 hover:text-white'
-              }`}
-              title={soundEnabled ? 'Mute audio' : 'Enable ambient soundscape'}
+              className={`flex h-9 items-center gap-1.5 rounded-full border px-2.5 text-[10px] font-mono tracking-wider transition-all duration-300 ${soundEnabled
+                ? 'border-cyan-400/40 bg-cyan-500/10 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                : 'border-white/10 bg-white/[0.02] text-white/40 hover:border-white/30 hover:text-white'
+                }`}
+              title={soundEnabled ? 'Mute audio' : 'Enable ambient soundscape & spoken intro'}
               aria-label="Toggle sound"
             >
               {soundEnabled ? (
-                <div className="flex items-end gap-0.5 h-3 w-3">
-                  <span className="w-0.5 bg-cyan-400 animate-pulse h-full" />
-                  <span className="w-0.5 bg-cyan-400 animate-pulse h-2/3" style={{ animationDelay: '0.15s' }} />
-                  <span className="w-0.5 bg-cyan-400 animate-pulse h-4/5" style={{ animationDelay: '0.3s' }} />
+                <div className="flex items-center">
+                  <AudioSpectrum bands={5} barWidth={2} height={12} />
                 </div>
               ) : (
                 <VolumeX size={13} />
@@ -192,7 +188,7 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
 
           <div className="space-y-4 border-t border-white/10 pt-6">
             <div className="flex items-center justify-between text-xs font-mono text-white/50">
-              <span>LOCATION: BHUBANESWAR</span>
+              <span>LOCATION: BHUBANESWAR, INDIA</span>
               <span>{istTime} IST</span>
             </div>
             <a

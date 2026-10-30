@@ -1,5 +1,4 @@
 import { GraduationCap, BriefcaseBusiness, Award, Code2, Sparkles, ArrowUpRight } from 'lucide-react';
-import { portfolio } from '../data/portfolio';
 
 const TIMELINE = [
   {

@@ -30,43 +30,72 @@ export function CinematicCanvas() {
 
     resize();
 
-    // Particle count scaled to screen size
-    const count = width < 768 ? 45 : 85;
-
-    type Particle = {
-      x: number;
-      y: number;
-      z: number;
-      baseX: number;
-      baseY: number;
-      size: number;
-      vx: number;
-      vy: number;
-      alpha: number;
-      color: string;
-    };
-
-    const colors = [
-      'rgba(56, 189, 248,',  // sky blue
-      'rgba(129, 140, 248,', // indigo
-      'rgba(168, 85, 247,',  // purple
-      'rgba(244, 244, 245,', // pure luminescent white
+    // Data pipeline stack layers
+    const LAYERS = [
+      { name: 'UI / Client', color: '#61dafb', glow: 'rgba(97, 218, 251, 0.9)' },
+      { name: 'API Gateway', color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.9)' },
+      { name: 'Microservices', color: '#8b5cf6', glow: 'rgba(139, 92, 246, 0.9)' },
+      { name: 'Cache / Redis', color: '#f43f5e', glow: 'rgba(244, 63, 94, 0.9)' },
+      { name: 'Database Cluster', color: '#10b981', glow: 'rgba(16, 185, 129, 0.9)' },
+      { name: 'AI / Telemetry', color: '#a855f7', glow: 'rgba(168, 85, 247, 0.9)' },
+      { name: 'Cloud Pipelines', color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.9)' },
     ];
 
-    const particles: Particle[] = Array.from({ length: count }, () => {
-      const x = Math.random() * width;
-      const y = Math.random() * height;
+    const nodeCount = width < 768 ? 40 : 80;
+
+    type PipelineNode = {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      layer: string;
+      color: string;
+      glowColor: string;
+      pulse: number;
+      pulseSpeed: number;
+    };
+
+    type DataBeam = {
+      fromIndex: number;
+      toIndex: number;
+      progress: number;
+      speed: number;
+      trailLength: number;
+      color: string;
+      glowColor: string;
+    };
+
+    const nodes: PipelineNode[] = Array.from({ length: nodeCount }, () => {
+      const layer = LAYERS[Math.floor(Math.random() * LAYERS.length)];
       return {
-        x,
-        y,
-        z: Math.random() * 2 + 0.5,
-        baseX: x,
-        baseY: y,
-        size: Math.random() * 1.8 + 0.6,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.2,
-        alpha: Math.random() * 0.6 + 0.2,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 2.2 + 1.2,
+        layer: layer.name,
+        color: layer.color,
+        glowColor: layer.glow,
+        pulse: Math.random() * Math.PI,
+        pulseSpeed: 0.02 + Math.random() * 0.03,
+      };
+    });
+
+    // Generate traveling data beams connecting services
+    const beamCount = Math.floor(nodeCount * 0.75);
+    const beams: DataBeam[] = Array.from({ length: beamCount }, () => {
+      const from = Math.floor(Math.random() * nodes.length);
+      let to = Math.floor(Math.random() * nodes.length);
+      if (to === from) to = (from + 1) % nodes.length;
+      return {
+        fromIndex: from,
+        toIndex: to,
+        progress: Math.random(),
+        speed: Math.random() * 0.009 + 0.005,
+        trailLength: 0.18 + Math.random() * 0.12,
+        color: nodes[from].color,
+        glowColor: nodes[from].glowColor,
       };
     });
 
@@ -97,61 +126,138 @@ export function CinematicCanvas() {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Smooth mouse easing
+      // Smooth mouse movement
       mouse.x += (mouse.targetX - mouse.x) * 0.08;
       mouse.y += (mouse.targetY - mouse.y) * 0.08;
 
-      // Draw subtle filaments between neighboring particles
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+      // Cursor interactive aura
+      if (mouse.active) {
+        const aura = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 320);
+        aura.addColorStop(0, 'rgba(6, 182, 212, 0.12)');
+        aura.addColorStop(0.4, 'rgba(139, 92, 246, 0.05)');
+        aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = aura;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Update node positions
+      for (const node of nodes) {
+        node.x += node.vx;
+        node.y += node.vy;
+        node.pulse += node.pulseSpeed;
+
+        // Mouse gentle repulsion
+        if (mouse.active) {
+          const dx = mouse.x - node.x;
+          const dy = mouse.y - node.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 180 && dist > 0) {
+            const force = (1 - dist / 180) * 0.7;
+            node.x -= (dx / dist) * force;
+            node.y -= (dy / dist) * force;
+          }
+        }
+
+        // Screen boundary bounce/wrap
+        if (node.x < 0) node.x = width;
+        if (node.x > width) node.x = 0;
+        if (node.y < 0) node.y = height;
+        if (node.y > height) node.y = 0;
+      }
+
+      // Draw connection conduits (every layer of the stack connected)
+      const maxDist = width < 768 ? 120 : 155;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
           const dist = Math.hypot(dx, dy);
 
-          const maxDist = 95;
           if (dist < maxDist) {
-            const filamentAlpha = (1 - dist / maxDist) * 0.12;
+            const alpha = (1 - dist / maxDist) * 0.18;
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(147, 197, 253, ${filamentAlpha})`;
-            ctx.lineWidth = 0.5;
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+
+            // Dual tone gradient conduit line
+            const grad = ctx.createLinearGradient(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+            grad.addColorStop(0, `${nodes[i].color}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`);
+            grad.addColorStop(1, `${nodes[j].color}${Math.floor(alpha * 255).toString(16).padStart(2, '0')}`);
+
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 0.75;
             ctx.stroke();
           }
         }
       }
 
-      // Draw & update particles
-      for (const p of particles) {
-        // Natural drift
-        p.x += p.vx * p.z;
-        p.y += p.vy * p.z;
-
-        // Interactive mouse gravity / deflection
-        if (mouse.active) {
-          const mdx = mouse.x - p.x;
-          const mdy = mouse.y - p.y;
-          const mdist = Math.hypot(mdx, mdy);
-          const maxRepel = 160;
-
-          if (mdist < maxRepel && mdist > 0) {
-            const force = (1 - mdist / maxRepel) * 1.5;
-            p.x -= (mdx / mdist) * force;
-            p.y -= (mdy / mdist) * force;
-          }
+      // Draw traveling animated data beams (laser pulses with comet tails)
+      for (const beam of beams) {
+        beam.progress += beam.speed;
+        if (beam.progress >= 1) {
+          beam.progress = 0;
+          beam.fromIndex = Math.floor(Math.random() * nodes.length);
+          beam.toIndex = (beam.fromIndex + Math.floor(Math.random() * 6) + 1) % nodes.length;
+          beam.color = nodes[beam.fromIndex].color;
+          beam.glowColor = nodes[beam.fromIndex].glowColor;
         }
 
-        // Screen wrap
-        if (p.x < 0) p.x = width;
-        if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        if (p.y > height) p.y = 0;
+        const p1 = nodes[beam.fromIndex];
+        const p2 = nodes[beam.toIndex];
+        const dist = Math.hypot(p2.x - p1.x, p2.y - p1.y);
 
-        // Render particle with subtle bloom
+        if (dist < 260) {
+          // Head position
+          const hx = p1.x + (p2.x - p1.x) * beam.progress;
+          const hy = p1.y + (p2.y - p1.y) * beam.progress;
+
+          // Tail position
+          const tailProg = Math.max(0, beam.progress - beam.trailLength);
+          const tx = p1.x + (p2.x - p1.x) * tailProg;
+          const ty = p1.y + (p2.y - p1.y) * tailProg;
+
+          // Comet tail
+          const beamGrad = ctx.createLinearGradient(tx, ty, hx, hy);
+          beamGrad.addColorStop(0, 'transparent');
+          beamGrad.addColorStop(1, beam.color);
+
+          ctx.beginPath();
+          ctx.moveTo(tx, ty);
+          ctx.lineTo(hx, hy);
+          ctx.strokeStyle = beamGrad;
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+
+          // Laser head pulse with glowing halo
+          ctx.beginPath();
+          ctx.arc(hx, hy, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = beam.glowColor;
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      // Render connected service nodes with breathing glow
+      for (const node of nodes) {
+        const pulseFactor = 0.8 + 0.35 * Math.sin(node.pulse);
+        const radius = node.size * pulseFactor;
+
+        // Ambient outer glow
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * (p.z * 0.8), 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}${p.alpha})`;
+        ctx.arc(node.x, node.y, radius * 2.8, 0, Math.PI * 2);
+        ctx.fillStyle = `${node.color}15`;
         ctx.fill();
+
+        // Node center
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = node.color;
+        ctx.shadowColor = node.glowColor;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
       rafId = requestAnimationFrame(render);
@@ -170,7 +276,7 @@ export function CinematicCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none fixed inset-0 z-0 opacity-70"
+      className="pointer-events-none fixed inset-0 z-0 opacity-85"
       aria-hidden="true"
     />
   );

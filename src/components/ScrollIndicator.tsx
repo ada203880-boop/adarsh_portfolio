@@ -19,13 +19,11 @@ export function ScrollIndicator() {
 
   const sections = [
     { label: '01', href: '#home', title: 'Home' },
-    { label: '02', href: '#services', title: 'Services' },
+    { label: '02', href: '#services', title: 'What I Do' },
     { label: '03', href: '#projects', title: 'Work' },
-    { label: '04', href: '#skills', title: 'Skills' },
-    { label: '05', href: '#education', title: 'Education' },
-    { label: '06', href: '#certifications', title: 'Certs' },
-    { label: '07', href: '#about', title: 'About' },
-    { label: '08', href: '#contact', title: 'Contact' },
+    { label: '04', href: '#journey', title: 'Journey' },
+    { label: '05', href: '#about', title: 'About' },
+    { label: '06', href: '#contact', title: 'Contact' },
   ];
 
   return (
