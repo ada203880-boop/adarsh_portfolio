@@ -29,6 +29,9 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
   const { t } = useI18n();
   const [activeTab, setActiveTab] = useState<'architecture' | 'stack' | 'status' | 'globe'>('architecture');
 
+  const hour = new Date().getHours();
+  const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
   const typedRole = useTypewriter(ROLES, 70, 2200);
 
   const handleResumeClick = (e: React.MouseEvent) => {
@@ -73,23 +76,23 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
           <div className="relative group shrink-0">
             {/* Ethereal dual-tone cyan & violet 3D ambient aura */}
             <div
-              className="absolute -inset-2 sm:-inset-3 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/30 to-emerald-400/30 blur-lg sm:blur-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              className="absolute -inset-4 sm:-inset-6 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/35 to-emerald-400/35 blur-xl sm:blur-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
-                boxShadow: '0 0 50px rgba(6,182,212,0.4), 0 0 70px rgba(139,92,246,0.25)',
+                boxShadow: '0 0 70px rgba(6,182,212,0.45), 0 0 100px rgba(139,92,246,0.3)',
               }}
             />
 
-            {/* 3D Glass Bevel Ring with Depth */}
-            <div className="relative h-20 w-20 min-[400px]:h-24 min-[400px]:w-24 sm:h-36 sm:w-36 lg:h-44 lg:w-44 rounded-full p-0.5 sm:p-1 bg-gradient-to-b from-white/40 via-cyan-400/40 to-violet-600/50 shadow-[0_15px_35px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1">
+            {/* 3D Glass Bevel Ring with Depth — Significantly Enlarged */}
+            <div className="relative h-28 w-28 min-[400px]:h-36 min-[400px]:w-36 sm:h-48 sm:w-48 lg:h-56 lg:w-56 xl:h-64 xl:w-64 rounded-full p-1 sm:p-1.5 bg-gradient-to-b from-white/50 via-cyan-400/50 to-violet-600/60 shadow-[0_20px_60px_rgba(0,0,0,0.85),inset_0_2px_6px_rgba(255,255,255,0.45)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1">
               <img
                 src={profileImg}
                 alt="Adarsh Panda"
-                className="h-full w-full rounded-full object-cover object-center ring-2 ring-black"
+                className="h-full w-full rounded-full object-cover object-center ring-2 sm:ring-4 ring-black"
               />
 
               {/* Verified Online Active Indicator */}
-              <span className="absolute bottom-0.5 right-0.5 sm:bottom-1.5 sm:right-1.5 flex h-4 w-4 sm:h-6 sm:w-6 lg:h-7 lg:w-7 items-center justify-center rounded-full bg-black border sm:border-2 border-emerald-400 shadow-[0_0_12px_#10b981]">
-                <span className="h-1.5 w-1.5 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full bg-black border-2 border-emerald-400 shadow-[0_0_15px_#10b981]">
+                <span className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-emerald-400 animate-pulse" />
               </span>
             </div>
           </div>
@@ -101,8 +104,9 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
           {/* Left Column: Headline & Bio */}
           <div>
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.25]">
-              {/* Namaste on its own line */}
-              <div>
+              {/* Dynamic time-based greeting + Namaste */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-zinc-400 font-extralight">{timeGreeting},</span>
                 <BlurFadeText text={t('hero.greeting')} delay={100} />
               </div>
               {/* I'm Adarsh Panda on the next line */}
@@ -359,12 +363,12 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 </div>
               )}
 
-              {/* Tab 4: 3D Holographic Globe */}
+              {/* Tab 4: 3D Interactive Map Globe */}
               {activeTab === 'globe' && (
-                <div className="flex flex-col items-center justify-center py-2">
-                  <HolographicGlobe className="w-full max-w-[280px] h-[220px]" />
-                  <p className="mt-2 text-center font-mono text-[10px] text-zinc-400">
-                    Location Coordinates: <span className="text-cyan-400">20.2961° N, 85.8245° E (Bhubaneswar, IN)</span>
+                <div className="flex flex-col items-center justify-center py-1">
+                  <HolographicGlobe className="w-full max-w-[340px]" />
+                  <p className="mt-1 text-center font-mono text-[10px] text-zinc-400">
+                    Location Coordinates: <span className="text-cyan-400 font-semibold">20.2961° N, 85.8245° E (Bhubaneswar, IN)</span>
                   </p>
                 </div>
               )}
