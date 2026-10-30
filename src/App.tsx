@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,8 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { CinematicLoader } from './components/CinematicLoader';
 import { CinematicCanvas } from './components/CinematicCanvas';
 import { CustomCursor } from './components/CustomCursor';
-import { CommandPalette } from './components/CommandPalette';
-import { ResumeModal } from './components/ResumeModal';
 import { ToastContainer } from './components/Toast';
 import { Navigation } from './components/Navigation';
 import { VelocityMarquee } from './components/VelocityMarquee';
@@ -16,13 +14,15 @@ import { FloatingDock } from './components/FloatingDock';
 import { CRTOverlay } from './components/CRTOverlay';
 import { AudioVisualizerHUD } from './components/AudioVisualizerHUD';
 import { sound } from './lib/sound';
-
-// Advanced & Interactive Additions
-import { AskAdarshChat } from './components/AskAdarshChat';
 import { KonamiCode } from './components/KonamiCode';
 import { HiringStatusWidget } from './components/HiringStatusWidget';
-import { AdminView } from './components/AdminView';
-import { InteractiveResume } from './components/InteractiveResume';
+
+// Code-split heavy interactive additions & modals via React.lazy
+const CommandPalette = lazy(() => import('./components/CommandPalette').then((m) => ({ default: m.CommandPalette })));
+const ResumeModal = lazy(() => import('./components/ResumeModal').then((m) => ({ default: m.ResumeModal })));
+const InteractiveResume = lazy(() => import('./components/InteractiveResume').then((m) => ({ default: m.InteractiveResume })));
+const AdminView = lazy(() => import('./components/AdminView').then((m) => ({ default: m.AdminView })));
+const AskAdarshChat = lazy(() => import('./components/AskAdarshChat').then((m) => ({ default: m.AskAdarshChat })));
 
 // Page Sections
 import { HeroSection } from './components/HeroSection';
@@ -175,34 +175,34 @@ export default function App() {
       <CinematicCanvas />
       <CustomCursor />
 
-      {/* Overlays & Interactive Systems */}
-      <CommandPalette
-        isOpen={isTerminalOpen}
-        onClose={() => setTerminal(false)}
-        onToggleCRT={toggleCRT}
-      />
-      <ResumeModal
-        isOpen={isResumeOpen}
-        onClose={() => setResumeOpen(false)}
-        onOpenInteractive={() => {
-          setResumeOpen(false);
-          setInteractiveResumeOpen(true);
-        }}
-      />
-      <InteractiveResume
-        isOpen={isInteractiveResumeOpen}
-        onClose={() => setInteractiveResumeOpen(false)}
-      />
+      {/* Overlays & Interactive Systems (Code-Split via Suspense) */}
+      <Suspense fallback={null}>
+        <CommandPalette
+          isOpen={isTerminalOpen}
+          onClose={() => setTerminal(false)}
+          onToggleCRT={toggleCRT}
+        />
+        <ResumeModal
+          isOpen={isResumeOpen}
+          onClose={() => setResumeOpen(false)}
+          onOpenInteractive={() => {
+            setResumeOpen(false);
+            setInteractiveResumeOpen(true);
+          }}
+        />
+        <InteractiveResume
+          isOpen={isInteractiveResumeOpen}
+          onClose={() => setInteractiveResumeOpen(false)}
+        />
+        {/* Secret Diagnostic Admin View (#admin or PIN 2580) */}
+        <AdminView />
+        {/* AI "Ask Adarsh" Chat Widget (Gemini 2.0 Flash) */}
+        <AskAdarshChat />
+      </Suspense>
       <ToastContainer />
-
-      {/* Secret Diagnostic Admin View (#admin or PIN 2580) */}
-      <AdminView />
 
       {/* Konami Code Easter Egg (↑↑↓↓←→←→BA) */}
       <KonamiCode />
-
-      {/* AI "Ask Adarsh" Chat Widget (Gemini 2.0 Flash) */}
-      <AskAdarshChat />
 
       {/* Sticky Hiring Status Quick Widget (Desktop) */}
       <HiringStatusWidget />

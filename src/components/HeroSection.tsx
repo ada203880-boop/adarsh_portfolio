@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import {
   ArrowDown, FileText, ArrowUpRight,
   Code2, Server, Database, Sparkles
 } from 'lucide-react';
 import { sound } from '../lib/sound';
 import { SpotlightCard } from './SpotlightCard';
-import { HolographicGlobe } from './HolographicGlobe';
 import { BlurFadeText } from './BlurFadeText';
 import { ClaymorphicSocialBadges } from './ClaymorphicSocialBadges';
 import { InteractiveDevTerminal } from './InteractiveDevTerminal';
@@ -13,6 +12,9 @@ import { useTypewriter } from '../lib/useTypewriter';
 import { useI18n } from '../lib/useI18n';
 import { useMagnetic } from '../lib/useMagnetic';
 import profileImg from '../assets/profile.jpeg';
+
+// Code-split heavy 3D globe component
+const HolographicGlobe = lazy(() => import('./HolographicGlobe').then((m) => ({ default: m.HolographicGlobe })));
 
 interface HeroSectionProps {
   onOpenTerminal: () => void;
@@ -373,7 +375,15 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                   className="flex flex-col items-center justify-center py-1 focus:outline-none"
                   tabIndex={0}
                 >
-                  <HolographicGlobe className="w-full max-w-[340px]" />
+                  <Suspense
+                    fallback={
+                      <div className="h-[280px] w-full flex items-center justify-center font-mono text-xs text-cyan-400 animate-pulse">
+                        Initializing 3D Globe Telemetry...
+                      </div>
+                    }
+                  >
+                    <HolographicGlobe className="w-full max-w-[340px]" />
+                  </Suspense>
                   <p className="mt-1 text-center font-mono text-[10px] text-zinc-400">
                     Location Coordinates: <span className="text-cyan-400 font-semibold">20.2961° N, 85.8245° E (Bhubaneswar, IN)</span>
                   </p>

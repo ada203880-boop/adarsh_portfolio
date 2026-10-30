@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import {
   ArrowUpRight, Sparkles, Pill, Dumbbell, CheckCircle2,
   BookOpen, Layers, SlidersHorizontal
 } from 'lucide-react';
 import { portfolio } from '../data/portfolio';
 import { sound } from '../lib/sound';
-import { CaseStudyModal } from './CaseStudyModal';
 import type { CaseStudyData } from './CaseStudyModal';
 import { SpotlightCard } from './SpotlightCard';
 import { ScrollStack } from './ScrollStack';
 import { ForgeSimulator } from './ProjectSimulators';
 import { PhoneSimulator } from './PhoneSimulator';
 import { BlurFadeText } from './BlurFadeText';
+
+const CaseStudyModal = lazy(() => import('./CaseStudyModal').then((m) => ({ default: m.CaseStudyModal })));
 
 export function ProjectsSection() {
   const [activeProject, setActiveProject] = useState(0);
@@ -213,11 +214,13 @@ export function ProjectsSection() {
       {/* Background radial highlight */}
       <div className="pointer-events-none absolute top-1/3 left-1/4 h-[500px] w-[500px] rounded-full bg-cyan-600/[0.08] blur-[150px]" />
 
-      {/* Case Study Modal */}
-      <CaseStudyModal
-        study={selectedCaseStudy}
-        onClose={() => setSelectedCaseStudy(null)}
-      />
+      {/* Case Study Modal (Code-Split) */}
+      <Suspense fallback={null}>
+        <CaseStudyModal
+          study={selectedCaseStudy}
+          onClose={() => setSelectedCaseStudy(null)}
+        />
+      </Suspense>
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         {/* Section Header */}

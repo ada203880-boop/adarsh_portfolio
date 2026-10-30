@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "docs"
+
+[functions]
+  directory = "api"
+
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
