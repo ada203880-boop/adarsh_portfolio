@@ -191,6 +191,16 @@ body.crt-mode [class*="shadow"] {
   will-change: transform;
 }
 
+/* ─── Claymorphic Staggered Float Animation ────────────────────── */
+@keyframes clayFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 /* Reduced motion overrides */
 @media (prefers-reduced-motion: reduce) {
 

@@ -72,3 +72,4 @@ export function useMagnetic<T extends HTMLElement>(options: MagneticOptions = {}
 
   return ref;
 }
+
