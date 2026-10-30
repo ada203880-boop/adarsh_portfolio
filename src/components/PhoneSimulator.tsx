@@ -12,7 +12,7 @@ interface PhoneSimulatorProps {
 }
 
 export function PhoneSimulator({
-  url = 'https://ravindramedicalhall.in',
+  url = 'https://rabindramedicalhall.in',
   title = 'Rabindra Medical Hall',
 }: PhoneSimulatorProps) {
   const [time, setTime] = useState('09:41');
@@ -93,7 +93,7 @@ export function PhoneSimulator({
             <div className="flex flex-1 items-center gap-1.5 overflow-hidden rounded-full border border-white/10 bg-black/60 px-2.5 py-1 text-[11px]">
               <ShieldCheck size={12} className="text-emerald-400 shrink-0" />
               <span className="truncate font-mono text-[10px] text-zinc-300">
-                https://ravindramedicalhall.in
+                https://rabindramedicalhall.in
               </span>
             </div>
             

@@ -30,7 +30,7 @@ const TIMELINE = [
     org: 'Production E-Commerce Pharmacy System',
     desc: 'Engineered a responsive e-pharmacy storefront with prescription validation, WhatsApp order alerts, and WooCommerce + PHP backend.',
     tags: ['WordPress', 'WooCommerce', 'PHP', 'MySQL'],
-    link: 'https://ravindramedicalhall.in',
+    link: 'https://rabindramedicalhall.in',
   },
   {
     period: '2023 — 2024',

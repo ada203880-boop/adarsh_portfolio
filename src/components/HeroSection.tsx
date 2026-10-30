@@ -10,6 +10,7 @@ import { HolographicGlobe } from './HolographicGlobe';
 import { BlurFadeText } from './BlurFadeText';
 import { useTypewriter } from '../lib/useTypewriter';
 import { useI18n } from '../lib/useI18n';
+import { useMagnetic } from '../lib/useMagnetic';
 import profileImg from '../assets/profile.jpeg';
 
 interface HeroSectionProps {
@@ -31,6 +32,10 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
 
   const hour = new Date().getHours();
   const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+  const btnWorkRef = useMagnetic<HTMLAnchorElement>({ distance: 35, strength: 0.25 });
+  const btnContactRef = useMagnetic<HTMLAnchorElement>({ distance: 35, strength: 0.25 });
+  const btnResumeRef = useMagnetic<HTMLAnchorElement>({ distance: 35, strength: 0.25 });
 
   const typedRole = useTypewriter(ROLES, 70, 2200);
 
@@ -132,18 +137,20 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               I architect dependable full-stack web platforms, custom WooCommerce e-commerce pipelines, and production-grade REST APIs designed for real-world reliability and scale.
             </p>
 
-            {/* Primary Action Buttons */}
+            {/* Primary Action Buttons with Subtle Magnetic Physics */}
             <div className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
               <a
+                ref={btnWorkRef}
                 href="#projects"
                 onClick={() => sound.playClick()}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
                 {t('hero.cta.work')}
                 <ArrowDown size={14} />
               </a>
 
               <a
+                ref={btnContactRef}
                 href="#contact"
                 onClick={() => sound.playClick()}
                 className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-4 sm:px-5 py-3 sm:py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
@@ -153,6 +160,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               </a>
 
               <a
+                ref={btnResumeRef}
                 href={`${import.meta.env.BASE_URL}resume.pdf`}
                 onClick={handleResumeClick}
                 className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 sm:px-4 py-3 sm:py-3.5 text-xs font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-all duration-200"

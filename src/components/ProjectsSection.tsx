@@ -32,14 +32,14 @@ export function ProjectsSection() {
         { label: 'NOTIFICATIONS', value: 'Automated WhatsApp Dispatch' },
       ],
       image: null,
-      url: 'https://ravindramedicalhall.in',
+      url: 'https://rabindramedicalhall.in',
       caseStudy: {
         id: 'rmh',
         number: '01',
         name: 'Rabindra Medical Hall',
         subtitle: 'Production E-Commerce Pharmacy & Prescription Safeguards',
         stack: 'WordPress · WooCommerce · PHP · JavaScript · MySQL',
-        liveUrl: 'https://ravindramedicalhall.in',
+        liveUrl: 'https://rabindramedicalhall.in',
         overview:
           'A complete digital pharmacy storefront and backend ordering pipeline serving retail patients. Engineered to transition a legacy retail medical store into a frictionless online delivery and prescription ordering system.',
         challenge:
@@ -196,7 +196,7 @@ export function ProjectsSection() {
           {/* Right: Visual Showcase (Real Working Mobile Simulator or Interactive Telemetry) */}
           <div className="relative group flex items-center justify-center">
             {proj.id === 'rmh' ? (
-              <PhoneSimulator url="https://ravindramedicalhall.in" title="Rabindra Medical Hall" />
+              <PhoneSimulator url="https://rabindramedicalhall.in" title="Rabindra Medical Hall" />
             ) : (
               <div className="w-full overflow-hidden rounded-2xl border border-white/15 bg-black/80 p-4 shadow-2xl">
                 <ForgeSimulator />

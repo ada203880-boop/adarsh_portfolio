@@ -11,7 +11,7 @@ interface Slide {
 const PROJECT_SLIDES: Record<string, { before: Slide; after: Slide }> = {
   'rmh-ecommerce': {
     before: { label: 'Figma Wireframe', caption: 'Initial low-fidelity mockup — basic WooCommerce product grid layout designed in Figma.', color: '#f97316' },
-    after:  { label: 'Live Deployed',   caption: 'Production storefront on ravindramedicalhall.in — fully responsive WooCommerce build with custom prescription upload.', color: '#34d399' },
+    after:  { label: 'Live Deployed',   caption: 'Production storefront on rabindramedicalhall.in — fully responsive WooCommerce build with custom prescription upload.', color: '#34d399' },
   },
   'data-pipeline': {
     before: { label: 'Architecture Draft', caption: 'Hand-sketched system architecture diagram — initial service flow design for pipeline visualizer.', color: '#a78bfa' },
