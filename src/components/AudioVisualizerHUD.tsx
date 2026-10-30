@@ -11,7 +11,23 @@ export function AudioVisualizerHUD({ active, scrollVelocity = 0 }: AudioVisualiz
   const barsRef    = useRef<number[]>([]);
   const velRef     = useRef(0);
 
-  useEffect(() => { velRef.current = scrollVelocity; }, [scrollVelocity]);
+  useEffect(() => {
+    if (typeof scrollVelocity === 'number') {
+      velRef.current = scrollVelocity;
+    }
+  }, [scrollVelocity]);
+
+  // Listen directly to decoupled scroll velocity updates without triggering React tree re-renders
+  useEffect(() => {
+    const handleVel = (e: Event) => {
+      const custom = e as CustomEvent<number>;
+      if (typeof custom.detail === 'number') {
+        velRef.current = custom.detail;
+      }
+    };
+    window.addEventListener('scroll-velocity', handleVel, { passive: true });
+    return () => window.removeEventListener('scroll-velocity', handleVel);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;

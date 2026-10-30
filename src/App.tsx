@@ -46,7 +46,6 @@ export default function App() {
   const [activeSection, setSection] = useState('home');
   const [crtMode, setCrtMode] = useState(false);
   const [isMuted, setMuted] = useState(!sound.enabled);
-  const [scrollVel, setScrollVel] = useState(0);
 
   // Sync sound mute state with navigation toggle
   useEffect(() => {
@@ -78,7 +77,8 @@ export default function App() {
       ScrollTrigger.update();
       if (typeof e.velocity === 'number') {
         sound.playScrollFlow(e.velocity);
-        setScrollVel(e.velocity);
+        // Decouple scroll velocity from React state to avoid full-tree re-renders
+        window.dispatchEvent(new CustomEvent('scroll-velocity', { detail: e.velocity }));
       }
       // Never skew on mobile/touch screens to guarantee 100% viewport width alignment
       if (prefersReducedMotion || isMobile) return;
@@ -97,18 +97,46 @@ export default function App() {
     return () => { gsap.ticker.remove(tick); lenis.destroy(); };
   }, []);
 
-  // Keyboard: Cmd/Ctrl + K -> terminal toggle
+  // Centralized keyboard shortcuts with modal priority & focus protection
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const activeEl = document.activeElement;
+      const isInputFocused =
+        activeEl instanceof HTMLInputElement ||
+        activeEl instanceof HTMLTextAreaElement ||
+        activeEl instanceof HTMLSelectElement ||
+        (activeEl && (activeEl as HTMLElement).isContentEditable);
+
+      // Cmd/Ctrl + K toggle
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setTerminal((p) => !p);
+        return;
       }
-      if (e.key === 'Escape') setTerminal(false);
+
+      // Escape key with deterministic modal hierarchy
+      if (e.key === 'Escape') {
+        if (isInteractiveResumeOpen) {
+          setInteractiveResumeOpen(false);
+          return;
+        }
+        if (isResumeOpen) {
+          setResumeOpen(false);
+          return;
+        }
+        if (isTerminalOpen) {
+          setTerminal(false);
+          return;
+        }
+        // If an input is focused, allow Escape to blur without opening/closing modals
+        if (isInputFocused && activeEl) {
+          (activeEl as HTMLElement).blur();
+        }
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [isInteractiveResumeOpen, isResumeOpen, isTerminalOpen]);
 
   // Active section tracker for nav pills
   useEffect(() => {
@@ -140,7 +168,7 @@ export default function App() {
         className="fixed bottom-0 left-0 right-0 z-[200] pointer-events-none transition-opacity duration-500"
         style={{ opacity: !isMuted ? 1 : 0.25, height: '36px' }}
       >
-        <AudioVisualizerHUD active={!isMuted} scrollVelocity={scrollVel} />
+        <AudioVisualizerHUD active={!isMuted} />
       </div>
 
       {/* Always-on background layers (with data pipeline network beams across whole page) */}

@@ -19,28 +19,31 @@ export function CinematicCanvas() {
     const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
-    let rafId: number;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let rafId: number | null = null;
     let width = window.innerWidth;
     let height = window.innerHeight;
     let isMobile = width < 768;
+    let isVisible = true;
 
     // Mouse coordinates tracking
     let mouseX = -9999;
     let mouseY = -9999;
     let isMouseOver = false;
 
-    // 65 floating micro-particles in soft teal/cyan tints with ~0.18 opacity and 1px - 3px sizes
-    const PARTICLE_COUNT = 65;
+    // Adaptive particle density: Desktop = 65 micro-particles, Mobile (< 768px) = 18 particles
     const particles: Particle[] = [];
 
     const initParticles = () => {
+      const count = isMobile ? 18 : 65;
       particles.length = 0;
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
+      for (let i = 0; i < count; i++) {
         particles.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.55,
-          vy: (Math.random() - 0.5) * 0.55,
+          vx: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.55),
+          vy: (Math.random() - 0.5) * (isMobile ? 0.35 : 0.55),
           size: 1 + Math.random() * 2, // 1px to 3px
           baseAlpha: 0.14 + Math.random() * 0.08, // around 0.18
         });
@@ -50,7 +53,11 @@ export function CinematicCanvas() {
     const handleResize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      isMobile = width < 768;
+      const newIsMobile = width < 768;
+      if (newIsMobile !== isMobile) {
+        isMobile = newIsMobile;
+        initParticles();
+      }
 
       canvas.width = width;
       canvas.height = height;
@@ -79,11 +86,28 @@ export function CinematicCanvas() {
       mouseY = -9999;
     };
 
+    // Page Visibility API to pause rendering when the browser tab is hidden
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+      if (isVisible && !rafId && !prefersReducedMotion) {
+        rafId = requestAnimationFrame(render);
+      } else if (!isVisible && rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+    };
+
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const render = () => {
+      if (!isVisible) {
+        rafId = null;
+        return;
+      }
+
       // Deep canvas background color matching #0b0c10
       ctx.fillStyle = '#0b0c10';
       ctx.fillRect(0, 0, width, height);
@@ -97,38 +121,39 @@ export function CinematicCanvas() {
         const p = particles[i];
 
         // Position update
-        p.x += p.vx;
-        p.y += p.vy;
+        if (!prefersReducedMotion) {
+          p.x += p.vx;
+          p.y += p.vy;
 
-        // Wrap around boundaries smoothly
-        if (p.x < 0) p.x = width;
-        else if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        else if (p.y > height) p.y = 0;
+          // Wrap around boundaries smoothly
+          if (p.x < 0) p.x = width;
+          else if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          else if (p.y > height) p.y = 0;
 
-        // Desktop mousemove proximity magnetic logic loop
-        if (!isMobile && isMouseOver) {
-          const dx = mouseX - p.x;
-          const dy = mouseY - p.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          // Desktop mousemove proximity magnetic logic loop
+          if (!isMobile && isMouseOver) {
+            const dx = mouseX - p.x;
+            const dy = mouseY - p.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < magneticRadius && dist > 1) {
-            const force = (1 - dist / magneticRadius) * 0.04;
-            p.x += dx * force;
-            p.y += dy * force;
+            if (dist < magneticRadius && dist > 1) {
+              const force = (1 - dist / magneticRadius) * 0.04;
+              p.x += dx * force;
+              p.y += dy * force;
+            }
           }
         }
 
         // Draw individual micro-particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        // Soft teal/cyan tint (rgb 45, 212, 191 / rgb 6, 182, 212)
         ctx.fillStyle = `rgba(34, 211, 238, ${p.baseAlpha})`;
         ctx.fill();
 
         // MOBILE RENDER RULE:
         // On screens under 768px, disable line tracing calculations entirely to save CPU/battery
-        if (!isMobile) {
+        if (!isMobile && !prefersReducedMotion) {
           for (let j = i + 1; j < particles.length; j++) {
             const p2 = particles[j];
             const dx = p.x - p2.x;
@@ -149,16 +174,23 @@ export function CinematicCanvas() {
         }
       }
 
-      rafId = requestAnimationFrame(render);
+      if (!prefersReducedMotion) {
+        rafId = requestAnimationFrame(render);
+      }
     };
 
-    rafId = requestAnimationFrame(render);
+    if (!prefersReducedMotion) {
+      rafId = requestAnimationFrame(render);
+    } else {
+      render();
+    }
 
     return () => {
-      cancelAnimationFrame(rafId);
+      if (rafId) cancelAnimationFrame(rafId);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 

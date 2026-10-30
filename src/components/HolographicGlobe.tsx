@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { RotateCw, Compass, Sparkles } from 'lucide-react';
 import { sound } from '../lib/sound';
 
@@ -88,14 +88,14 @@ const CONTINENT_POLYGONS: Array<{ name: string; color: string; points: Array<[nu
     color: '#fbbf24',
     points: [
       [-12.0, 131.0], [-15.0, 136.0], [-12.0, 142.0], [-22.0, 150.0], [-28.0, 153.0],
-      [-37.0, 150.0], [-38.0, 144.0], [-35.0, 136.0], [-32.0, 128.0], [-34.0, 115.0],
-      [-25.0, 113.0], [-20.0, 118.0], [-15.0, 125.0], [-12.0, 131.0],
+      [-37.5, 150.0], [-38.5, 145.0], [-35.0, 136.0], [-32.0, 128.0], [-34.0, 115.0],
+      [-22.0, 114.0], [-18.0, 121.0], [-14.0, 126.0], [-12.0, 131.0],
     ],
   },
-  // Southeast Asia & Indonesia
+  // Southeast Asia / Maritime
   {
     name: 'Southeast Asia',
-    color: '#06b6d4',
+    color: '#38bdf8',
     points: [
       [6.0, 100.0], [10.0, 105.0], [15.0, 101.0], [20.0, 106.0], [16.0, 108.0],
       [10.0, 108.0], [1.5, 104.0], [-6.0, 106.0], [-8.0, 115.0], [-7.5, 111.0],
@@ -147,6 +147,7 @@ function project3D(lat: number, lng: number, rotX: number, rotY: number, radius:
 }
 
 export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // 3D Rotation angles and physics velocity for true drag & roll momentum
@@ -158,29 +159,91 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
   const lastPos = useRef({ x: 0, y: 0 });
   const frameRef = useRef<number | null>(null);
   const tick = useRef(0);
+  const lastRenderTime = useRef(0);
+  const isIntersecting = useRef(true);
+  const isTabVisible = useRef(true);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [hudCoords, setHudCoords] = useState('20.29° N, 85.82° E');
 
+  // Check reduced motion preference
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      setAutoRotate(false);
+    }
+  }, []);
+
+  const resetToBhubaneswar = useCallback(() => {
+    sound.playClick();
+    rotX.current = 0.35;
+    rotY.current = -1.4;
+    velX.current = 0;
+    velY.current = 0;
+    setHudCoords('20.29° N, 85.82° E');
+  }, []);
+
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const rootEl = rootRef.current;
+    if (!canvas || !rootEl) return;
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    // High-DPI 4K rendering configuration
+    let isMobile = window.innerWidth < 768;
+
+    // Adaptive DPR: capped at 2 on desktop, capped at 1.2 on mobile
     const updateSize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 2, 3);
+      isMobile = window.innerWidth < 768;
+      const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.2) : Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
     };
 
     updateSize();
-    window.addEventListener('resize', updateSize);
+    window.addEventListener('resize', updateSize, { passive: true });
 
-    const render = () => {
-      const dpr = Math.min(window.devicePixelRatio || 2, 3);
+    // Page Visibility API handler
+    const handleVisibility = () => {
+      isTabVisible.current = !document.hidden;
+      if (isTabVisible.current && isIntersecting.current && !frameRef.current) {
+        frameRef.current = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    // IntersectionObserver to pause rendering when outside viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isIntersecting.current = entry.isIntersecting;
+          if (entry.isIntersecting && isTabVisible.current && !frameRef.current) {
+            frameRef.current = requestAnimationFrame(render);
+          }
+        });
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(rootEl);
+
+    const render = (time: number) => {
+      // Pause if tab is hidden or outside viewport
+      if (!isTabVisible.current || !isIntersecting.current) {
+        frameRef.current = null;
+        return;
+      }
+
+      // Mobile FPS throttle: target ~28-30 FPS on mobile, full 60 FPS on desktop
+      const targetDelta = isMobile ? 32 : 16;
+      const elapsed = time - lastRenderTime.current;
+      if (elapsed < targetDelta && !isDragging.current) {
+        frameRef.current = requestAnimationFrame(render);
+        return;
+      }
+      lastRenderTime.current = time;
+
+      const dpr = isMobile ? Math.min(window.devicePixelRatio || 1, 1.2) : Math.min(window.devicePixelRatio || 1, 2);
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;
       const cx = w / 2;
@@ -194,7 +257,7 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
       // Inertia & Physics damping
       if (!isDragging.current) {
         if (autoRotate) {
-          rotY.current += 0.003;
+          rotY.current += isMobile ? 0.0022 : 0.003;
         } else {
           rotY.current += velY.current;
           rotX.current += velX.current;
@@ -205,7 +268,6 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
 
       // Constrain latitude tilt (-65° to +65°)
       rotX.current = Math.max(-1.15, Math.min(1.15, rotX.current));
-
       tick.current++;
 
       // ─── Layer 1: Atmospheric Outer Glow ───────────────────────────────
@@ -236,11 +298,13 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
       ctx.stroke();
 
       // ─── Layer 3: Coordinate Parallels & Meridians Grid ────────────────
-      const STEPS = 48;
+      // Reduced geometry calculations on mobile (24 steps vs 48 steps)
+      const STEPS = isMobile ? 24 : 48;
       ctx.lineWidth = 0.5;
 
       // Latitudes
-      for (let lat = -60; lat <= 60; lat += 20) {
+      const latStep = isMobile ? 30 : 20;
+      for (let lat = -60; lat <= 60; lat += latStep) {
         ctx.beginPath();
         let started = false;
         for (let lng = -180; lng <= 180; lng += 360 / STEPS) {
@@ -262,7 +326,8 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
       }
 
       // Longitudes
-      for (let lng = 0; lng < 360; lng += 30) {
+      const lngStep = isMobile ? 45 : 30;
+      for (let lng = 0; lng < 360; lng += lngStep) {
         ctx.beginPath();
         let started = false;
         for (let lat = -90; lat <= 90; lat += 180 / STEPS) {
@@ -283,7 +348,7 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
         ctx.stroke();
       }
 
-      // Equator Gold Highlight
+      // Equator Highlight
       ctx.beginPath();
       let eqStarted = false;
       for (let lng = -180; lng <= 180; lng += 360 / STEPS) {
@@ -337,8 +402,10 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
           ctx.beginPath();
           ctx.arc(cx + pt.x, cy - pt.y, 2.5, 0, Math.PI * 2);
           ctx.fillStyle = node.color;
-          ctx.shadowColor = node.color;
-          ctx.shadowBlur = 8;
+          if (!isMobile) {
+            ctx.shadowColor = node.color;
+            ctx.shadowBlur = 8;
+          }
           ctx.fill();
           ctx.restore();
         }
@@ -351,8 +418,9 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
         const by = cy - bhu.y;
         const pulse = (Math.sin(tick.current * 0.08) + 1) / 2;
 
-        // Sonic radar pulses
-        for (let i = 0; i < 3; i++) {
+        // Radar pulses
+        const pulseRings = isMobile ? 2 : 3;
+        for (let i = 0; i < pulseRings; i++) {
           const ringRadius = 5 + i * 8 + pulse * 7;
           const ringAlpha = (1 - i * 0.3) * (1 - pulse * 0.5) * 0.8;
           ctx.beginPath();
@@ -362,71 +430,36 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
           ctx.stroke();
         }
 
-        // Elevated 3D pin pole
-        ctx.beginPath();
-        ctx.moveTo(bx, by);
-        ctx.lineTo(bx + 12, by - 16);
-        ctx.strokeStyle = '#00e5ff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        // Glowing core
+        // Inner solid beacon
         ctx.beginPath();
         ctx.arc(bx, by, 4.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#00e5ff';
-        ctx.shadowColor = '#00e5ff';
-        ctx.shadowBlur = 12;
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.arc(bx, by, 2, 0, Math.PI * 2);
         ctx.fillStyle = '#ffffff';
+        if (!isMobile) {
+          ctx.shadowColor = '#00e5ff';
+          ctx.shadowBlur = 12;
+        }
         ctx.fill();
-        ctx.shadowBlur = 0;
 
-        // Elevated Label Card
-        ctx.font = 'bold 10px "DM Mono", monospace';
-        const labelText = 'BHUBANESWAR [BASE]';
-        const labelWidth = ctx.measureText(labelText).width;
-
-        // Badge pill
-        ctx.fillStyle = 'rgba(6,13,26,0.92)';
-        ctx.strokeStyle = 'rgba(0,229,255,0.7)';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.roundRect(bx + 16, by - 26, labelWidth + 12, 18, 6);
-        ctx.fill();
-        ctx.stroke();
-
+        // 3D HUD Floating Marker Label
+        ctx.font = '600 10px monospace';
         ctx.fillStyle = '#00e5ff';
-        ctx.fillText(labelText, bx + 22, by - 13);
+        ctx.fillText(BHUBANESWAR.label, bx + 12, by - 6);
       }
 
-      // ─── Layer 7: Specular 3D Gloss Sheen ──────────────────────────────
-      const sheenGrad = ctx.createRadialGradient(cx - R * 0.45, cy - R * 0.45, 0, cx - R * 0.45, cy - R * 0.45, R * 0.8);
-      sheenGrad.addColorStop(0, 'rgba(255,255,255,0.25)');
-      sheenGrad.addColorStop(0.4, 'rgba(255,255,255,0.05)');
-      sheenGrad.addColorStop(1, 'transparent');
-
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, 0, Math.PI * 2);
-      ctx.fillStyle = sheenGrad;
-      ctx.fill();
-
       ctx.restore();
-
       frameRef.current = requestAnimationFrame(render);
     };
 
-    render();
+    frameRef.current = requestAnimationFrame(render);
 
     return () => {
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
       window.removeEventListener('resize', updateSize);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      observer.disconnect();
     };
   }, [autoRotate]);
 
-  // Touch and Drag handlers for 2-axis free rotation
   const handleStart = (clientX: number, clientY: number) => {
     isDragging.current = true;
     lastPos.current = { x: clientX, y: clientY };
@@ -457,18 +490,12 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
     isDragging.current = false;
   };
 
-  const resetToBhubaneswar = () => {
-    sound.playClick();
-    rotX.current = 0.35;
-    rotY.current = -1.4;
-    velX.current = 0;
-    velY.current = 0;
-    setHudCoords('20.29° N, 85.82° E');
-  };
-
   return (
-    <div className={`relative flex flex-col items-center justify-center select-none ${className}`}>
-      {/* 3D Canvas with 4K touch and mouse drag capabilities */}
+    <div
+      ref={rootRef}
+      className={`relative flex flex-col items-center justify-center select-none ${className}`}
+    >
+      {/* 3D Canvas with touch and mouse drag capabilities */}
       <div className="relative w-full h-[280px] sm:h-[300px] flex items-center justify-center">
         <canvas
           ref={canvasRef}
@@ -483,7 +510,7 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
           title="Drag and roll in 3D to explore the globe"
         />
 
-        {/* Ambient Orbiting Outer Ring */}
+        {/* Ambient Orbiting Outer Rings */}
         <div
           className="pointer-events-none absolute inset-4 rounded-full border border-cyan-400/20 animate-spin"
           style={{ animationDuration: '32s' }}
@@ -532,7 +559,7 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
 
       <div className="mt-1 text-center font-mono text-[9px] tracking-widest text-zinc-500 uppercase">
         <Sparkles size={9} className="inline mr-1 text-cyan-400" />
-        Touch & Drag 3D globe to roll in 360°
+        Touch &amp; Drag 3D globe to roll in 360°
       </div>
     </div>
   );

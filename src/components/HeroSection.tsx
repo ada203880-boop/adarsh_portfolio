@@ -185,49 +185,97 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
           {/* Right Column: Technical Credibility & Architecture Stage */}
           <div className="relative">
             <SpotlightCard
-              enableTilt
-              className="rounded-2xl border border-cyan-500/25 bg-[#0e0c20]/90 p-5 sm:p-6 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+              enableTilt={activeTab !== 'globe' && activeTab !== 'terminal'}
+              className="rounded-2xl border border-cyan-500/25 bg-[#0e0c20]/90 p-4 sm:p-6 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
             >
               {/* Window Header */}
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-3 mb-4">
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-rose-500/70" />
                   <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
-                  <span className="ml-2 font-mono text-[11px] text-zinc-400">adarsh-dev-environment</span>
+                  <span className="ml-2 font-mono text-[11px] text-zinc-400 font-medium">adarsh-dev-environment</span>
                 </div>
-                <div className="flex flex-wrap gap-1">
-                  {(['terminal', 'architecture', 'stack', 'status', 'globe'] as const).map((tab) => (
-                    <button
-                      key={tab}
-                      type="button"
-                      onClick={() => {
-                        setActiveTab(tab);
-                        sound.playHover();
-                      }}
-                      className={`px-2.5 py-1 rounded text-[10px] font-mono capitalize transition-colors ${activeTab === tab
-                        ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
-                        : 'text-zinc-500 hover:text-zinc-300'
+
+                {/* Accessible Scrollable Tab Navigation */}
+                <div
+                  role="tablist"
+                  aria-label="Developer workstation modules"
+                  className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 max-w-full"
+                >
+                  {([
+                    { id: 'terminal', label: '💻 Shell' },
+                    { id: 'architecture', label: '🏗️ Architecture' },
+                    { id: 'stack', label: '⚡ Stack' },
+                    { id: 'status', label: '🎯 Status' },
+                    { id: 'globe', label: '🌐 Globe' },
+                  ] as const).map(({ id, label }) => {
+                    const isSelected = activeTab === id;
+                    return (
+                      <button
+                        key={id}
+                        id={`tab-${id}`}
+                        role="tab"
+                        aria-selected={isSelected}
+                        aria-controls={`panel-${id}`}
+                        tabIndex={isSelected ? 0 : -1}
+                        type="button"
+                        onClick={() => {
+                          setActiveTab(id);
+                          sound.playHover();
+                        }}
+                        onKeyDown={(e) => {
+                          const tabs = ['terminal', 'architecture', 'stack', 'status', 'globe'] as const;
+                          const currentIndex = tabs.indexOf(activeTab);
+                          if (e.key === 'ArrowRight') {
+                            e.preventDefault();
+                            const nextTab = tabs[(currentIndex + 1) % tabs.length];
+                            setActiveTab(nextTab);
+                            document.getElementById(`tab-${nextTab}`)?.focus();
+                          } else if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            const prevTab = tabs[(currentIndex - 1 + tabs.length) % tabs.length];
+                            setActiveTab(prevTab);
+                            document.getElementById(`tab-${prevTab}`)?.focus();
+                          }
+                        }}
+                        className={`min-h-[34px] px-3 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-mono whitespace-nowrap transition-all duration-200 outline-none focus-visible:ring-1 focus-visible:ring-cyan-400 ${
+                          isSelected
+                            ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                            : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04] border border-transparent'
                         }`}
-                    >
-                      {tab === 'terminal' ? '💻 Shell' : tab === 'globe' ? '🌐 3D Globe' : tab}
-                    </button>
-                  ))}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Tab 0: Interactive Bash Shell Terminal */}
               {activeTab === 'terminal' && (
-                <div className="py-1">
+                <div
+                  id="panel-terminal"
+                  role="tabpanel"
+                  aria-labelledby="tab-terminal"
+                  className="py-1 focus:outline-none"
+                  tabIndex={0}
+                >
                   <InteractiveDevTerminal />
                 </div>
               )}
 
               {/* Tab 1: Architecture Highlights */}
               {activeTab === 'architecture' && (
-                <div className="space-y-3 font-mono text-xs">
+                <div
+                  id="panel-architecture"
+                  role="tabpanel"
+                  aria-labelledby="tab-architecture"
+                  className="space-y-3 font-mono text-xs focus:outline-none"
+                  tabIndex={0}
+                >
                   <div className="rounded-lg bg-black/40 border border-white/[0.06] p-3 text-zinc-300 space-y-2">
-                    <div className="text-cyan-400 font-semibold">// Engineering Focus & Philosophy</div>
+                    <div className="text-cyan-400 font-semibold">// Engineering Focus &amp; Philosophy</div>
                     <p className="text-[11px] text-zinc-400 leading-relaxed font-sans">
                       Writing predictable, type-safe full-stack code. Integrating responsive user interfaces with resilient API endpoints and relational schemas.
                     </p>
@@ -256,7 +304,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                       <div className="flex items-center gap-1.5 text-cyan-300 mb-1">
                         <Sparkles size={12} /> E-Commerce
                       </div>
-                      <div className="text-zinc-400">WooCommerce & PHP</div>
+                      <div className="text-zinc-400">WooCommerce &amp; PHP</div>
                     </div>
                   </div>
                 </div>
@@ -264,8 +312,14 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
 
               {/* Tab 2: Verified Stack */}
               {activeTab === 'stack' && (
-                <div className="space-y-2.5 font-mono text-xs">
-                  <div className="text-zinc-400 text-[11px]">Core Verified Languages & Frameworks:</div>
+                <div
+                  id="panel-stack"
+                  role="tabpanel"
+                  aria-labelledby="tab-stack"
+                  className="space-y-2.5 font-mono text-xs focus:outline-none"
+                  tabIndex={0}
+                >
+                  <div className="text-zinc-400 text-[11px]">Core Verified Languages &amp; Frameworks:</div>
                   <div className="flex flex-wrap gap-1.5">
                     {['JavaScript', 'React.js', 'Python', 'Node.js', 'Express.js', 'MySQL', 'PHP', 'WordPress', 'WooCommerce', 'Git', 'Vite', 'HTML5/CSS3'].map((tech) => (
                       <span
@@ -284,7 +338,13 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
 
               {/* Tab 3: Current Status */}
               {activeTab === 'status' && (
-                <div className="space-y-3 font-mono text-xs text-zinc-300">
+                <div
+                  id="panel-status"
+                  role="tabpanel"
+                  aria-labelledby="tab-status"
+                  className="space-y-3 font-mono text-xs text-zinc-300 focus:outline-none"
+                  tabIndex={0}
+                >
                   <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
                     <span className="text-zinc-500">Degree:</span>
                     <span className="text-cyan-300">B.Tech Computer Science</span>
@@ -306,7 +366,13 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
 
               {/* Tab 4: 3D Interactive Map Globe */}
               {activeTab === 'globe' && (
-                <div className="flex flex-col items-center justify-center py-1">
+                <div
+                  id="panel-globe"
+                  role="tabpanel"
+                  aria-labelledby="tab-globe"
+                  className="flex flex-col items-center justify-center py-1 focus:outline-none"
+                  tabIndex={0}
+                >
                   <HolographicGlobe className="w-full max-w-[340px]" />
                   <p className="mt-1 text-center font-mono text-[10px] text-zinc-400">
                     Location Coordinates: <span className="text-cyan-400 font-semibold">20.2961° N, 85.8245° E (Bhubaneswar, IN)</span>

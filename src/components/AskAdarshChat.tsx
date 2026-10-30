@@ -96,13 +96,13 @@ export function AskAdarshChat() {
     setInput('');
     setIsGenerating(true);
 
-    const apiKey = customKey.trim() || (import.meta.env.VITE_GEMINI_API_KEY as string) || '';
-
-    // If no key is configured, check if we have a pre-cached answer or provide a high-fidelity fallback response
-    const normalizedQuery = query.toLowerCase();
+    // Client-side length truncation & sanitization (max 400 chars)
+    const sanitizedQuery = query.slice(0, 400);
+    const normalizedQuery = sanitizedQuery.toLowerCase();
     const matchedKey = Object.keys(PRE_CACHED_ANSWERS).find((k) => normalizedQuery.includes(k.replace('?', '')));
 
-    if (!apiKey && matchedKey) {
+    // 1. Check pre-cached responses for instant zero-latency answers
+    if (matchedKey) {
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
@@ -115,61 +115,89 @@ export function AskAdarshChat() {
         ]);
         sound.playHover();
         setIsGenerating(false);
-      }, 700);
+      }, 450);
       return;
     }
 
-    if (!apiKey) {
-      setTimeout(() => {
+    // 2. If user configured custom personal session key (BYOK in settings modal), execute client-side safely
+    if (customKey.trim()) {
+      try {
+        const ai = new GoogleGenAI({ apiKey: customKey.trim() });
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.0-flash',
+          contents: [
+            { role: 'user', parts: [{ text: `${SYSTEM_PROMPT}\n\nUser Question: ${sanitizedQuery}` }] },
+          ],
+        });
+
+        const reply = response.text || "I'm ready to answer any questions about my portfolio and engineering experience!";
         setMessages((prev) => [
           ...prev,
           {
             id: String(Date.now() + 1),
             sender: 'assistant',
-            text: `I'd love to answer "${query}"! I specialize in React, Node.js, Python, and MySQL. For live deployment questions or immediate hiring, reach out directly to Adarsh at ada203880@gmail.com or via WhatsApp at +91 9861054025. (Tip: You can also configure a free Gemini API Key in the settings icon above!)`,
+            text: reply,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
           },
         ]);
         sound.playHover();
         setIsGenerating(false);
-      }, 900);
-      return;
+        return;
+      } catch {
+        // Fall through to serverless proxy or graceful fallback
+      }
     }
 
+    // 3. Call secure serverless proxy endpoint (/api/chat) with timeout protection
+    const aiEndpoint = (import.meta.env.VITE_AI_ENDPOINT as string) || '/api/chat';
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
     try {
-      const ai = new GoogleGenAI({ apiKey });
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: [
-          { role: 'user', parts: [{ text: `${SYSTEM_PROMPT}\n\nUser Question: ${query}` }] },
-        ],
+      const res = await fetch(aiEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: sanitizedQuery }),
+        signal: controller.signal,
       });
 
-      const reply = response.text || "I'm ready to answer any questions about my portfolio and engineering experience!";
+      clearTimeout(timeoutId);
 
+      if (res.ok) {
+        const data = await res.json();
+        if (data.reply) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: String(Date.now() + 1),
+              sender: 'assistant',
+              text: data.reply,
+              timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ]);
+          sound.playHover();
+          setIsGenerating(false);
+          return;
+        }
+      }
+    } catch {
+      clearTimeout(timeoutId);
+    }
+
+    // 4. Safe fallback for static environments without serverless backends
+    setTimeout(() => {
       setMessages((prev) => [
         ...prev,
         {
           id: String(Date.now() + 1),
           sender: 'assistant',
-          text: reply,
+          text: `I'd love to help with "${sanitizedQuery}"! I specialize in React, Node.js, Python, and MySQL. For live deployment questions or immediate hiring, reach out directly to Adarsh at ada203880@gmail.com or via WhatsApp at +91 9861054025.`,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
       ]);
       sound.playHover();
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: String(Date.now() + 1),
-          sender: 'assistant',
-          text: "I encountered a brief connection issue with the Gemini API. Adarsh is a Full-Stack Developer specializing in React.js, Node.js, and MySQL. Please email ada203880@gmail.com for direct questions!",
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ]);
-    } finally {
       setIsGenerating(false);
-    }
+    }, 500);
   };
 
   return (

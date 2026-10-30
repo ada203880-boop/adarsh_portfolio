@@ -1,0 +1,5 @@
+# Robots.txt for Adarsh Panda Portfolio
+User-agent: *
+Allow: /
+
+Sitemap: https://ada203880-boop.github.io/adarsh_portfolio/sitemap.xml

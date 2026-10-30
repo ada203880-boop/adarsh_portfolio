@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { sound } from '../lib/sound';
 
 interface LogEntry {
@@ -13,16 +13,16 @@ Full-Stack Software Engineer with dedicated focus on resilient web architecture,
 
   skills: `.
 ├── 📂 Frontend/
-│   ├── ⚛️  React.js (Modern SPA & State Management)
-│   ├── 🔷 TypeScript & Modern ES6+ JavaScript
-│   └── 🎨 Tailwind CSS & Responsive Systems
+│   ├── ⚛️  React.js (Modern Architecture & State Machines)
+│   ├── 🔷 TypeScript & ES6+ JavaScript
+│   └── 🎨 Tailwind CSS & Responsive Design
 ├── 📂 Backend/
-│   ├── 🟢 Node.js & Express.js Microservices
-│   ├── 🐍 Python & Automated Data Pipelines
-│   └── 🔌 Production REST APIs & JWT Authentication
+│   ├── 🟢 Node.js & Express.js Services
+│   ├── 🐍 Python & Scripting Automation
+│   └── 🔌 Production REST APIs & Authentication
 └── 📂 Database/
-    ├── 🗄️  MySQL & Normalized Relational Schemas
-    └── 🛒 WooCommerce & WordPress Backend Architecture`,
+    ├── 🗄️  MySQL & Relational Schema Modeling
+    └── 🛒 WooCommerce & WordPress Architecture`,
 
   help: `Available operations:
   • about   - Full-stack engineering focus, WooCommerce pipelines & API reliability
@@ -40,21 +40,50 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
     },
   ]);
   const [inputVal, setInputVal] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+
   const logContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Auto-scroll routine pinning feed window instantly to bottom baseline index
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (logContainerRef.current) {
       logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
     }
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [logs]);
+  }, [logs, scrollToBottom]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Arrow-up: navigate backward in command history
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (history.length === 0) return;
+      const nextIndex = historyIndex === -1 ? history.length - 1 : Math.max(0, historyIndex - 1);
+      setHistoryIndex(nextIndex);
+      setInputVal(history[nextIndex]);
+      return;
+    }
+
+    // Arrow-down: navigate forward in command history
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex === -1) return;
+      const nextIndex = historyIndex + 1;
+      if (nextIndex >= history.length) {
+        setHistoryIndex(-1);
+        setInputVal('');
+      } else {
+        setHistoryIndex(nextIndex);
+        setInputVal(history[nextIndex]);
+      }
+      return;
+    }
+
+    // Enter / Return key handler
     if (e.key === 'Enter') {
       e.preventDefault();
       const rawCmd = inputVal.trim();
@@ -62,6 +91,10 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
 
       sound.playClick();
       const lowerCmd = rawCmd.toLowerCase();
+
+      // Update command history (limit to 100 entries)
+      setHistory((prev) => [...prev.slice(-99), rawCmd]);
+      setHistoryIndex(-1);
 
       // Clear operation
       if (lowerCmd === 'clear') {
@@ -71,7 +104,7 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
       }
 
       const inputEntry: LogEntry = {
-        id: `in-${Date.now()}`,
+        id: `in-${Date.now()}-${Math.random()}`,
         type: 'input',
         text: rawCmd,
       };
@@ -80,31 +113,34 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
 
       if (lowerCmd in COMMAND_RESPONSES) {
         responseEntry = {
-          id: `out-${Date.now()}`,
+          id: `out-${Date.now()}-${Math.random()}`,
           type: 'output',
           text: COMMAND_RESPONSES[lowerCmd],
         };
       } else {
         responseEntry = {
-          id: `err-${Date.now()}`,
+          id: `err-${Date.now()}-${Math.random()}`,
           type: 'error',
           text: `System shell error: Command '${rawCmd}' not found. Type 'help' to view options.`,
         };
       }
 
-      setLogs((prev) => [...prev, inputEntry, responseEntry]);
+      // Cap logs to 100 entries max to prevent excessive DOM growth
+      setLogs((prev) => [...prev.slice(-98), inputEntry, responseEntry]);
       setInputVal('');
     }
   };
 
   return (
     <div
+      role="region"
+      aria-label="Interactive developer bash shell"
       onClick={() => inputRef.current?.focus()}
       className="relative flex flex-col rounded-xl border border-cyan-500/25 shadow-[0_16px_36px_rgba(0,0,0,0.7)] overflow-hidden font-mono text-xs select-text cursor-text"
       style={{
         width: '100%',
         maxWidth: '650px',
-        margin: '20px auto',
+        margin: '12px auto',
         backgroundColor: '#0d0e12',
       }}
     >
@@ -123,13 +159,16 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
         </div>
       </div>
 
-      {/* Automated Scrolling Code Feed Log Panel */}
+      {/* Automated Scrolling Code Feed Log Panel (overscroll-contain prevents outer page chaining) */}
       <div
         ref={logContainerRef}
-        className="flex-1 max-h-[220px] sm:max-h-[260px] overflow-y-auto p-3.5 space-y-2 text-zinc-300 scroll-smooth"
+        tabIndex={0}
+        aria-label="Terminal output feed"
+        className="flex-1 max-h-[220px] sm:max-h-[260px] overflow-y-auto p-3.5 space-y-2 text-zinc-300 scroll-smooth outline-none focus:ring-1 focus:ring-cyan-500/30"
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: 'rgba(6,182,212,0.3) transparent',
+          overscrollBehavior: 'contain',
         }}
       >
         {logs.map((entry) => {
@@ -174,8 +213,12 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
 
       {/* Live Input Prompt Line with Blue Prompt Indicator Pointer ($) */}
       <div className="flex items-center gap-2 border-t border-white/[0.08] bg-[#090a0e] px-3.5 py-2.5">
-        <span className="text-cyan-400 font-bold text-sm leading-none">$</span>
+        <span className="text-cyan-400 font-bold text-sm leading-none" aria-hidden="true">$</span>
+        <label htmlFor="terminal-command-input" className="sr-only">
+          Terminal command prompt
+        </label>
         <input
+          id="terminal-command-input"
           ref={inputRef}
           type="text"
           value={inputVal}
@@ -185,6 +228,7 @@ Type 'help' to view available operations or 'about' for engineer overview.`,
           className="flex-1 bg-transparent text-emerald-300 outline-none placeholder:text-zinc-600 font-mono text-xs caret-cyan-400"
           autoCapitalize="none"
           autoComplete="off"
+          autoCorrect="off"
           spellCheck={false}
         />
       </div>
