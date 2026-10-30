@@ -57,25 +57,25 @@ export function ContactSection() {
           {/* Left Column: Direct Coordinates Deck */}
           <div className="space-y-4">
             {/* Email Copy Card */}
-            <div className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-white/[0.04]">
-              <div className="flex items-center gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-950/40 text-cyan-300">
+            <div className="group flex flex-col min-[440px]:flex-row min-[440px]:items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-6 backdrop-blur-xl transition hover:border-cyan-400/40 hover:bg-white/[0.04]">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-950/40 text-cyan-300">
                   <Mail size={18} />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">PRIMARY DISPATCH</div>
-                  <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                  <strong className="text-xs min-[400px]:text-sm sm:text-base font-semibold text-white tracking-wide truncate block">
                     {portfolio.email}
                   </strong>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 self-end min-[440px]:self-auto">
                 <button
                   type="button"
                   onClick={copyEmail}
                   data-cursor="COPY"
-                  className="flex h-9 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 font-mono text-xs text-white/70 hover:border-cyan-400 hover:text-cyan-300 transition"
+                  className="flex h-8 sm:h-9 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2.5 sm:px-3 font-mono text-xs text-white/70 hover:border-cyan-400 hover:text-cyan-300 transition"
                   title="Copy email to clipboard"
                 >
                   {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -86,7 +86,7 @@ export function ContactSection() {
                   href={`mailto:${portfolio.email}`}
                   data-cursor="MAIL"
                   onClick={() => sound.playClick()}
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 hover:border-cyan-400 hover:text-cyan-300 transition"
+                  className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-white/70 hover:border-cyan-400 hover:text-cyan-300 transition"
                 >
                   <ArrowUpRight size={16} />
                 </a>
@@ -100,7 +100,7 @@ export function ContactSection() {
               rel="noreferrer"
               data-cursor="WHATSAPP"
               onClick={() => sound.playClick()}
-              className="group flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-6 backdrop-blur-xl transition-all duration-300 hover:border-emerald-400/60 hover:bg-emerald-950/35 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
+              className="group flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-4 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-emerald-400/60 hover:bg-emerald-950/35 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(16,185,129,0.2)]"
             >
               <div className="flex items-center gap-4">
                 <span
@@ -129,26 +129,26 @@ export function ContactSection() {
               rel="noreferrer"
               data-cursor="INSTA"
               onClick={() => sound.playHover()}
-              className="group flex items-center justify-between rounded-2xl border border-pink-500/30 bg-pink-950/15 p-6 backdrop-blur-xl transition-all duration-300 hover:border-pink-400/60 hover:bg-pink-950/30 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(236,72,153,0.2)]"
+              className="group flex items-center justify-between rounded-2xl border border-pink-500/30 bg-pink-950/15 p-4 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-pink-400/60 hover:bg-pink-950/30 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(236,72,153,0.2)]"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                 <span
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  className="flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
                   style={{
                     background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)',
                     boxShadow: '0 8px 20px rgba(253,29,29,0.45), inset 0 2px 2px rgba(255,255,255,0.4)',
                   }}
                 >
-                  <Instagram size={22} className="text-white drop-shadow-md" />
+                  <Instagram size={20} className="text-white drop-shadow-md" />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-pink-400">INSTAGRAM</div>
-                  <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                  <strong className="text-xs min-[400px]:text-sm sm:text-base font-semibold text-white tracking-wide truncate block">
                     @__a_._d_._i__
                   </strong>
                 </div>
               </div>
-              <ArrowUpRight size={18} className="text-pink-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight size={18} className="text-pink-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform shrink-0" />
             </a>
 
             {/* LinkedIn Card */}
@@ -158,26 +158,26 @@ export function ContactSection() {
               rel="noreferrer"
               data-cursor="PROFILE"
               onClick={() => sound.playHover()}
-              className="group flex items-center justify-between rounded-2xl border border-sky-500/25 bg-sky-950/15 p-6 backdrop-blur-xl transition-all duration-300 hover:border-sky-400/60 hover:bg-sky-950/30 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(14,165,233,0.2)]"
+              className="group flex items-center justify-between rounded-2xl border border-sky-500/25 bg-sky-950/15 p-4 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-sky-400/60 hover:bg-sky-950/30 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(14,165,233,0.2)]"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                 <span
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  className="flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
                   style={{
                     background: 'linear-gradient(135deg, #0077b5, #005582)',
                     boxShadow: '0 8px 20px rgba(0,119,181,0.45), inset 0 2px 2px rgba(255,255,255,0.4)',
                   }}
                 >
-                  <Linkedin size={22} className="text-white drop-shadow-md" />
+                  <Linkedin size={20} className="text-white drop-shadow-md" />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-sky-400">PROFESSIONAL NETWORK</div>
-                  <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                  <strong className="text-xs min-[400px]:text-sm sm:text-base font-semibold text-white tracking-wide truncate block">
                     linkedin.com/in/adarsh-panda-5181b9214
                   </strong>
                 </div>
               </div>
-              <ArrowUpRight size={18} className="text-sky-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight size={18} className="text-sky-400 group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform shrink-0" />
             </a>
 
             {/* GitHub Card */}
@@ -187,37 +187,37 @@ export function ContactSection() {
               rel="noreferrer"
               data-cursor="CODE"
               onClick={() => sound.playHover()}
-              className="group flex items-center justify-between rounded-2xl border border-zinc-700/40 bg-zinc-900/40 p-6 backdrop-blur-xl transition-all duration-300 hover:border-zinc-500/60 hover:bg-zinc-900/70 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
+              className="group flex items-center justify-between rounded-2xl border border-zinc-700/40 bg-zinc-900/40 p-4 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-zinc-500/60 hover:bg-zinc-900/70 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(255,255,255,0.1)]"
             >
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                 <span
-                  className="flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
+                  className="flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110"
                   style={{
                     background: 'linear-gradient(135deg, #333333, #181717)',
                     boxShadow: '0 8px 20px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.2)',
                   }}
                 >
-                  <Github size={22} className="text-white drop-shadow-md" />
+                  <Github size={20} className="text-white drop-shadow-md" />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <div className="font-mono text-[10px] uppercase tracking-widest text-zinc-400">OPEN SOURCE WORKSPACE</div>
-                  <strong className="text-sm sm:text-base font-semibold text-white tracking-wide">
+                  <strong className="text-xs min-[400px]:text-sm sm:text-base font-semibold text-white tracking-wide truncate block">
                     github.com/ada203880-boop
                   </strong>
                 </div>
               </div>
-              <ArrowUpRight size={18} className="text-white/60 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" />
+              <ArrowUpRight size={18} className="text-white/60 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform shrink-0" />
             </a>
 
             {/* Location Coordinate */}
-            <div className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.01] p-6 font-mono text-xs text-zinc-400">
-              <MapPin size={18} className="text-cyan-400" />
+            <div className="flex items-center gap-3 sm:gap-4 rounded-2xl border border-white/5 bg-white/[0.01] p-4 sm:p-6 font-mono text-xs text-zinc-400">
+              <MapPin size={18} className="text-cyan-400 shrink-0" />
               <span>Location: Bhubaneswar, Odisha, India</span>
             </div>
           </div>
 
           {/* Right Column: Direct Transmission Form */}
-          <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-black p-8 sm:p-10 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
+          <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-black p-5 sm:p-8 sm:p-10 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
             <h3 className="text-2xl font-light tracking-tight text-white">Send Direct Dispatch</h3>
             <p className="mt-1 text-xs font-mono text-zinc-400">
               Fill out this quick form to automatically initiate an email draft with your notes.

@@ -21,7 +21,7 @@ export function ScrollStack({ children, className = '', stickyOffset = 90 }: Scr
               top: `${topPosition}px`,
               zIndex: idx + 10,
             }}
-            className="sticky transition-all duration-300"
+            className="relative lg:sticky transition-all duration-300"
           >
             {child}
           </div>

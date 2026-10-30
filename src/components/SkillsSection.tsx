@@ -96,11 +96,11 @@ export function SkillsSection() {
           </div>
           
           {/* View Mode Toggle: Matrix vs Zero-G Physics vs 3D Sphere */}
-          <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur-md">
+          <div className="flex flex-wrap items-center gap-1 rounded-2xl sm:rounded-full border border-white/10 bg-white/[0.03] p-1 backdrop-blur-md">
             <button
               type="button"
               onClick={() => { setViewMode('matrix'); sound.playClick(); }}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-xs transition-all ${
+              className={`flex items-center gap-1.5 rounded-full px-2.5 sm:px-3.5 py-1 sm:py-1.5 font-mono text-[11px] sm:text-xs transition-all ${
                 viewMode === 'matrix'
                   ? 'bg-violet-600 text-white shadow-[0_0_15px_rgba(139,92,246,0.5)]'
                   : 'text-zinc-400 hover:text-white'
@@ -112,7 +112,7 @@ export function SkillsSection() {
             <button
               type="button"
               onClick={() => { setViewMode('physics'); sound.playClick(); }}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-xs transition-all ${
+              className={`flex items-center gap-1.5 rounded-full px-2.5 sm:px-3.5 py-1 sm:py-1.5 font-mono text-[11px] sm:text-xs transition-all ${
                 viewMode === 'physics'
                   ? 'bg-cyan-500 text-black font-semibold shadow-[0_0_15px_rgba(6,182,212,0.5)]'
                   : 'text-zinc-400 hover:text-white'
@@ -124,7 +124,7 @@ export function SkillsSection() {
             <button
               type="button"
               onClick={() => { setViewMode('sphere'); sound.playClick(); }}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 font-mono text-xs transition-all ${
+              className={`flex items-center gap-1.5 rounded-full px-2.5 sm:px-3.5 py-1 sm:py-1.5 font-mono text-[11px] sm:text-xs transition-all ${
                 viewMode === 'sphere'
                   ? 'bg-emerald-500 text-black font-semibold shadow-[0_0_15px_rgba(52,211,153,0.5)]'
                   : 'text-zinc-400 hover:text-white'
@@ -138,7 +138,7 @@ export function SkillsSection() {
 
         {viewMode === 'sphere' ? (
           /* Interactive 3D Skill Sphere with Drag-to-Rotate + Filter by Category */
-          <div className="mt-10 overflow-hidden rounded-3xl border border-emerald-500/30 bg-[#060e18]/80 p-6 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
+          <div className="mt-10 overflow-hidden rounded-3xl border border-emerald-500/30 bg-[#060e18]/80 p-4 sm:p-6 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div>
                 <span className="font-mono text-xs text-emerald-400 flex items-center gap-2">
@@ -167,13 +167,13 @@ export function SkillsSection() {
                 ))}
               </div>
             </div>
-            <div className="relative mt-4 h-[500px] w-full rounded-2xl bg-black/40 border border-white/5 overflow-hidden">
+            <div className="relative mt-4 h-[360px] sm:h-[500px] w-full rounded-2xl bg-black/40 border border-white/5 overflow-hidden">
               <SkillSphere3D activeFilter={activeCategory} />
             </div>
           </div>
         ) : viewMode === 'physics' ? (
           /* Interactive 2D Physics Playground */
-          <div className="mt-10 overflow-hidden rounded-3xl border border-cyan-500/30 bg-[#0a0d18]/80 p-6 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
+          <div className="mt-10 overflow-hidden rounded-3xl border border-cyan-500/30 bg-[#0a0d18]/80 p-4 sm:p-6 backdrop-blur-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8)]">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
               <div>
                 <span className="font-mono text-xs text-cyan-400 flex items-center gap-2">
@@ -193,7 +193,7 @@ export function SkillsSection() {
               </button>
             </div>
 
-            <div className="relative mt-4 h-[440px] w-full rounded-2xl bg-black/60 border border-white/5 overflow-hidden">
+            <div className="relative mt-4 h-[340px] sm:h-[440px] w-full rounded-2xl bg-black/60 border border-white/5 overflow-hidden">
               <TechStackPhysics />
             </div>
           </div>

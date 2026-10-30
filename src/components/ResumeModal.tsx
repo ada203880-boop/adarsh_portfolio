@@ -97,13 +97,41 @@ export function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
           </div>
         </div>
 
-        {/* PDF Viewer Embed */}
-        <div className="flex-1 bg-[#1a1e28]">
+        {/* PDF Viewer Embed with Mobile Native Helper */}
+        <div className="flex-1 bg-[#1a1e28] flex flex-col items-center justify-center relative overflow-hidden">
           <iframe
             src={`${resumeUrl}#toolbar=0&navpanes=0`}
             title="Adarsh Panda Resume"
-            className="h-full w-full border-0"
+            className="hidden sm:block h-full w-full border-0"
           />
+          {/* Mobile Direct Action View (iOS/Android Native) */}
+          <div className="flex sm:hidden flex-col items-center justify-center text-center p-6 space-y-4">
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/40 bg-violet-950/60 text-violet-300 shadow-[0_0_25px_rgba(139,92,246,0.3)]">
+              <FileText size={28} />
+            </span>
+            <div>
+              <h4 className="text-base font-semibold text-white">Adarsh Panda · Resume</h4>
+              <p className="mt-1 font-mono text-xs text-zinc-400">Full-Stack Developer · B.Tech CSE '25</p>
+            </div>
+            <div className="flex flex-col w-full gap-2.5 pt-2">
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-xs font-semibold text-white shadow-lg transition active:scale-95"
+              >
+                <ExternalLink size={15} /> Open PDF Full Screen
+              </a>
+              <a
+                href={resumeUrl}
+                download="Adarsh_Panda_Resume.pdf"
+                onClick={handleDownload}
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/[0.05] px-5 py-3 text-xs font-mono text-zinc-300 transition active:scale-95"
+              >
+                <Download size={14} /> Download PDF File
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

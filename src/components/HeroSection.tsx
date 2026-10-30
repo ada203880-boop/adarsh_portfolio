@@ -50,15 +50,15 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12 z-10 flex-1 flex flex-col justify-center">
 
         {/* Top Header Row with Greeting Badges & Circular 3D Glow Profile in Top-Right Corner */}
-        <div className="flex items-start justify-between gap-4 mb-6">
-          {/* Status Badges only (greeting removed from badge row) */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/25 bg-violet-950/20 px-3 py-1.5 font-mono text-xs text-violet-300">
+        <div className="flex items-start justify-between gap-3 mb-6">
+          {/* Status Badges only */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/25 bg-violet-950/20 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-violet-300">
               <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
               Adarsh Panda · B.Tech CSE '25
             </span>
 
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/25 px-3 py-1.5 font-mono text-xs text-emerald-300">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/25 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-emerald-300">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
@@ -67,18 +67,18 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             </span>
           </div>
 
-          {/* Profile Picture in Top-Right Corner — Larger Circular with Elegant 3D Glow (No disco effect) */}
-          <div className="relative group shrink-0 hidden sm:block">
+          {/* Profile Picture in Top-Right Corner on all screen sizes — responsive, circular, 3D glow */}
+          <div className="relative group shrink-0">
             {/* Ethereal dual-tone cyan & violet 3D ambient aura */}
             <div
-              className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/30 to-emerald-400/30 blur-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              className="absolute -inset-2 sm:-inset-3 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/30 to-emerald-400/30 blur-lg sm:blur-xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
-                boxShadow: '0 0 60px rgba(6,182,212,0.45), 0 0 90px rgba(139,92,246,0.3)',
+                boxShadow: '0 0 50px rgba(6,182,212,0.4), 0 0 70px rgba(139,92,246,0.25)',
               }}
             />
 
             {/* 3D Glass Bevel Ring with Depth */}
-            <div className="relative h-36 w-36 lg:h-44 lg:w-44 rounded-full p-1 bg-gradient-to-b from-white/40 via-cyan-400/40 to-violet-600/50 shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_2px_4px_rgba(255,255,255,0.4)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1.5">
+            <div className="relative h-20 w-20 min-[400px]:h-24 min-[400px]:w-24 sm:h-36 sm:w-36 lg:h-44 lg:w-44 rounded-full p-0.5 sm:p-1 bg-gradient-to-b from-white/40 via-cyan-400/40 to-violet-600/50 shadow-[0_15px_35px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.4)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1">
               <img
                 src={profileImg}
                 alt="Adarsh Panda"
@@ -86,24 +86,9 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               />
 
               {/* Verified Online Active Indicator */}
-              <span className="absolute bottom-1.5 right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-black border-2 border-emerald-400 shadow-[0_0_15px_#10b981]">
-                <span className="h-3 w-3 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="absolute bottom-0.5 right-0.5 sm:bottom-1.5 sm:right-1.5 flex h-4 w-4 sm:h-6 sm:w-6 lg:h-7 lg:w-7 items-center justify-center rounded-full bg-black border sm:border-2 border-emerald-400 shadow-[0_0_12px_#10b981]">
+                <span className="h-1.5 w-1.5 sm:h-2.5 sm:w-2.5 rounded-full bg-emerald-400 animate-pulse" />
               </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile-only Top Right profile circle if screen is small */}
-        <div className="sm:hidden flex justify-end mb-4">
-          <div className="relative group">
-            <div className="absolute -inset-3 rounded-full bg-gradient-to-tr from-cyan-500/35 via-violet-600/25 to-emerald-400/20 blur-lg opacity-80" />
-            <div className="relative h-28 w-28 rounded-full p-0.5 bg-gradient-to-b from-white/40 to-cyan-400/50 shadow-xl">
-              <img
-                src={profileImg}
-                alt="Adarsh Panda"
-                className="h-full w-full rounded-full object-cover ring-1 ring-black"
-              />
-              <span className="absolute bottom-0.5 right-0.5 h-5 w-5 rounded-full bg-emerald-400 border-2 border-black animate-pulse" />
             </div>
           </div>
         </div>
@@ -127,7 +112,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             </h1>
 
             {/* Flowing Typewriter Sentence */}
-            <div className="mt-3 flex items-center gap-2 font-mono text-sm sm:text-base text-zinc-300">
+            <div className="mt-3 flex flex-wrap items-center gap-1.5 sm:gap-2 font-mono text-xs sm:text-base text-zinc-300">
               <span className="text-cyan-400 font-medium">I am a</span>
               <span className="font-semibold text-white border-b border-cyan-400/50 pb-0.5">
                 {typedRole}
@@ -136,17 +121,17 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             </div>
 
             {/* Professional Bio Intro */}
-            <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed text-zinc-300 font-light">
+            <p className="mt-5 max-w-xl text-sm sm:text-lg leading-relaxed text-zinc-300 font-light">
               Computer Science graduate and software engineer specializing in <strong className="text-white font-medium">React.js</strong>, <strong className="text-white font-medium">Node.js</strong>, <strong className="text-white font-medium">Python</strong>, and <strong className="text-white font-medium">MySQL</strong>.
               I architect dependable full-stack web platforms, custom WooCommerce e-commerce pipelines, and production-grade REST APIs designed for real-world reliability and scale.
             </p>
 
             {/* Primary Action Buttons */}
-            <div className="mt-8 flex flex-wrap items-center gap-3.5">
+            <div className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
               <a
                 href="#projects"
                 onClick={() => sound.playClick()}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-6 py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
                 Explore My Work
                 <ArrowDown size={14} />
@@ -155,7 +140,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               <a
                 href="#contact"
                 onClick={() => sound.playClick()}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-5 py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-4 sm:px-5 py-3 sm:py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
               >
                 Contact Me
                 <ArrowUpRight size={14} />
@@ -164,7 +149,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               <a
                 href={`${import.meta.env.BASE_URL}resume.pdf`}
                 onClick={handleResumeClick}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 text-xs font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-all duration-200"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 sm:px-4 py-3 sm:py-3.5 text-xs font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-all duration-200"
                 title="View Resume PDF"
               >
                 <FileText size={14} className="text-cyan-400" />
@@ -173,7 +158,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             </div>
 
             {/* Direct Verified Channels — Realistic Glowing 3D Social Icons */}
-            <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-white/[0.08] pt-6">
+            <div className="mt-8 flex flex-wrap items-center gap-2 sm:gap-3 border-t border-white/[0.08] pt-6">
               {/* WhatsApp */}
               <a
                 href={portfolio.links.whatsapp}

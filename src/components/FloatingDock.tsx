@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, Download, Mail, ArrowUp, Github, Linkedin, MessageCircle, Instagram } from 'lucide-react';
+import { Terminal, Download, Mail, ArrowUp, Github, Linkedin, MessageCircle, Instagram, Zap, X as CloseIcon } from 'lucide-react';
 import { portfolio } from '../data/portfolio';
 import { sound } from '../lib/sound';
 
@@ -21,6 +21,7 @@ interface ActionItem {
 export function FloatingDock({ onOpenTerminal, onOpenResume }: FloatingDockProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
@@ -106,8 +107,8 @@ export function FloatingDock({ onOpenTerminal, onOpenResume }: FloatingDockProps
       transition={{ delay: 1, duration: 0.5, type: 'spring', stiffness: 260, damping: 20 }}
       aria-label="Quick Actions & Social Dock"
     >
-      {/* Vertical Action Column with 3D Glass Depth */}
-      <div className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/15 bg-[#060814]/90 p-1.5 backdrop-blur-2xl shadow-[0_15px_50px_rgba(0,0,0,0.85),inset_0_1px_2px_rgba(255,255,255,0.15)] ring-1 ring-white/[0.06]">
+      {/* Vertical Action Column with 3D Glass Depth (Always visible on desktop, toggleable on mobile) */}
+      <div className={`${isMobileOpen ? 'flex' : 'hidden sm:flex'} flex-col items-center gap-1.5 rounded-2xl border border-white/15 bg-[#060814]/90 p-1.5 backdrop-blur-2xl shadow-[0_15px_50px_rgba(0,0,0,0.85),inset_0_1px_2px_rgba(255,255,255,0.15)] ring-1 ring-white/[0.06]`}>
         {items.map((item, idx) => {
           const isHovered = hoveredId === item.id;
 
@@ -179,6 +180,19 @@ export function FloatingDock({ onOpenTerminal, onOpenResume }: FloatingDockProps
           );
         })}
       </div>
+
+      {/* Mobile Quick Action Toggle FAB Button */}
+      <button
+        type="button"
+        onClick={() => {
+          sound.playClick();
+          setIsMobileOpen((prev) => !prev);
+        }}
+        className="flex sm:hidden h-10 w-10 items-center justify-center rounded-2xl border border-cyan-400/40 bg-[#060814]/90 backdrop-blur-xl shadow-[0_6px_20px_rgba(6,182,212,0.35)] text-cyan-300 transition-all active:scale-95"
+        aria-label="Toggle quick actions dock"
+      >
+        {isMobileOpen ? <CloseIcon size={16} /> : <Zap size={16} className="text-cyan-400 animate-pulse" />}
+      </button>
 
       {/* Back to Top with Clean Circular Scroll Progress Ring */}
       <motion.button

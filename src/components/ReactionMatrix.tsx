@@ -49,7 +49,7 @@ export function ReactionMatrix() {
 
   return (
     <div className="relative">
-      <div className="flex flex-wrap gap-3 justify-center">
+      <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
         {REACTIONS.map(({ key, emoji, label, color }) => {
           const isTapped = tapped[key];
           return (
@@ -57,7 +57,7 @@ export function ReactionMatrix() {
               key={key}
               type="button"
               onClick={() => handleReact(key, emoji)}
-              className="relative flex flex-col items-center gap-1.5 rounded-2xl border px-5 py-3.5 font-mono text-xs transition-all duration-200 hover:scale-110 active:scale-95 select-none"
+              className="relative flex flex-col items-center gap-1 sm:gap-1.5 rounded-2xl border px-3.5 sm:px-5 py-2.5 sm:py-3.5 font-mono text-xs transition-all duration-200 hover:scale-105 active:scale-95 select-none"
               style={{
                 borderColor: isTapped ? color : `${color}40`,
                 backgroundColor: isTapped ? `${color}22` : `${color}0a`,

@@ -52,11 +52,11 @@ export function CaseStudyModal({ study, onClose }: CaseStudyModalProps) {
       role="dialog"
       aria-modal="true"
       aria-labelledby="case-study-title"
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 p-4 sm:p-6 backdrop-blur-xl"
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/85 p-2.5 sm:p-6 backdrop-blur-xl"
       onClick={onClose}
     >
       <div
-        className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-violet-500/25 bg-[#0a081a] p-6 sm:p-10 shadow-[0_0_80px_rgba(139,92,246,0.18)] text-white"
+        className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-2xl border border-violet-500/25 bg-[#0a081a] p-4 sm:p-10 shadow-[0_0_80px_rgba(139,92,246,0.18)] text-white"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Bar */}

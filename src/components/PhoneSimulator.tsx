@@ -58,18 +58,18 @@ export function PhoneSimulator({
   const categories = ['All', 'Prescription Rx', 'OTC Care', 'Vitamins', 'Ayurveda', 'Baby Care'];
 
   return (
-    <div className="flex flex-col items-center justify-center p-2 select-none">
+    <div className="flex flex-col items-center justify-center p-0 sm:p-2 select-none w-full max-w-full">
       {/* Smartphone Outer Chassis with 3D Bevel and Depth */}
-      <div className="relative mx-auto w-full max-w-[350px] sm:max-w-[370px] rounded-[48px] border-[10px] border-[#161726] bg-[#03060c] p-2 shadow-[0_25px_80px_rgba(0,0,0,0.9),0_0_40px_rgba(6,182,212,0.18)] ring-1 ring-white/10">
+      <div className="relative mx-auto w-full max-w-[305px] min-[390px]:max-w-[340px] sm:max-w-[370px] rounded-[36px] sm:rounded-[48px] border-[6px] sm:border-[10px] border-[#161726] bg-[#03060c] p-1.5 sm:p-2 shadow-[0_25px_80px_rgba(0,0,0,0.9),0_0_40px_rgba(6,182,212,0.18)] ring-1 ring-white/10">
         
         {/* Hardware side button accents */}
-        <div className="absolute -left-[13px] top-24 h-9 w-[3px] rounded-l bg-zinc-700" />
-        <div className="absolute -left-[13px] top-36 h-12 w-[3px] rounded-l bg-zinc-700" />
-        <div className="absolute -left-[13px] top-52 h-12 w-[3px] rounded-l bg-zinc-700" />
-        <div className="absolute -right-[13px] top-28 h-16 w-[3px] rounded-r bg-zinc-700" />
+        <div className="absolute -left-[10px] sm:-left-[13px] top-24 h-9 w-[3px] rounded-l bg-zinc-700" />
+        <div className="absolute -left-[10px] sm:-left-[13px] top-36 h-12 w-[3px] rounded-l bg-zinc-700" />
+        <div className="absolute -left-[10px] sm:-left-[13px] top-52 h-12 w-[3px] rounded-l bg-zinc-700" />
+        <div className="absolute -right-[10px] sm:-right-[13px] top-28 h-16 w-[3px] rounded-r bg-zinc-700" />
 
         {/* Inner Phone Screen */}
-        <div className="relative flex flex-col h-[580px] sm:h-[620px] w-full overflow-hidden rounded-[36px] bg-[#f8fafc] text-zinc-900">
+        <div className="relative flex flex-col h-[520px] min-[390px]:h-[580px] sm:h-[620px] w-full overflow-hidden rounded-[28px] sm:rounded-[36px] bg-[#f8fafc] text-zinc-900">
           
           {/* Top Status Bar with Dynamic Island */}
           <div className="relative z-30 flex items-center justify-between bg-black px-6 pt-2 pb-1 text-[11px] font-medium text-white select-none">
