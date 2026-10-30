@@ -21,13 +21,8 @@ import { sound } from './lib/sound';
 import { AskAdarshChat } from './components/AskAdarshChat';
 import { KonamiCode } from './components/KonamiCode';
 import { HiringStatusWidget } from './components/HiringStatusWidget';
-import MusicPlayer from './components/MusicPlayer';
 import { AdminView } from './components/AdminView';
 import { InteractiveResume } from './components/InteractiveResume';
-import { MultiDeviceMockup } from './components/MultiDeviceMockup';
-import { WorldMap } from './components/WorldMap';
-import { AchievementsSection } from './components/AchievementsSection';
-import WorkspaceGallery from './components/WorkspaceGallery';
 
 // Page Sections
 import { HeroSection } from './components/HeroSection';
@@ -117,7 +112,7 @@ export default function App() {
 
   // Active section tracker for nav pills
   useEffect(() => {
-    const IDS = ['home', 'about', 'skills', 'projects', 'devices', 'worldmap', 'achievements', 'telemetry', 'journey', 'education', 'certifications', 'workspace', 'services', 'contact'];
+    const IDS = ['home', 'about', 'skills', 'projects', 'telemetry', 'journey', 'education', 'certifications', 'services', 'contact'];
     const onScroll = () => {
       const y = window.scrollY + 220;
       for (const id of IDS) {
@@ -181,9 +176,6 @@ export default function App() {
       {/* AI "Ask Adarsh" Chat Widget (Gemini 2.0 Flash) */}
       <AskAdarshChat />
 
-      {/* Ambient Lo-Fi Background Music Player */}
-      <MusicPlayer />
-
       {/* Sticky Hiring Status Quick Widget (Desktop) */}
       <HiringStatusWidget />
 
@@ -228,38 +220,26 @@ export default function App() {
         {/* 04 FEATURED SYSTEMS / PROJECTS */}
         <ProjectsSection />
 
-        {/* 05 CROSS-DEVICE PERFECTION (Multi-Device Mockup) */}
-        <MultiDeviceMockup />
-
-        {/* 06 WHERE I'VE SHIPPED (Interactive World Map) */}
-        <WorldMap />
-
-        {/* 07 MILESTONE ACHIEVEMENTS (Gamer XP Log) */}
-        <AchievementsSection />
-
-        {/* 08 LIVE GITHUB TELEMETRY RADAR & HEATMAP */}
+        {/* 05 LIVE GITHUB TELEMETRY RADAR & HEATMAP */}
         <section id="telemetry" className="relative w-full max-w-full overflow-hidden bg-[#03060c] pb-20 sm:pb-24 text-white">
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
             <GithubActivity />
           </div>
         </section>
 
-        {/* 09 CAREER & EXPERIENCE TIMELINE */}
+        {/* 06 CAREER & EXPERIENCE TIMELINE */}
         <CareerTimeline />
 
-        {/* 10 ACADEMIC FOUNDATION */}
+        {/* 07 ACADEMIC FOUNDATION */}
         <EducationSection />
 
-        {/* 11 PROFESSIONAL CERTIFICATIONS */}
+        {/* 08 PROFESSIONAL CERTIFICATIONS */}
         <CertificationsSection />
 
-        {/* 12 BEHIND THE BUILD (Workspace Code Gallery) */}
-        <WorkspaceGallery />
-
-        {/* 13 WHAT I DO (SERVICES FOR CLIENTS) */}
+        {/* 09 WHAT I DO (SERVICES FOR CLIENTS) */}
         <WhatIDoSection />
 
-        {/* 14 CONTACT / TRANSMISSION DOCK */}
+        {/* 10 CONTACT / TRANSMISSION DOCK */}
         <ContactSection />
 
       </main>

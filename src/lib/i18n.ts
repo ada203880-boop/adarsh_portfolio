@@ -34,3 +34,4 @@ export const TRANSLATIONS = {
 } as const;
 
 export type TranslationKey = keyof typeof TRANSLATIONS['en'];
+

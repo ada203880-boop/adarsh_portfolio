@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { GitCommit, Github, ExternalLink, Users, BookOpen, UserCheck } from 'lucide-react';
+import { Github, ExternalLink, Users, BookOpen, UserCheck } from 'lucide-react';
 import { sound } from '../lib/sound';
 
 /* ─── Types ─────────────────────────────────────────────────────────────── */
@@ -145,7 +145,6 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
 
 /* ─── Main Component ─────────────────────────────────────────────────────── */
 export function GithubActivity() {
-  const [commits, setCommits] = useState<CommitRow[]>([]);
   const [langs, setLangs] = useState<LangMap>({});
   const [langsLoading, setLangsLoading] = useState(true);
   const [commitsLoading, setCommitsLoading] = useState(true);
@@ -184,11 +183,9 @@ export function GithubActivity() {
             };
           });
         if (rows.length > 0) {
-          setCommits(rows);
           setLastCommitDate(rows[0].rawDate);
         } else throw new Error();
       } catch {
-        setCommits(FALLBACK_COMMITS);
         setLastCommitDate(FALLBACK_COMMITS[0].rawDate);
       } finally {
         if (mounted) setCommitsLoading(false);
@@ -329,43 +326,7 @@ export function GithubActivity() {
       </div>
 
       {/* ──────────────────────────────────────────────────────────────────
-          SECTION 1 — Live Commit Feed
-      ─────────────────────────────────────────────────────────────────── */}
-      <div>
-        <SectionHeader>// COMMIT_STREAM</SectionHeader>
-        <div className="space-y-2">
-          {commitsLoading
-            ? Array.from({ length: 4 }).map((_, i) => (
-              <Skeleton key={i} className="h-10 w-full" />
-            ))
-            : commits.map(evt => (
-              <a
-                key={evt.id}
-                href={evt.url}
-                target="_blank" rel="noreferrer"
-                onClick={() => sound.playHover()}
-                className="group flex items-center justify-between gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3.5 py-2.5 transition hover:border-cyan-500/30 hover:bg-cyan-500/[0.04]"
-              >
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <GitCommit size={13} className="shrink-0 text-cyan-400/70 group-hover:text-cyan-300" />
-                  <span className="truncate font-mono text-xs text-zinc-300 group-hover:text-white">
-                    {evt.message}
-                  </span>
-                </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <span className="rounded bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
-                    {evt.repo}
-                  </span>
-                  <span className="font-mono text-[10px] text-zinc-600">{evt.time}</span>
-                </div>
-              </a>
-            ))
-          }
-        </div>
-      </div>
-
-      {/* ──────────────────────────────────────────────────────────────────
-          SECTION 2 — Language Distribution Bar
+          SECTION 1 — Language Distribution Bar
       ─────────────────────────────────────────────────────────────────── */}
       <div ref={barRef}>
         <SectionHeader>// LANGUAGE_DISTRIBUTION</SectionHeader>

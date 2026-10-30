@@ -205,3 +205,4 @@ export function KonamiCode() {
     </div>
   );
 }
+
