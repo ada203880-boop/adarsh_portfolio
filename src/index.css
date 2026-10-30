@@ -37,13 +37,26 @@ html {
   /* Handled smoothly by Lenis or system */
   background: var(--bg-primary);
   color-scheme: dark;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  width: 100%;
+  max-width: 100vw;
   min-width: 320px;
   background: var(--bg-primary);
   color: var(--text-primary);
+  overflow-x: hidden;
+  position: relative;
+}
+
+#root, #main-content {
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
 }
 

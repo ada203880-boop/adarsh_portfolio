@@ -65,7 +65,7 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
           : 'bg-transparent py-4.5'
           }`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-8 lg:px-12">
           {/* Brand Signature */}
           <a
             href="#home"

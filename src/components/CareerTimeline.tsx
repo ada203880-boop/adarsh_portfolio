@@ -111,7 +111,7 @@ const COLOR_MAP: Record<string, { border: string; bg: string; dot: string; badge
 
 export function CareerTimeline() {
   return (
-    <section id="journey" className="relative bg-[#03060c] py-28 text-white">
+    <section id="journey" className="relative w-full max-w-full overflow-hidden bg-[#03060c] py-20 sm:py-28 text-white">
       <div className="pointer-events-none absolute top-1/4 left-0 h-[600px] w-[500px] rounded-full bg-cyan-700/[0.05] blur-[160px]" />
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
@@ -123,7 +123,7 @@ export function CareerTimeline() {
               <Sparkles size={13} />
               <span>04 // CAREER & EXPERIENCE</span>
             </div>
-            <h2 className="mt-4 text-5xl font-extralight tracking-[-0.04em] sm:text-7xl lg:text-8xl">
+            <h2 className="mt-4 text-4xl font-extralight tracking-[-0.04em] sm:text-7xl lg:text-8xl">
               MY CAREER &<br />
               <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-sky-400">
                 JOURNEY.

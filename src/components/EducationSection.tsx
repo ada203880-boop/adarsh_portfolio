@@ -3,7 +3,7 @@ import { portfolio } from '../data/portfolio';
 
 export function EducationSection() {
   return (
-    <section id="education" className="relative bg-[#03060c] py-28 text-white overflow-hidden">
+    <section id="education" className="relative w-full max-w-full bg-[#03060c] py-20 sm:py-28 text-white overflow-hidden">
       <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-indigo-700/[0.07] blur-[160px]" />
 
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
@@ -15,7 +15,7 @@ export function EducationSection() {
               <Sparkles size={13} />
               <span>04 // ACADEMIC FOUNDATION</span>
             </div>
-            <h2 className="mt-4 text-5xl font-extralight tracking-[-0.04em] sm:text-7xl lg:text-8xl">
+            <h2 className="mt-4 text-4xl font-extralight tracking-[-0.04em] sm:text-7xl lg:text-8xl">
               MY<br />
               <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-white to-cyan-300">
                 EDUCATION.

@@ -31,7 +31,7 @@ export function AboutSection() {
   ];
 
   return (
-    <section id="about" className="relative min-h-screen bg-[#03060c] py-28 text-white">
+    <section id="about" className="relative min-h-screen w-full max-w-full overflow-hidden bg-[#03060c] py-20 sm:py-28 text-white">
       {/* Background glow */}
       <div className="pointer-events-none absolute top-1/2 left-1/3 h-[500px] w-[500px] rounded-full bg-cyan-600/[0.06] blur-[160px]" />
 

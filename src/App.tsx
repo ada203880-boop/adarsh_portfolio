@@ -54,13 +54,14 @@ export default function App() {
 
   // Lenis smooth scroll + GSAP ticker sync
   useEffect(() => {
+    const isMobile = window.innerWidth < 1024 || window.matchMedia('(pointer: coarse)').matches;
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: isMobile ? 0.9 : 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      touchMultiplier: 2,
+      touchMultiplier: 1,
     });
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -71,7 +72,8 @@ export default function App() {
         sound.playScrollFlow(e.velocity);
         setScrollVel(e.velocity);
       }
-      if (prefersReducedMotion) return;
+      // Never skew on mobile/touch screens to guarantee 100% viewport width alignment
+      if (prefersReducedMotion || isMobile) return;
       const main = document.getElementById('main-content');
       if (main && typeof e.velocity === 'number') {
         const clampedSkew = Math.max(-1.5, Math.min(1.5, e.velocity * 0.06));
@@ -120,7 +122,7 @@ export default function App() {
   const toggleCRT = () => setCrtMode((p) => !p);
 
   return (
-    <div className="relative min-h-screen bg-[#03060c] text-white selection:bg-cyan-500 selection:text-black">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-[#03060c] text-white selection:bg-cyan-500 selection:text-black">
 
       {/* Boot preloader */}
       {!loaderDone && <CinematicLoader onDone={() => setLoaderDone(true)} />}
@@ -164,7 +166,7 @@ export default function App() {
       {/* =====================================================
           PAGE FLOW — seamlessly unified creative journey
           ===================================================== */}
-      <main id="main-content" className="relative z-10">
+      <main id="main-content" className="relative z-10 w-full max-w-full overflow-x-hidden">
 
         {/* 01 HERO */}
         <HeroSection
@@ -188,7 +190,7 @@ export default function App() {
         <ProjectsSection />
 
         {/* 05 LIVE GITHUB TELEMETRY RADAR */}
-        <section id="telemetry" className="relative bg-[#03060c] pb-24 text-white">
+        <section id="telemetry" className="relative w-full max-w-full overflow-hidden bg-[#03060c] pb-20 sm:pb-24 text-white">
           <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
             <GithubActivity />
           </div>

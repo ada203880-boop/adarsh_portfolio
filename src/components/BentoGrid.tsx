@@ -83,7 +83,7 @@ export function BentoGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="bento" className="relative py-24 overflow-hidden">
+    <section id="bento" className="relative w-full max-w-full py-20 sm:py-24 overflow-hidden">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="mb-14 text-center">
@@ -101,7 +101,7 @@ export function BentoGrid() {
         {/* Bento Grid */}
         <div
           ref={containerRef}
-          className="relative grid grid-cols-2 md:grid-cols-4 gap-4"
+          className="relative grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4"
         >
           {/* SVG beam overlay */}
           <AnimatedBeam containerRef={containerRef} paths={BEAMS} />
@@ -110,7 +110,7 @@ export function BentoGrid() {
             <div
               key={cell.id}
               data-node={cell.id}
-              className={`group relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-500 hover:bg-white/[0.06] cursor-default overflow-hidden ${sizeClass[cell.size]}`}
+              className={`group relative rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3 sm:p-5 backdrop-blur-sm hover:border-white/20 transition-all duration-500 hover:bg-white/[0.06] cursor-default overflow-hidden ${sizeClass[cell.size]}`}
               style={{
                 boxShadow: `0 0 0 0 ${cell.color}00`,
               }}

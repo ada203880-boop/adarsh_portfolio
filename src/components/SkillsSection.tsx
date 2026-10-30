@@ -75,7 +75,7 @@ export function SkillsSection() {
   });
 
   return (
-    <section id="skills" className="relative bg-[#07060f] py-28 text-white">
+    <section id="skills" className="relative w-full max-w-full overflow-hidden bg-[#07060f] py-20 sm:py-28 text-white">
       {/* Background ambient glow */}
       <div className="pointer-events-none absolute bottom-1/4 left-1/3 h-[500px] w-[500px] rounded-full bg-violet-950/[0.1] blur-[160px]" />
 

@@ -209,7 +209,7 @@ export function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="relative min-h-screen bg-[#03060c] py-28 text-white">
+    <section id="projects" className="relative min-h-screen w-full max-w-full overflow-hidden bg-[#03060c] py-20 sm:py-28 text-white">
       {/* Background radial highlight */}
       <div className="pointer-events-none absolute top-1/3 left-1/4 h-[500px] w-[500px] rounded-full bg-cyan-600/[0.08] blur-[150px]" />
 

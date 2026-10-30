@@ -94,7 +94,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
         </div>
 
         {/* Hero Grid: Typography & Actions on Left, Architecture Stage on Right */}
-        <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+        <div className="grid gap-8 lg:gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
 
           {/* Left Column: Headline & Bio */}
           <div>
@@ -256,7 +256,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
                   <span className="ml-2 font-mono text-[11px] text-zinc-400">adarsh-dev-environment</span>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
                   {(['architecture', 'stack', 'status', 'globe'] as const).map((tab) => (
                     <button
                       key={tab}

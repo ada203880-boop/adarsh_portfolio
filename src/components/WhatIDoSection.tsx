@@ -108,7 +108,7 @@ export function WhatIDoSection() {
   const [selectedService, setSelectedService] = useState<string>(SERVICES[0].id);
 
   return (
-    <section id="services" className="relative bg-[#07060f] py-28 text-white">
+    <section id="services" className="relative w-full max-w-full overflow-hidden bg-[#07060f] py-20 sm:py-28 text-white">
       {/* Background ambient lighting */}
       <div className="pointer-events-none absolute top-1/2 right-0 h-[500px] w-[500px] rounded-full bg-violet-950/[0.1] blur-[160px]" />
 

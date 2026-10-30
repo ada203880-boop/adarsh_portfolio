@@ -26,7 +26,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="relative min-h-screen bg-[#03060c] py-28 text-white">
+    <section id="contact" className="relative min-h-screen w-full max-w-full overflow-hidden bg-[#03060c] py-20 sm:py-28 text-white">
       {/* Glow */}
       <div className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 h-[600px] w-[600px] rounded-full bg-cyan-600/[0.1] blur-[160px]" />
 
