@@ -243,8 +243,8 @@ export function AskAdarshChat() {
 
   return (
     <>
-      {/* Floating Trigger Bubble */}
-      <div className="fixed bottom-14 left-4 z-[180]">
+      {/* Floating Trigger Bubble — Positioned safely in bottom-right margin above floating dock to eliminate text overlap */}
+      <div className="fixed bottom-20 right-3 sm:bottom-28 sm:right-4 z-[80]">
         {!isOpen ? (
           <button
             type="button"
@@ -252,18 +252,18 @@ export function AskAdarshChat() {
               sound.playClick();
               setIsOpen(true);
             }}
-            className="group relative flex items-center gap-2.5 rounded-full border border-cyan-400/40 bg-gradient-to-r from-[#0c1024]/90 to-[#120d2c]/90 px-4 py-2.5 shadow-[0_8px_32px_rgba(6,182,212,0.35)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-cyan-300 hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] focus:outline-none"
+            className="group relative flex items-center gap-2 sm:gap-2.5 rounded-full border border-cyan-400/40 bg-gradient-to-r from-[#0c1024]/95 to-[#120d2c]/95 px-3 sm:px-4 py-2 sm:py-2.5 shadow-[0_8px_32px_rgba(6,182,212,0.35)] backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-cyan-300 hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] focus:outline-none"
             aria-label="Open AI Assistant"
           >
-            <span className="relative flex h-3 w-3">
+            <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-400" />
+              <span className="relative inline-flex h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-cyan-400" />
             </span>
-            <div className="flex items-center gap-1.5 font-mono text-xs font-semibold text-white">
-              <Sparkles size={14} className="text-cyan-400 animate-pulse" />
+            <div className="flex items-center gap-1.5 font-mono text-[11px] sm:text-xs font-semibold text-white">
+              <Sparkles size={13} className="text-cyan-400 animate-pulse" />
               <span>Ask Adarsh AI</span>
             </div>
-            <span className="rounded-full bg-cyan-500/20 px-2 py-0.5 font-mono text-[9px] text-cyan-300 border border-cyan-500/30">
+            <span className="rounded-full bg-cyan-500/20 px-1.5 sm:px-2 py-0.5 font-mono text-[8px] sm:text-[9px] text-cyan-300 border border-cyan-500/30">
               Gemini
             </span>
           </button>
@@ -272,7 +272,7 @@ export function AskAdarshChat() {
 
       {/* Chat Dialog Drawer */}
       {isOpen && (
-        <div className="fixed bottom-12 left-4 z-[190] w-[calc(100vw-32px)] sm:w-[420px] max-w-[420px] h-[540px] flex flex-col rounded-3xl border border-cyan-500/30 bg-[#090b16]/95 backdrop-blur-2xl shadow-[0_25px_65px_rgba(0,0,0,0.8),0_0_40px_rgba(6,182,212,0.2)] overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-6">
+        <div className="fixed bottom-6 right-3 sm:right-6 z-[190] w-[calc(100vw-24px)] sm:w-[420px] max-w-[420px] h-[540px] flex flex-col rounded-3xl border border-cyan-500/30 bg-[#090b16]/95 backdrop-blur-2xl shadow-[0_25px_65px_rgba(0,0,0,0.8),0_0_40px_rgba(6,182,212,0.2)] overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-6">
           
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.03] px-4 py-3">

@@ -100,7 +100,7 @@ export function VelocityMarquee({ topRow = DEFAULT_TOP, bottomRow = DEFAULT_BOTT
       <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-[#03060c] to-transparent" />
 
       {/* Row 1 */}
-      <div className="flex mb-3 relative">
+      <div className="flex mb-3 relative w-full max-w-full overflow-hidden">
         <div
           className="flex items-center will-change-transform"
           style={{ transform: `translateX(${x1.get()}px)`, display: 'flex' }}
@@ -114,7 +114,7 @@ export function VelocityMarquee({ topRow = DEFAULT_TOP, bottomRow = DEFAULT_BOTT
       </div>
 
       {/* Row 2 */}
-      <div className="flex relative">
+      <div className="flex relative w-full max-w-full overflow-hidden">
         <div
           className="flex items-center will-change-transform"
           style={{ transform: `translateX(${x2.get()}px)`, display: 'flex' }}

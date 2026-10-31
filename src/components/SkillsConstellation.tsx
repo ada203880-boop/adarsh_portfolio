@@ -647,7 +647,7 @@ export function SkillsConstellation() {
                   }}
                   onMouseLeave={() => setHoveredId(null)}
                   aria-label={`${node.name} (${node.category})`}
-                  className={`group relative flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-[22.5%] transition-all duration-300 cursor-pointer select-none focus:outline-none ${
+                  className={`group relative flex items-center justify-center w-9 h-9 min-[380px]:w-11 min-[380px]:h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-[22.5%] transition-all duration-300 cursor-pointer select-none focus:outline-none ${
                     isSelected
                       ? 'scale-110 ring-4 ring-cyan-400 shadow-[0_0_35px_rgba(6,182,212,0.6)]'
                       : isConnected && activeNode !== null

@@ -1,4 +1,8 @@
-# Environment secrets & local config
+# Screenshots & Test Captures
+screenshots/
+scripts/
+
+
 .env
 .env.local
 .env.*

@@ -16,7 +16,8 @@ export function LanguageToggle() {
       title="Switch Language (English / हिन्दी)"
     >
       <Languages size={12} className="text-cyan-400" />
-      <span>{language === 'en' ? 'EN 🇬🇧' : 'हिन्दी 🇮🇳'}</span>
+      <span className="hidden sm:inline">{language === 'en' ? 'EN 🇬🇧' : 'हिन्दी 🇮🇳'}</span>
+      <span className="sm:hidden">{language === 'en' ? 'EN' : 'हिन्दी'}</span>
     </button>
   );
 }

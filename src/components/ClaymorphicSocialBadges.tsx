@@ -137,7 +137,7 @@ export function ClaymorphicSocialBadges() {
 
   return (
     <div
-      className="flex flex-wrap items-center gap-3 sm:gap-4 py-2"
+      className="flex flex-wrap items-center gap-2 sm:gap-3.5 py-1"
       style={{ perspective: '1000px' }}
     >
       {socialLinks.map((item, index) => {
@@ -166,7 +166,7 @@ export function ClaymorphicSocialBadges() {
               }}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              className="relative flex items-center justify-center w-13 h-13 sm:w-16 sm:h-16 rounded-[22.5%] transition-all duration-200 ease-out select-none cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none active:scale-95"
+              className="relative flex items-center justify-center w-11 h-11 min-[380px]:w-12 min-[380px]:h-12 sm:w-14 sm:h-14 rounded-[22.5%] transition-all duration-200 ease-out select-none cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:outline-none active:scale-95"
               style={{
                 background: item.brandGradient,
                 boxShadow: isHovered
@@ -181,8 +181,8 @@ export function ClaymorphicSocialBadges() {
               <div
                 className="pointer-events-none flex items-center justify-center transition-transform duration-200"
                 style={{
-                  transform: 'translateZ(14px)',
-                  filter: 'drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45))',
+                  transform: 'translateZ(12px)',
+                  filter: 'drop-shadow(0 2px 5px rgba(0, 0, 0, 0.45))',
                 }}
               >
                 {item.svg}

@@ -75,7 +75,7 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
             onClick={() => sound.playHover()}
           >
             <div className="flex flex-col">
-              <span className="font-serif italic text-xl sm:text-2xl tracking-wide bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-violet-300 transition-all duration-300 font-semibold select-none drop-shadow-[0_0_15px_rgba(34,211,238,0.35)]">
+              <span className="font-serif italic text-lg sm:text-2xl tracking-wide bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent group-hover:from-cyan-300 group-hover:to-violet-300 transition-all duration-300 font-semibold select-none drop-shadow-[0_0_15px_rgba(34,211,238,0.35)]">
                 Adarsh Panda
               </span>
               <div className="flex items-center gap-1.5 text-[9px] font-mono tracking-widest text-white/40">

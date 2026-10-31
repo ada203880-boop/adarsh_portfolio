@@ -4,8 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 import fs from 'node:fs';
 
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/adarsh_portfolio/' : '/',
+export default defineConfig({
+  base: '/adarsh_portfolio/',
   plugins: [
     react(),
     tailwindcss(),
@@ -59,4 +59,4 @@ export default defineConfig(({ command }) => ({
       '@': path.resolve(import.meta.dirname, './src'),
     },
   },
-}));
+});

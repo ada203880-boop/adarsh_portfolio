@@ -126,80 +126,73 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
   return (
     <section
       id="home"
-      className="relative min-h-[95vh] w-full overflow-hidden bg-[#07060f] pt-28 pb-16 text-white flex flex-col justify-between"
+      className="relative min-h-[95vh] w-full overflow-hidden bg-[#07060f] pt-24 sm:pt-28 pb-20 sm:pb-16 text-white flex flex-col justify-between"
     >
       {/* Background restrained ambient glow */}
       <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[550px] w-[550px] rounded-full bg-cyan-900/[0.1] blur-[160px]" />
       <div className="pointer-events-none absolute bottom-12 right-12 h-[450px] w-[450px] rounded-full bg-violet-950/[0.15] blur-[150px]" />
 
       {/* Main Content Container */}
-      <div className="mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12 z-10 flex-1 flex flex-col justify-center">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12 z-10 flex-1 flex flex-col justify-center min-w-0 max-w-full">
 
-        {/* Top Header Row with Greeting Badges & Circular 3D Glow Profile in Top-Right Corner */}
-        <div className="flex items-start justify-between gap-3 mb-6">
-          {/* Status & Telemetry Badges */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/25 bg-violet-950/20 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-violet-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-violet-400" />
-              Adarsh Panda · B.Tech CSE '25
+        {/* Top Header Row with Greeting Badges & Circular 3D Glow Profile */}
+        <div className="flex items-start justify-between gap-3 mb-6 w-full min-w-0">
+          {/* Status & Location Badges */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 flex-1 min-w-0">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/25 bg-violet-950/20 px-2.5 py-1 font-mono text-[9px] sm:text-xs text-violet-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-violet-400 shrink-0" />
+              <span className="hidden min-[420px]:inline">Adarsh Panda · </span>B.Tech CSE '25
             </span>
 
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/25 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-emerald-300">
-              <span className="relative flex h-2 w-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/25 px-2.5 py-1 font-mono text-[9px] sm:text-xs text-emerald-300">
+              <span className="relative flex h-2 w-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
               </span>
-              {t('status.available')}
+              <span className="hidden sm:inline">{t('status.available')}</span>
+              <span className="sm:hidden">AVAILABLE FOR HIRE</span>
             </span>
 
-            {/* Live Coordinate & Location */}
-            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/25 bg-cyan-950/20 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-cyan-300">
+            {/* Live Location */}
+            <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/25 bg-cyan-950/20 px-2.5 sm:px-3 py-1 font-mono text-[10px] sm:text-xs text-cyan-300">
               <MapPin size={11} className="text-cyan-400" />
               Bhubaneswar, Odisha, India
             </span>
 
             {currentTime && (
-              <span className="hidden min-[480px]:inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-zinc-400">
+              <span className="hidden min-[540px]:inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 sm:px-3 py-1 font-mono text-[10px] sm:text-xs text-zinc-400">
                 <Clock size={11} className="text-zinc-500" />
                 {currentTime} IST
               </span>
             )}
           </div>
 
-          {/* Profile Picture in Top-Right Corner on all screen sizes — responsive, circular, 3D glow */}
+          {/* Profile Picture — Clean, responsive 3D glow */}
           <div className="relative group shrink-0">
-            {/* Ethereal dual-tone cyan & violet 3D ambient aura */}
             <div
-              className="absolute -inset-2 sm:-inset-4 lg:-inset-6 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/35 to-emerald-400/35 blur-xl sm:blur-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-              style={{
-                boxShadow: '0 0 70px rgba(6,182,212,0.45), 0 0 100px rgba(139,92,246,0.3)',
-              }}
+              className="absolute -inset-1 sm:-inset-3 lg:-inset-4 rounded-full bg-gradient-to-tr from-cyan-500/30 via-violet-600/30 to-emerald-400/30 blur-md sm:blur-xl opacity-80 pointer-events-none"
             />
-
-            {/* 3D Glass Bevel Ring with Depth */}
-            <div className="relative h-20 w-20 min-[400px]:h-28 min-[400px]:w-28 sm:h-44 sm:w-44 lg:h-56 lg:w-56 xl:h-64 xl:w-64 rounded-full p-1 sm:p-1.5 bg-gradient-to-b from-white/50 via-cyan-400/50 to-violet-600/60 shadow-[0_20px_60px_rgba(0,0,0,0.85),inset_0_2px_6px_rgba(255,255,255,0.45)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1">
+            <div className="relative h-16 w-16 min-[400px]:h-20 min-[400px]:w-20 sm:h-36 sm:w-36 lg:h-48 lg:w-48 rounded-full p-1 bg-gradient-to-b from-white/40 via-cyan-400/40 to-violet-600/50 shadow-xl transition-transform duration-500 group-hover:scale-105">
               <img
                 src={profileImg}
                 alt="Adarsh Panda"
-                className="h-full w-full rounded-full object-cover object-center ring-2 sm:ring-4 ring-black"
+                className="h-full w-full rounded-full object-cover object-center ring-2 ring-black"
               />
-
-              {/* Verified Online Active Indicator */}
-              <span className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 flex h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8 items-center justify-center rounded-full bg-black border-2 border-emerald-400 shadow-[0_0_15px_#10b981]">
-                <span className="h-2 w-2 sm:h-3 sm:w-3 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="absolute bottom-0.5 right-0.5 sm:bottom-1 sm:right-1 flex h-4 w-4 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-black border border-emerald-400 shadow-[0_0_10px_#10b981]">
+                <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-emerald-400 animate-pulse" />
               </span>
             </div>
           </div>
         </div>
 
         {/* Hero Grid: Typography & Actions on Left, Architecture Stage on Right */}
-        <div className="grid gap-8 lg:gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-8 lg:gap-12 lg:items-center w-full min-w-0 max-w-full">
 
           {/* Left Column: Headline & Bio */}
-          <div>
-            <h1 className="text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.2] break-words">
+          <div className="w-full min-w-0 max-w-full">
+            <h1 className="text-xl min-[360px]:text-2xl min-[430px]:text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.2]">
               {/* Dynamic time-based greeting + Namaste */}
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                 <span className="text-zinc-400 font-extralight">{timeGreeting},</span>
                 <BlurFadeText text={t('hero.greeting')} delay={100} />
               </div>
@@ -221,38 +214,38 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             </div>
 
             {/* Professional Bio Intro */}
-            <p className="mt-5 max-w-xl text-sm sm:text-lg leading-relaxed text-zinc-300 font-light">
+            <p className="mt-5 w-full max-w-xl text-sm sm:text-lg leading-relaxed text-zinc-300 font-light">
               Computer Science graduate and software engineer specializing in <strong className="text-white font-medium">React.js</strong>, <strong className="text-white font-medium">Node.js</strong>, <strong className="text-white font-medium">Python</strong>, and <strong className="text-white font-medium">MySQL</strong>.
               I architect dependable full-stack web platforms, custom WooCommerce e-commerce pipelines, and production-grade REST APIs designed for real-world reliability and scale.
             </p>
 
-            {/* Professional Foundation Quick Strip */}
-            <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-xl">
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+            {/* Professional Foundation Quick Strip — Responsive Bento Cells */}
+            <div className="mt-5 grid grid-cols-2 gap-2 w-full max-w-xl sm:grid-cols-4">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm min-w-0">
                 <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">DEGREE</div>
-                <div className="font-mono text-xs font-semibold text-cyan-300 mt-0.5">B.Tech CSE '25</div>
+                <div className="font-mono text-[11px] sm:text-xs font-semibold text-cyan-300 mt-0.5 truncate">B.Tech CSE '25</div>
               </div>
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm min-w-0">
                 <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">SPECIALTY</div>
-                <div className="font-mono text-xs font-semibold text-cyan-300 mt-0.5">Full-Stack React</div>
+                <div className="font-mono text-[11px] sm:text-xs font-semibold text-cyan-300 mt-0.5 truncate">Full-Stack React</div>
               </div>
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm min-w-0">
                 <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">BACKEND</div>
-                <div className="font-mono text-xs font-semibold text-violet-300 mt-0.5">Node.js &amp; MySQL</div>
+                <div className="font-mono text-[11px] sm:text-xs font-semibold text-violet-300 mt-0.5 truncate">Node.js &amp; MySQL</div>
               </div>
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm min-w-0">
                 <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">PRODUCTION</div>
-                <div className="font-mono text-xs font-semibold text-emerald-400 mt-0.5">Live E-Commerce</div>
+                <div className="font-mono text-[11px] sm:text-xs font-semibold text-emerald-400 mt-0.5 truncate">Live E-Commerce</div>
               </div>
             </div>
 
             {/* Primary Action Buttons with Subtle Magnetic Physics */}
-            <div className="mt-8 flex flex-wrap items-center gap-2.5 sm:gap-3.5">
+            <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-3 w-full max-w-xl">
               <a
                 ref={btnWorkRef}
                 href="#projects"
                 onClick={() => sound.playClick()}
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-5 sm:px-6 py-3 sm:py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 px-3.5 sm:px-6 py-2.5 sm:py-3.5 text-xs font-semibold tracking-wide text-white transition-all duration-200 hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex-1 min-w-[110px] sm:flex-initial"
               >
                 {t('hero.cta.work')}
                 <ArrowDown size={14} />
@@ -262,7 +255,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 ref={btnContactRef}
                 href="#contact"
                 onClick={() => sound.playClick()}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-4 sm:px-5 py-3 sm:py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-3.5 sm:px-5 py-2.5 sm:py-3.5 text-xs font-semibold text-zinc-200 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.08] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 flex-1 min-w-[100px] sm:flex-initial"
               >
                 {t('hero.cta.contact')}
                 <ArrowUpRight size={14} />
@@ -272,16 +265,16 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                 ref={btnResumeRef}
                 href={`${import.meta.env.BASE_URL}resume.pdf`}
                 onClick={handleResumeClick}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 sm:px-4 py-3 sm:py-3.5 text-xs font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-all duration-200"
+                className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.02] px-3 sm:px-4 py-2.5 sm:py-3.5 text-xs font-mono text-zinc-300 hover:text-cyan-300 hover:border-cyan-400/40 transition-all duration-200 flex-1 min-w-[95px] sm:flex-initial"
                 title="View Resume PDF"
               >
-                <FileText size={14} className="text-cyan-400" />
-                {t('hero.cta.resume')}
+                <FileText size={14} className="text-cyan-400 shrink-0" />
+                <span className="truncate">{t('hero.cta.resume')}</span>
               </a>
             </div>
 
             {/* Direct Verified Channels — Standalone 3D Apple Squircle App Icon Badges */}
-            <div className="mt-8 border-t border-white/[0.08] pt-6">
+            <div className="mt-8 border-t border-white/[0.08] pt-6 w-full max-w-full">
               <p className="font-mono text-[10px] tracking-widest text-cyan-400 uppercase mb-3 flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 DIRECT VERIFIED CHANNELS
@@ -291,7 +284,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
           </div>
 
           {/* Right Column: Technical Credibility & Architecture Stage */}
-          <div className="relative">
+          <div className="relative w-full min-w-0 max-w-full overflow-hidden">
             <SpotlightCard
               enableTilt={activeTab !== 'globe' && activeTab !== 'terminal'}
               className="rounded-2xl border border-cyan-500/25 bg-[#0e0c20]/90 p-4 sm:p-6 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]"

@@ -16,7 +16,7 @@ export function BlurFadeText({
   as: Tag = 'span',
 }: BlurFadeTextProps) {
   const ref = useRef<HTMLElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     const el = ref.current;
@@ -27,12 +27,19 @@ export function BlurFadeText({
       return;
     }
 
+    // Ensure immediate visibility if already in viewport
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true);
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Re-triggers each time section scrolls into and out of view
-        setVisible(entry.isIntersecting);
+        if (entry.isIntersecting) {
+          setVisible(true);
+        }
       },
-      { threshold: 0.2 }
+      { threshold: 0.01 }
     );
     observer.observe(el);
     return () => observer.disconnect();
