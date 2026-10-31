@@ -133,15 +133,15 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
               <span className="hidden xl:inline">{soundEnabled ? 'AUDIO' : 'MUTE'}</span>
             </button>
 
-            {/* Terminal Command Palette Button */}
+            {/* Terminal Command Palette Button (hidden on mobile to prevent crowding header) */}
             <button
               onClick={onOpenTerminal}
-              className="flex h-9 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 text-[10px] font-mono tracking-wider text-white/70 hover:border-cyan-400/50 hover:bg-cyan-500/10 hover:text-cyan-300 transition-all duration-300"
+              className="hidden sm:flex h-9 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 text-[10px] font-mono tracking-wider text-white/70 hover:border-cyan-400/50 hover:bg-cyan-500/10 hover:text-cyan-300 transition-all duration-300"
               data-cursor="TERMINAL"
               title="Open Terminal [Cmd + K]"
             >
               <Terminal size={13} className="text-cyan-400" />
-              <span className="hidden sm:inline">TERMINAL</span>
+              <span>TERMINAL</span>
               <kbd className="hidden xl:inline rounded bg-white/10 px-1 py-0.5 text-[9px] text-white/40 font-mono">⌘K</kbd>
             </button>
 
@@ -195,6 +195,16 @@ export function Navigation({ onOpenTerminal, activeSection }: NavigationProps) {
               <span>LOCATION: BHUBANESWAR, INDIA</span>
               <span>{istTime} IST</span>
             </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsMenuOpen(false);
+                onOpenTerminal();
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-950/20 py-3 text-xs font-mono text-cyan-300 hover:bg-cyan-500/10 transition"
+            >
+              <Terminal size={14} /> Open Terminal [⌘K]
+            </button>
             <a
               href="#contact"
               onClick={() => setIsMenuOpen(false)}

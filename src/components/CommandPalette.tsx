@@ -327,6 +327,9 @@ export function CommandPalette({ isOpen, onClose, onToggleCRT }: CommandPaletteP
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Interactive Command Terminal"
         className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-cyan-500/30 bg-[#090d16] shadow-[0_0_80px_rgba(6,182,212,0.18)]"
         onClick={(e) => e.stopPropagation()}
       >

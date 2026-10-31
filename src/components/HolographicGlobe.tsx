@@ -164,7 +164,7 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
   const isTabVisible = useRef(true);
 
   const [autoRotate, setAutoRotate] = useState(true);
-  const [hudCoords, setHudCoords] = useState('20.29° N, 85.82° E');
+  const [hudCoords, setHudCoords] = useState('Bhubaneswar, Odisha, India');
 
   // Check reduced motion preference
   useEffect(() => {
@@ -180,7 +180,7 @@ export function HolographicGlobe({ className = '' }: HolographicGlobeProps) {
     rotY.current = -1.4;
     velX.current = 0;
     velY.current = 0;
-    setHudCoords('20.29° N, 85.82° E');
+    setHudCoords('Bhubaneswar, Odisha, India');
   }, []);
 
   useEffect(() => {

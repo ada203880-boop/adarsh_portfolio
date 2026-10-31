@@ -152,10 +152,10 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               {t('status.available')}
             </span>
 
-            {/* Live Coordinate & Clock Telemetry */}
+            {/* Live Coordinate & Location */}
             <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-cyan-500/25 bg-cyan-950/20 px-2.5 sm:px-3 py-1 sm:py-1.5 font-mono text-[10px] sm:text-xs text-cyan-300">
               <MapPin size={11} className="text-cyan-400" />
-              20.29°N, 85.82°E
+              Bhubaneswar, Odisha, India
             </span>
 
             {currentTime && (
@@ -170,14 +170,14 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
           <div className="relative group shrink-0">
             {/* Ethereal dual-tone cyan & violet 3D ambient aura */}
             <div
-              className="absolute -inset-4 sm:-inset-6 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/35 to-emerald-400/35 blur-xl sm:blur-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+              className="absolute -inset-2 sm:-inset-4 lg:-inset-6 rounded-full bg-gradient-to-tr from-cyan-500/40 via-violet-600/35 to-emerald-400/35 blur-xl sm:blur-2xl opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
               style={{
                 boxShadow: '0 0 70px rgba(6,182,212,0.45), 0 0 100px rgba(139,92,246,0.3)',
               }}
             />
 
-            {/* 3D Glass Bevel Ring with Depth — Significantly Enlarged */}
-            <div className="relative h-28 w-28 min-[400px]:h-36 min-[400px]:w-36 sm:h-48 sm:w-48 lg:h-56 lg:w-56 xl:h-64 xl:w-64 rounded-full p-1 sm:p-1.5 bg-gradient-to-b from-white/50 via-cyan-400/50 to-violet-600/60 shadow-[0_20px_60px_rgba(0,0,0,0.85),inset_0_2px_6px_rgba(255,255,255,0.45)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1">
+            {/* 3D Glass Bevel Ring with Depth */}
+            <div className="relative h-20 w-20 min-[400px]:h-28 min-[400px]:w-28 sm:h-44 sm:w-44 lg:h-56 lg:w-56 xl:h-64 xl:w-64 rounded-full p-1 sm:p-1.5 bg-gradient-to-b from-white/50 via-cyan-400/50 to-violet-600/60 shadow-[0_20px_60px_rgba(0,0,0,0.85),inset_0_2px_6px_rgba(255,255,255,0.45)] transition-transform duration-500 group-hover:scale-105 group-hover:-translate-y-1">
               <img
                 src={profileImg}
                 alt="Adarsh Panda"
@@ -197,7 +197,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
 
           {/* Left Column: Headline & Bio */}
           <div>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.25]">
+            <h1 className="text-2xl min-[380px]:text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white leading-[1.2] break-words">
               {/* Dynamic time-based greeting + Namaste */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-zinc-400 font-extralight">{timeGreeting},</span>
@@ -226,23 +226,23 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
               I architect dependable full-stack web platforms, custom WooCommerce e-commerce pipelines, and production-grade REST APIs designed for real-world reliability and scale.
             </p>
 
-            {/* Command Center Quick Telemetry Strip */}
+            {/* Professional Foundation Quick Strip */}
             <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 max-w-xl">
               <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
-                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">FOUNDATION</div>
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">DEGREE</div>
                 <div className="font-mono text-xs font-semibold text-cyan-300 mt-0.5">B.Tech CSE '25</div>
+              </div>
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">SPECIALTY</div>
+                <div className="font-mono text-xs font-semibold text-cyan-300 mt-0.5">Full-Stack React</div>
+              </div>
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
+                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">BACKEND</div>
+                <div className="font-mono text-xs font-semibold text-violet-300 mt-0.5">Node.js &amp; MySQL</div>
               </div>
               <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
                 <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">PRODUCTION</div>
                 <div className="font-mono text-xs font-semibold text-emerald-400 mt-0.5">Live E-Commerce</div>
-              </div>
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
-                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">ARCH</div>
-                <div className="font-mono text-xs font-semibold text-violet-300 mt-0.5">MySQL &amp; REST</div>
-              </div>
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 backdrop-blur-sm">
-                <div className="font-mono text-[9px] text-zinc-500 uppercase tracking-wider">FOOTPRINT</div>
-                <div className="font-mono text-xs font-semibold text-amber-300 mt-0.5">&lt; 200 kB Core</div>
               </div>
             </div>
 
@@ -284,7 +284,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
             <div className="mt-8 border-t border-white/[0.08] pt-6">
               <p className="font-mono text-[10px] tracking-widest text-cyan-400 uppercase mb-3 flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                DIRECT VERIFIED CHANNELS // 3D APP BADGES
+                DIRECT VERIFIED CHANNELS
               </p>
               <ClaymorphicSocialBadges />
             </div>
@@ -541,7 +541,7 @@ export function HeroSection({ onOpenTerminal, onOpenResume }: HeroSectionProps) 
                     <HolographicGlobe className="w-full max-w-[340px]" />
                   </Suspense>
                   <p className="mt-1 text-center font-mono text-[10px] text-zinc-400">
-                    Location Coordinates: <span className="text-cyan-400 font-semibold">20.2961° N, 85.8245° E (Bhubaneswar, IN)</span>
+                    Location: <span className="text-cyan-400 font-semibold">Bhubaneswar, Odisha, India</span>
                   </p>
                 </div>
               )}

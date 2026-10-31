@@ -51,7 +51,7 @@ const RECRUITER_ANSWERS: Record<string, string> = {
   "why should i hire adarsh?":
     "Adarsh brings verified end-to-end full-stack capabilities, production deployment experience (Rabindra Medical Hall), strong foundations in Computer Science (B.Tech '25, CGPA 7.6/10), and accredited credentials in Cyber Security (IIT Kanpur) and Cloud Security (Palo Alto). He writes clean, type-safe code and is immediately available.",
   "what full-stack projects has he built?":
-    "1. Rabindra Medical Hall: Live production e-pharmacy with WooCommerce, custom PHP prescription upload safeguards, and automated WhatsApp alerts.\n2. FORGE Fitness: AI-driven telemetry platform with Python REST APIs, MySQL schema, and workout progression.\n3. Cinematic Portfolio Engine: High-performance interactive developer operating system with React 19, GSAP, Web Audio API, and sub-200kB bundle architecture.",
+    "1. Rabindra Medical Hall: Live production e-pharmacy with WooCommerce, custom PHP prescription upload safeguards, and automated WhatsApp alerts.\n2. FORGE Fitness: AI-driven telemetry platform with Python REST APIs, MySQL schema, and workout progression.\n3. Interactive Developer Portfolio: High-performance full-stack web platform with React 19, TypeScript, and modern modular architecture.",
   "which technologies does he use?":
     "Frontend: React.js 19, JavaScript (ES6+), TypeScript, Tailwind CSS v4, HTML5/CSS3.\nBackend: Node.js, Express.js, Python, PHP, RESTful APIs.\nDatabases: MySQL, relational schema modeling, WordPress/WooCommerce.\nTools: Git, Vite, Postman, Web Audio API, GitHub Actions CI/CD.",
   "what problems can he solve?":

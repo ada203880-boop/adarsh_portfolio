@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Laptop, Tablet, Smartphone, ExternalLink, Sparkles, CheckCircle2 } from 'lucide-react';
 import rmhImg from '../assets/rmh-screenshot.png';
 import { sound } from '../lib/sound';
@@ -17,12 +17,12 @@ export function MultiDeviceMockup() {
           <div>
             <div className="flex items-center gap-2 font-mono text-xs tracking-[0.3em] text-violet-400 uppercase">
               <Sparkles size={13} />
-              <span>// MULTI_VIEWPORT_ENGINEERING</span>
+              <span>RESPONSIVE ARCHITECTURE</span>
             </div>
             <h2 className="mt-4 text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight">
-              CROSS-DEVICE<br />
+              Cross-Platform 
               <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-white to-cyan-300">
-                PERFECTION.
+                Design.
               </span>
             </h2>
           </div>

@@ -1,4 +1,4 @@
-import { Trophy, CheckCircle, Zap, Sparkles } from 'lucide-react';
+﻿import { Trophy, CheckCircle, Zap, Sparkles } from 'lucide-react';
 import { sound } from '../lib/sound';
 
 interface Achievement {
@@ -129,12 +129,12 @@ export function AchievementsSection() {
           <div>
             <div className="flex items-center gap-2 font-mono text-xs tracking-[0.3em] text-cyan-400 uppercase">
               <Sparkles size={13} />
-              <span>// MILESTONE_UNLOCK_SYSTEM</span>
+              <span>HONORS & ACHIEVEMENTS</span>
             </div>
             <h2 className="mt-4 text-4xl sm:text-6xl lg:text-7xl font-extralight tracking-tight">
-              CAREER<br />
+              Career 
               <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-emerald-300">
-                ACHIEVEMENTS.
+                Milestones.
               </span>
             </h2>
           </div>

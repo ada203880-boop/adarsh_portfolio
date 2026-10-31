@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import { sound } from '../lib/sound';
 
 interface CinematicLoaderProps {
   onDone: () => void;
 }
 
 export function CinematicLoader({ onDone }: CinematicLoaderProps) {
-  const [progress, setProgress] = useState(0);
-  const [statusLog, setStatusLog] = useState('BOOTING RUNTIME...');
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
@@ -21,99 +18,71 @@ export function CinematicLoader({ onDone }: CinematicLoaderProps) {
 
     sessionStorage.setItem('portfolio_visited', 'true');
 
-    const logs = [
-      'SYSTEM BOOT // INITIALIZING ENGINE',
-      'CALIBRATING MOTION MATRIX & GSAP TICKER',
-      'COMPILING WEBGL SHADER CANVAS',
-      'HYDRATING FULL-STACK DATA ARCHITECTURE',
-      'SYNCHRONIZING ORBITAL TIMELINE',
-      'SYSTEM READY // LAUNCHING EXPERIENCE',
-    ];
+    // Clean, natural transition without fake percentage tickers
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+      setTimeout(onDone, 600);
+    }, 750);
 
-    let current = 0;
-    const interval = window.setInterval(() => {
-      current += Math.floor(Math.random() * 8) + 4;
-      if (current >= 100) {
-        current = 100;
-        clearInterval(interval);
-        setProgress(100);
-        setStatusLog('READY');
-
-        // Play gentle chime
-        sound.playHover();
-
-        // Trigger cinematic curtain split
-        setTimeout(() => {
-          setIsExiting(true);
-          setTimeout(() => {
-            onDone();
-          }, 850);
-        }, 300);
-      } else {
-        setProgress(current);
-        const logIndex = Math.min(Math.floor((current / 100) * logs.length), logs.length - 1);
-        setStatusLog(logs[logIndex]);
-      }
-    }, 45);
-
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, [onDone]);
 
   const handleSkip = () => {
     setIsExiting(true);
-    setTimeout(onDone, 300);
+    setTimeout(onDone, 200);
   };
 
   return (
     <div
-      className={`fixed inset-0 z-[100000] flex flex-col justify-between overflow-hidden bg-[#03060c] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] ${isExiting ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
-        }`}
+      className={`fixed inset-0 z-[100000] flex flex-col justify-between overflow-hidden bg-[#03060c] text-white select-none transition-all duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] ${
+        isExiting ? '-translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
+      }`}
       aria-hidden="true"
     >
-      {/* Top telemetry bar */}
-      <div className="flex items-center justify-between border-b border-white/10 px-6 py-4 font-mono text-xs text-white/40">
+      {/* Top Bar */}
+      <div className="flex items-center justify-between border-b border-white/[0.08] px-6 py-4 font-mono text-xs text-white/50">
         <div className="flex items-center gap-2">
-          <span className="inline-block h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
-          <span>ADARSH PANDA // PORTFOLIO OS</span>
+          <span className="inline-block h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
+          <span className="font-semibold tracking-wider text-white/80">ADARSH PANDA</span>
+          <span className="text-white/30">|</span>
+          <span className="text-zinc-400">Full-Stack Developer</span>
         </div>
         <button
+          type="button"
           onClick={handleSkip}
-          className="rounded border border-white/20 px-2.5 py-1 text-[10px] uppercase tracking-widest text-white/60 hover:border-white/60 hover:text-white transition"
+          className="rounded-lg border border-white/20 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-zinc-300 hover:border-cyan-400 hover:text-white transition"
         >
-          Skip Intro [ESC]
+          Skip [ESC]
         </button>
       </div>
 
-      {/* Center Grand Typography & Progress */}
+      {/* Center Grand Entrance Typography */}
       <div className="mx-auto flex w-full max-w-4xl flex-col items-center px-6 text-center">
-        <p className="mb-3 font-mono text-[10px] tracking-[0.4em] text-cyan-400 uppercase">
-          Full-Stack Developer & Software Engineer
-        </p>
-        <h1 className="text-4xl font-extralight tracking-[-0.04em] sm:text-6xl md:text-7xl">
-          ADARSH <span className="font-semibold text-white/40">PANDA</span>
+        <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-950/20 px-3.5 py-1 mb-4">
+          <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-ping" />
+          <span className="font-mono text-[10px] tracking-[0.3em] text-cyan-300 uppercase">
+            React.js • Node.js • Python • MySQL
+          </span>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extralight tracking-tight text-white">
+          ADARSH <span className="font-semibold bg-gradient-to-r from-cyan-300 via-white to-violet-300 bg-clip-text text-transparent">PANDA</span>
         </h1>
 
-        <div className="mt-12 w-full max-w-md">
-          {/* Progress number */}
-          <div className="flex items-baseline justify-between font-mono text-xs text-white/50 mb-2">
-            <span className="text-cyan-400">{statusLog}</span>
-            <span className="text-2xl font-light text-white">{progress}%</span>
-          </div>
+        <p className="mt-3 text-xs sm:text-sm text-zinc-400 font-light max-w-md">
+          Architecting resilient full-stack web applications, e-commerce systems, and modern APIs.
+        </p>
 
-          {/* Progress Track */}
-          <div className="h-[2px] w-full overflow-hidden bg-white/10">
-            <div
-              className="h-full bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 transition-all duration-150 ease-out shadow-[0_0_12px_rgba(56,189,248,0.8)]"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+        {/* Minimalist Glowing Pulse Bar */}
+        <div className="mt-8 w-48 h-1 rounded-full bg-white/10 overflow-hidden relative">
+          <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-transparent via-cyan-400 to-violet-500 animate-[shimmer_1.2s_infinite]" />
         </div>
       </div>
 
-      {/* Bottom Coordinates & Latency */}
-      <div className="flex items-center justify-between border-t border-white/10 px-6 py-4 font-mono text-[10px] text-white/30">
-        <span>LOC: BHUBANESWAR, IN [20.2961° N, 85.8245° E]</span>
-        <span>LATENCY: 0.12ms // 60 FPS</span>
+      {/* Bottom Bar */}
+      <div className="border-t border-white/[0.08] px-6 py-4 flex items-center justify-between font-mono text-[11px] text-zinc-500">
+        <span>Bhubaneswar, Odisha, India</span>
+        <span className="text-cyan-400/80">Available Immediately</span>
       </div>
     </div>
   );

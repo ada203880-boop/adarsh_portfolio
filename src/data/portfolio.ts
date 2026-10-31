@@ -1,4 +1,4 @@
-export const portfolio = {
+﻿export const portfolio = {
   name: 'ADARSH PANDA',
   title: 'Full-Stack Developer',
   specialization: 'JavaScript • React.js • Python • Node.js • Express.js',
@@ -52,7 +52,7 @@ export const portfolio = {
     {
       id: 'cinematic-portfolio',
       number: '03',
-      name: 'Cinematic Developer Engine',
+      name: 'Interactive Developer Portfolio',
       subtitle: 'High-Performance Interactive Web Portfolio',
       stack: 'React 19 • TypeScript • GSAP • Web Audio API • Tailwind CSS',
       points: [

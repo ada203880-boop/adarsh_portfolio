@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Play, RotateCcw, CheckCircle2, Terminal, Database, Sparkles, Server } from 'lucide-react';
 import { sound } from '../lib/sound';
 
@@ -252,16 +252,16 @@ export function CodePlayground() {
           <div>
             <div className="flex items-center gap-2 font-mono text-xs tracking-[0.3em] text-cyan-400 uppercase">
               <Sparkles size={13} />
-              <span>05 // LIVE ARCHITECTURE PLAYGROUND</span>
+              <span>05 // INTERACTIVE CODE PLAYGROUND</span>
             </div>
             <h2 className="mt-3 text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-white">
-              Safe Engineering &amp;{' '}
+              Interactive 
               <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-white to-violet-300">
-                Data Simulators.
+                Code Playground.
               </span>
             </h2>
             <p className="mt-4 max-w-2xl text-xs sm:text-sm text-zinc-400 font-light leading-relaxed">
-              Explore authentic full-stack runtime flows, prescription validation pipelines, rate limiters, and relational queries in a safe, zero-eval interactive demonstration environment.
+              Interactive demonstrations of full-stack data validation, authentication middleware, and relational query workflows.
             </p>
           </div>
 
@@ -381,7 +381,7 @@ export function CodePlayground() {
             <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
-                <span className="text-cyan-300 font-semibold text-[11px]">OUTPUT_CONSOLE_TELEMETRY</span>
+                <span className="text-cyan-300 font-semibold text-[11px]">EXECUTION_OUTPUT_CONSOLE</span>
               </div>
               {result && (
                 <span

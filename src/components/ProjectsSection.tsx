@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from 'react';
+﻿import { useState, lazy, Suspense } from 'react';
 import {
   ArrowUpRight, Sparkles, Pill, Dumbbell, CheckCircle2,
   BookOpen, Layers, SlidersHorizontal, Code2
@@ -103,7 +103,7 @@ export function ProjectsSection() {
     {
       ...portfolio.projects[2],
       tagline: 'High-Performance Interactive Web Portfolio & Creative System',
-      badge: 'PRODUCTION CREATIVE SYSTEM',
+      badge: 'FULL-STACK WEB PLATFORM',
       color: 'from-violet-500/20 to-purple-500/10',
       borderColor: 'border-violet-500/30',
       icon: Code2,
@@ -117,8 +117,8 @@ export function ProjectsSection() {
       caseStudy: {
         id: 'cinematic-portfolio',
         number: '03',
-        name: 'Cinematic Developer Engine',
-        subtitle: 'Award-Tier Developer Portfolio & Interactive Creative System',
+        name: 'Interactive Developer Portfolio',
+        subtitle: 'Responsive Web Application & Component Architecture',
         stack: 'React 19 · TypeScript · GSAP · Web Audio API · Tailwind CSS',
         liveUrl: 'https://ada203880-boop.github.io/adarsh_portfolio/',
         overview:
@@ -247,7 +247,7 @@ export function ProjectsSection() {
                 <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-                    <span className="text-cyan-300 font-semibold text-[11px]">CINEMATIC_ENGINE_TELEMETRY</span>
+                    <span className="text-cyan-300 font-semibold text-[11px]">PORTFOLIO_SYSTEM_SPECS</span>
                   </div>
                   <span className="text-[10px] text-zinc-500">v2.4.0-PRO</span>
                 </div>

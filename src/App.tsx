@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -12,22 +12,23 @@ import { VelocityMarquee } from './components/VelocityMarquee';
 import { BentoGrid } from './components/BentoGrid';
 import { FloatingDock } from './components/FloatingDock';
 import { CRTOverlay } from './components/CRTOverlay';
-import { AudioVisualizerHUD } from './components/AudioVisualizerHUD';
 import { sound } from './lib/sound';
 import { KonamiCode } from './components/KonamiCode';
 import { HiringStatusWidget } from './components/HiringStatusWidget';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { lazyWithRetry } from './lib/lazyWithRetry';
 
-// Code-split heavy interactive additions & modals via React.lazy
-const CommandPalette = lazy(() => import('./components/CommandPalette').then((m) => ({ default: m.CommandPalette })));
-const ResumeModal = lazy(() => import('./components/ResumeModal').then((m) => ({ default: m.ResumeModal })));
-const InteractiveResume = lazy(() => import('./components/InteractiveResume').then((m) => ({ default: m.InteractiveResume })));
-const AdminView = lazy(() => import('./components/AdminView').then((m) => ({ default: m.AdminView })));
-const AskAdarshChat = lazy(() => import('./components/AskAdarshChat').then((m) => ({ default: m.AskAdarshChat })));
-const MultiDeviceMockup = lazy(() => import('./components/MultiDeviceMockup').then((m) => ({ default: m.MultiDeviceMockup })));
-const WorkspaceGallery = lazy(() => import('./components/WorkspaceGallery').then((m) => ({ default: m.default })));
-const CodePlayground = lazy(() => import('./components/CodePlayground').then((m) => ({ default: m.CodePlayground })));
-const AchievementsSection = lazy(() => import('./components/AchievementsSection').then((m) => ({ default: m.AchievementsSection })));
-const WorldMap = lazy(() => import('./components/WorldMap').then((m) => ({ default: m.WorldMap })));
+// Code-split heavy interactive additions & modals via resilient lazyWithRetry
+const CommandPalette = lazyWithRetry(() => import('./components/CommandPalette'), 'CommandPalette');
+const ResumeModal = lazyWithRetry(() => import('./components/ResumeModal'), 'ResumeModal');
+const InteractiveResume = lazyWithRetry(() => import('./components/InteractiveResume'), 'InteractiveResume');
+const AdminView = lazyWithRetry(() => import('./components/AdminView'), 'AdminView');
+const AskAdarshChat = lazyWithRetry(() => import('./components/AskAdarshChat'), 'AskAdarshChat');
+const MultiDeviceMockup = lazyWithRetry(() => import('./components/MultiDeviceMockup'), 'MultiDeviceMockup');
+const WorkspaceGallery = lazyWithRetry(() => import('./components/WorkspaceGallery'), 'default');
+const CodePlayground = lazyWithRetry(() => import('./components/CodePlayground'), 'CodePlayground');
+const AchievementsSection = lazyWithRetry(() => import('./components/AchievementsSection'), 'AchievementsSection');
+const WorldMap = lazyWithRetry(() => import('./components/WorldMap'), 'WorldMap');
 
 // Page Sections
 import { HeroSection } from './components/HeroSection';
@@ -50,19 +51,6 @@ export default function App() {
   const [isInteractiveResumeOpen, setInteractiveResumeOpen] = useState(false);
   const [activeSection, setSection] = useState('home');
   const [crtMode, setCrtMode] = useState(false);
-  const [isMuted, setMuted] = useState(!sound.enabled);
-
-  // Sync sound mute state with navigation toggle
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const custom = e as CustomEvent<{ enabled: boolean }>;
-      if (custom.detail) {
-        setMuted(!custom.detail.enabled);
-      }
-    };
-    window.addEventListener('sound-state-change', handler);
-    return () => window.removeEventListener('sound-state-change', handler);
-  }, []);
 
   // Lenis smooth scroll + GSAP ticker sync
   useEffect(() => {
@@ -168,38 +156,42 @@ export default function App() {
       {/* Boot preloader */}
       {!loaderDone && <CinematicLoader onDone={() => setLoaderDone(true)} />}
 
-      {/* Audio Visualizer HUD — bottom bar, appears when audio is active */}
-      <div
-        className="fixed bottom-0 left-0 right-0 z-[200] pointer-events-none transition-opacity duration-500"
-        style={{ opacity: !isMuted ? 1 : 0.25, height: '36px' }}
-      >
-        <AudioVisualizerHUD active={!isMuted} />
-      </div>
-
-      {/* Always-on background layers (with data pipeline network beams across whole page) */}
+      {/* Always-on background layers */}
       <CinematicCanvas />
       <CustomCursor />
 
-      {/* Overlays & Interactive Systems (Code-Split via Suspense) */}
+      {/* Overlays & Interactive Systems (Code-Split via Suspense & localized ErrorBoundaries) */}
       <Suspense fallback={null}>
-        <CommandPalette
-          isOpen={isTerminalOpen}
-          onClose={() => setTerminal(false)}
-          onToggleCRT={toggleCRT}
-        />
-        <ResumeModal
-          isOpen={isResumeOpen}
-          onClose={() => setResumeOpen(false)}
-          onOpenInteractive={() => {
-            setResumeOpen(false);
-            setInteractiveResumeOpen(true);
-          }}
-        />
-        <InteractiveResume
-          isOpen={isInteractiveResumeOpen}
-          onClose={() => setInteractiveResumeOpen(false)}
-        />
-        {/* Secret Diagnostic Admin View (#admin or PIN 2580) */}
+        {isTerminalOpen && (
+          <ErrorBoundary fallbackName="Terminal Command Palette">
+            <CommandPalette
+              isOpen={isTerminalOpen}
+              onClose={() => setTerminal(false)}
+              onToggleCRT={toggleCRT}
+            />
+          </ErrorBoundary>
+        )}
+        {isResumeOpen && (
+          <ErrorBoundary fallbackName="Resume Preview">
+            <ResumeModal
+              isOpen={isResumeOpen}
+              onClose={() => setResumeOpen(false)}
+              onOpenInteractive={() => {
+                setResumeOpen(false);
+                setInteractiveResumeOpen(true);
+              }}
+            />
+          </ErrorBoundary>
+        )}
+        {isInteractiveResumeOpen && (
+          <ErrorBoundary fallbackName="Interactive Resume">
+            <InteractiveResume
+              isOpen={isInteractiveResumeOpen}
+              onClose={() => setInteractiveResumeOpen(false)}
+            />
+          </ErrorBoundary>
+        )}
+        {/* Diagnostic Admin View (#admin or PIN 2580) */}
         <AdminView />
         {/* AI "Ask Adarsh" Chat Widget (Gemini 2.0 Flash) */}
         <AskAdarshChat />

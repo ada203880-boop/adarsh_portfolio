@@ -24,6 +24,9 @@ export function ResumeModal({ isOpen, onClose, onOpenInteractive }: ResumeModalP
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Resume Document Preview"
         className="relative flex h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-cyan-500/30 bg-[#090d16] shadow-[0_0_80px_rgba(6,182,212,0.2)]"
         onClick={(e) => e.stopPropagation()}
       >

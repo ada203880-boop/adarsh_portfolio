@@ -7,7 +7,7 @@ import { I18nProvider } from './lib/i18nContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ErrorBoundary fallbackName="Root Application">
+    <ErrorBoundary fallbackName="Portfolio Application" isRoot={true}>
       <I18nProvider>
         <App />
       </I18nProvider>

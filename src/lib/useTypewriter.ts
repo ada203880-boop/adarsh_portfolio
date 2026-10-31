@@ -40,3 +40,4 @@ export function useTypewriter(
 
   return display;
 }
+

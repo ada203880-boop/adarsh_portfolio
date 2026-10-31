@@ -54,9 +54,9 @@ LinkedIn   : linkedin.com/in/adarsh-panda-5181b9214`,
    Desc : Workout tracking, nutrition analytics, AI fitness coaching
    Stack: React, Node.js, Python, REST API, MySQL
 
-3. Cinematic Developer Portfolio Engine
+3. Interactive Developer Portfolio
    URL  : https://ada203880-boop.github.io/adarsh_portfolio/
-   Desc : Sub-200kB interactive portfolio OS
+   Desc : Sub-200kB interactive developer portfolio
    Stack: React 19, TypeScript, Vite, Tailwind CSS v4, GSAP, Gemini AI`,
 
   'cat resume': `[RESUME OVERVIEW - ADARSH PANDA]
